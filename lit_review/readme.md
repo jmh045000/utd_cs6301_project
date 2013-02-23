@@ -6,7 +6,7 @@ Literature Dump
 
 ./augmented reality/Trends in Augmented Reality Tracking, Interaction and Display (2008).pdf
 * ACM
-    decent trends paper (useful for finding other papers)
+* decent trends paper (useful for finding other papers)
 
 ./augmented reality/Designing Immersive Virtual Reality for Geometry Education (2006).pdf
 * IEEE
