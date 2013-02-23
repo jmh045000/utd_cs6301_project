@@ -12,6 +12,10 @@ __augmented reality/Designing Immersive Virtual Reality for Geometry Education (
 * IEEE
 * another paper by the initial author
 
+__virtual reality/3D Arrow a Virtual Pointer for Immersive Sculpting (2011).pdf__
+* IEEE
+* might be useful
+
 __virtual reality/Virtual Notepad Handwriting in Immersive VR (1998).pdf__
 * IEEE
 * interesting method of interaction (possible way to do interaction...  drawing tablets or digitizers are quite common for CAD)
