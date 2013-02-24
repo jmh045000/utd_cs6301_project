@@ -23,6 +23,13 @@ __virtual reality/Interaction Techniques for Immersive Virtual Environments: Des
 * http://people.cs.vt.edu/~bowman/papers/hcic.pdf
 * referenced by above
 
+__virtual reality/Moving Objects In Space: Exploiting Proprioception In Virtual-Environment Interaction (1997).pdf__
+* ACM
+* very relevent
+
 __virtual reality/Virtual Notepad Handwriting in Immersive VR (1998).pdf__
 * IEEE
 * interesting method of interaction (possible way to do interaction...  drawing tablets or digitizers are quite common for CAD)
+
+
+
