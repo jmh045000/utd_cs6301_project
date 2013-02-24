@@ -8,6 +8,9 @@ __augmented reality/Trends in Augmented Reality Tracking, Interaction and Displa
 * ACM
 * decent trends paper (useful for finding other papers)
 
+__Mathematics And Geometry Education With Collaborative Augmented Reality (2007).pdf__
+* ACM (https://www.ims.tuwien.ac.at/publications/tuw-137079)
+* describes teaching with Construct3D
 
 __virtual reality/3D Arrow a Virtual Pointer for Immersive Sculpting (2011).pdf__
 * IEEE
@@ -16,6 +19,7 @@ __virtual reality/3D Arrow a Virtual Pointer for Immersive Sculpting (2011).pdf_
 __virtual reality/Designing Immersive Virtual Reality for Geometry Education (2006).pdf__
 * IEEE
 * another paper by the initial author
+* describes design of Construct3D
 
 > In fact, Bowman [4] and other studies suggest that for direct input in 3D space six degrees of freedom are not expedient most of the time. Therefore it is very reasonable to restrict the user’s input to two dimensions for instance.  Commonly grids and snapping functions are used to enable exact modeling.
 
