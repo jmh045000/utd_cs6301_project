@@ -1,9 +1,120 @@
-This project will focus on the creation and manipulation of many 3-dimensional objects.
+\subsection{Physical/Real-world Environment}
+The real-world environment that the user will be tracked in is 10'x30'.
+The user is provided with a Head-Mounted Display and two 6 Degree of Freedom (6DOF) devices with 11 buttons each (Wiimotes).
+The tracking of the head and each Wiimote is done with a Vicon system placed around the tracking area.
 
-A brief list of key implementation details: %
+\subsection{Virtual Environment}
+The virtual environment is an empty and infinite 3D canvas for the user to create a virtual world.
+This allows the user to create any object, building, landscape, or geometrical feature that is possible, with any size imaginable.
+Since the user is creating a world, there are no sounds, animations, or simulation effects in place to begin with.
+However, the user may create any item within the world, which can be utilized to create moving objects, 3D sounds, and simulation effects.
+For instance, the user can create a car that moves along a street, which associated engine and tire noise as it moves.
+The user could also create the ground, and say that objects must ``rest'' upon the ground (simulating gravity).
+
+\subsection{Interaction}
+
+\subsubsection{Selection}
+Object selection is a crucial task for most of the features within this project.
+Several selection selection methods are provided, which can be selected based on the users preference.
 \begin{itemize}
-	\item Uses the Syzygy Virtual Reality framework
-	\item Implemented in C++
-	\item Rendered using the Scene Graph technique
-	\item Objects can be created, moved, scaled, rotated, and deleted
+	\item Simple Virtual Hand
+	\item Simple Ray-Casting
+	\item PORT
+\end{itemize}
+
+\paragraph{Simple Virtual Hand}
+A virtual hand will be co-located with the user's real hand.
+The user will not be able grasp any objects out of their reach, and must navigate to manipulate anything.
+This method of selection is the easiest to understand and use, but affords the least flexibility.
+
+\paragraph{Simple Ray-Casting}
+Much like Simple Virtual Hand, however the user is able to reach out to infinity, or until an object is encountered.
+This affords the user to be able to manipulate objects that are very far out of reach, but requires the user to learn to take advantage of this.
+We believe this will require very little cognitive overhead, and should not cause problems for any user.
+As such, this will be the default selection method.
+
+\paragraph{PORT}
+The user can create a 3D selection box, where all objects within the box become selected.
+This selection method provides the most flexibility, especially within our application, however the cognitive overhead on the user is much higher.
+Once a user is proficient with the system, we believe this will be the most used selection method.
+
+\subsubsection{Manipulation}
+There are several manipulation techniques provided.
+\begin{itemize}
+	\item Single-Object Manipulation
+		\subitem Creation
+		\subitem Deletion
+		\subitem Translation
+		\subitem Rotation
+		\subitem Scaling
+		\subitem Coloring
+		\subitem Texturing
+	\item Multi-Object Manipulation
+		\subitem Boolean Operations
+		\subitem Grouping
+		\subitem Deletion
+	\item World Manipulation
+		\subitem Scale-the-World
+		\subitem Light creation/manipulation
+		\subitem Sound creation/manipulation
+\end{itemize}
+
+\paragraph{Single-Object Manipulation}
+This subcategory of manipulation is dedicated to a user manipulating one object at a time.
+Creation and deletion will be done through a menu (described in System Control, below), however deletion will require an object to be selected first.
+Translation, rotation, and scaling will all be performed with button interaction on the Wiimote, after an object is selected.
+Scaling is unique, as it requires bimanual input.
+The user must select and object, press buttons on both Wiimotes, and move both hands for the object to be scaled.
+The actual motion will be determined by the hand movement while interaction button is being held down.
+Coloring and texturing will also be performed through a menu (again, see below), and will also require an object to be selected first.
+
+\paragraph{Multi-Object Manipulation}
+There are three boolean operations using multiple objects provided.  Boolean operations can be performed when there are overlapping portions of multiple selected objects.
+\begin{enumerate}
+	\item Union
+	\subitem When the user selects the union operation and multiple objects are selected, it creates a single object made up of all the objects that were selected.
+	\item Intersection
+	\subitem When intersection is selected, the non-overlapping portions of the selected objects will be removed, leaving a single object made up of only the intersecting portion.
+	\item Subtraction
+	\subitem This operation is limited to two selected objects.  When subtraction is selected, the user chooses a primary object, and the overlapping portion of the primary object is removed.  This operation leaves two objects, however the primary object is now missing the overlapped portion.
+\end{enumerate}
+
+Grouping objects allows the user create a single object from a group of selected objects.
+Unlike the boolean operations, no logic is performed on the group besides making them behave as a single object.
+The grouped objects, for all intents and purposes, behave as a single object, all the single object manipulations above work on a grouped objects.
+One benefit grouped objects provide over the boolean operations, is that it can be undone.
+Multiple objects can be grouped, manipulated, ungrouped, and manipulated independently.
+Grouping objects will be performed through the menu described below.
+
+Deletion is the same as single-object deletion, however it allows the user to delete multiple, unconnected objects (as long as all are selected).
+
+\paragraph{World Manipulation}
+When the user grabs the air with both hands, and performs the scaling operation, the entire world will be scaled up or down, according to the user's movement.
+This allows the user to navigate more easily, as well as create very large structures within the virtual environment without too much effort (simply scale the world down, create a normal object, and scale the world back to normal size).
+
+Light creation and manipulation allows the user to create lights, move them, and change aspects of the lights to suit the application (color, attenuation, direction, etc...).\footnote{Technical note: We are using OpenGL, so the number of lights in the world is limited to 8.}
+The same ability exists for sounds.
+The user can create a sound, attach it to an object, and the sound is then created from a specific point in space.
+
+\subsubsection{Navigation}
+Navigation is another crucial feature.
+Since the world is infinite, there must be a sensible way to navigate, otherwise the world will be limited to the size of the tracked area.
+This will be handling by applying the Scale-the-World technique listed above.
+Since the user can scale the entire world down, they can make everything smaller, making their steps much larger.
+This method forsakes some interaction fidelity for the benefit of an infinite world.
+
+\subsubsection{System Control}
+As mentioned above, a menu will be present.
+The menu is created in 3D space where the user's hand is when they press the menu key on the right-hand Wiimote.
+The menu is a collection of categories laid out in tabs, with buttons under each tab for the functions available in that category.
+The categories provided are:
+\begin{itemize}
+	\item Objects
+	\subitem Allows the creation of default objects (sphere, cube, cone, etc...)
+	\item Materials
+	\subitem Contains a collection of colors and textures to apply to objects
+	\item Tools
+	\subitem All of the advanced interaction methods listed above
+	\item File Operations
+	\subitem This category is unique, as it doesn't pertain to editing the world.  This category contains operations to save the existing world to file, load a file as an existing world, export an object to use again later, and load an object that was previously exported.
 \end{itemize}
