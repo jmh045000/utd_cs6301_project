@@ -4,11 +4,15 @@ Literature Dump
 __Kaufmann and Dunser - Summary of Usability Evaluations of an Educational Augmented Reality Application (2007).pdf__
 * paper given by Dr. McMahan
 
+__augmented reality/Constructing Virtual 3D Models with Physical Building Blocks (2011).pdf__
+* ACM
+* not very relevent, but really cool
+
 __augmented reality/Trends in Augmented Reality Tracking, Interaction and Display (2008).pdf__
 * ACM
 * decent trends paper (useful for finding other papers)
 
-__Mathematics And Geometry Education With Collaborative Augmented Reality (2007).pdf__
+__augmented reality/Mathematics And Geometry Education With Collaborative Augmented Reality (2007).pdf__
 * ACM (https://www.ims.tuwien.ac.at/publications/tuw-137079)
 * describes teaching with Construct3D
 
