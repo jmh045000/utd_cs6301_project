@@ -1,9 +1,19 @@
-\subsection{Physical/Real-world Environment}
+\label{Design}
+\subsection{Physical Environment}
+\label{Design:PhysicalEnvironment}
 The real-world environment that the user will be tracked in is 10'x30'.
-The user is provided with a Head-Mounted Display and two 6 Degree of Freedom (6DOF) devices with 11 buttons each (Wiimotes).
+The user is provided with a Head-Mounted Display and two 6 Degree of Freedom (6DOF) devices with 11 buttons each (Wiimotes) (see Figure \ref{fig:wiimote}).
 The tracking of the head and each Wiimote is done with a Vicon system placed around the tracking area.
 
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=3in]{figs/wiimote.jpg}
+	\caption{Wiimote with Vicon trackers}
+	\label{fig:wiimote}
+\end{figure}
+
 \subsection{Virtual Environment}
+\label{Design:VirtualEnvironment}
 The virtual environment is an empty and infinite 3D canvas for the user to create a virtual world.
 This allows the user to create any object, building, landscape, or geometrical feature that is possible, with any size imaginable.
 Since the user is creating a world, there are no sounds, animations, or simulation effects in place to begin with.
@@ -12,8 +22,10 @@ For instance, the user can create a car that moves along a street, which associa
 The user could also create the ground, and say that objects must ``rest'' upon the ground (simulating gravity).
 
 \subsection{Interaction}
+\label{Design:Interaction}
 
 \subsubsection{Selection}
+\label{Design:Interaction:Selection}
 Object selection is a crucial task for most of the features within this project.
 Several selection selection methods are provided, which can be selected based on the users preference.
 \begin{itemize}
@@ -39,6 +51,7 @@ This selection method provides the most flexibility, especially within our appli
 Once a user is proficient with the system, we believe this will be the most used selection method.
 
 \subsubsection{Manipulation}
+\label{Design:Interaction:Manipulation}
 There are several manipulation techniques provided.
 \begin{itemize}
 	\item Single-Object Manipulation
@@ -61,12 +74,12 @@ There are several manipulation techniques provided.
 
 \paragraph{Single-Object Manipulation}
 This subcategory of manipulation is dedicated to a user manipulating one object at a time.
-Creation and deletion will be done through a menu (described in System Control, below), however deletion will require an object to be selected first.
+Creation and deletion will be done through a menu (described \ref{Design:Interaction:SystemControl}), however deletion will require an object to be selected first.
 Translation, rotation, and scaling will all be performed with button interaction on the Wiimote, after an object is selected.
 Scaling is unique, as it requires bimanual input.
 The user must select and object, press buttons on both Wiimotes, and move both hands for the object to be scaled.
 The actual motion will be determined by the hand movement while interaction button is being held down.
-Coloring and texturing will also be performed through a menu (again, see below), and will also require an object to be selected first.
+Coloring and texturing will also be performed through a menu (see \ref{Design:Interaction:SystemControl}), and will also require an object to be selected first.
 
 \paragraph{Multi-Object Manipulation}
 There are three boolean operations using multiple objects provided.  Boolean operations can be performed when there are overlapping portions of multiple selected objects.
@@ -84,7 +97,7 @@ Unlike the boolean operations, no logic is performed on the group besides making
 The grouped objects, for all intents and purposes, behave as a single object, all the single object manipulations above work on a grouped objects.
 One benefit grouped objects provide over the boolean operations, is that it can be undone.
 Multiple objects can be grouped, manipulated, ungrouped, and manipulated independently.
-Grouping objects will be performed through the menu described below.
+Grouping objects will be performed through the menu described in \ref{Design:Interaction:SystemControl}.
 
 Deletion is the same as single-object deletion, however it allows the user to delete multiple, unconnected objects (as long as all are selected).
 
@@ -97,13 +110,21 @@ The same ability exists for sounds.
 The user can create a sound, attach it to an object, and the sound is then created from a specific point in space.
 
 \subsubsection{Navigation}
+\label{Design:Interaction:Navigation}
 Navigation is another crucial feature.
 Since the world is infinite, there must be a sensible way to navigate, otherwise the world will be limited to the size of the tracked area.
-This will be handling by applying the Scale-the-World technique listed above.
-Since the user can scale the entire world down, they can make everything smaller, making their steps much larger.
+
+The main method of navigation will be real walking, since we have a 10'x30' space, the user will be able to walk in any direction within the space, and that motion will be translated to the virtual environment.
+Another navigation mechanism provided will be virtual walking.
+We will be using the D-Pad on the Wiimote to simulate a joystick.
+i.e. If the user presses ``Up'' on the D-Pad, they will move forward in the virtual environment.
+
+Another navigation feature is to use the manipulation feature Scale-the-World.
+Since the user can scale the entire world down, they can make everything smaller, making their steps (both real and virtual) much larger.
 This method forsakes some interaction fidelity for the benefit of an infinite world.
 
 \subsubsection{System Control}
+\label{Design:Interaction:SystemControl}
 As mentioned above, a menu will be present.
 The menu is created in 3D space where the user's hand is when they press the menu key on the right-hand Wiimote.
 The menu is a collection of categories laid out in tabs, with buttons under each tab for the functions available in that category.
@@ -118,3 +139,28 @@ The categories provided are:
 	\item File Operations
 	\subitem This category is unique, as it doesn't pertain to editing the world.  This category contains operations to save the existing world to file, load a file as an existing world, export an object to use again later, and load an object that was previously exported.
 \end{itemize}
+
+
+See Figure \ref{fig:menu} for a mock-up of the menu.
+
+\begin{figure}[hp]
+	\centering
+	\subfigure[Object Menu] {
+		\label{fig:menu:object}
+		\includegraphics[width=3in]{figs/object_menu.jpg}
+	}
+	\subfigure[Material Menu] {
+		\label{fig:menu:material}
+		\includegraphics[width=3in]{figs/material_menu.jpg}
+	}
+	\subfigure[Tools Menu] {
+		\label{fig:menu:tools}
+		\includegraphics[width=3in]{figs/tools_menu.jpg}
+	}
+	\subfigure[File Menu] {
+		\label{fig:menu:file}
+		\includegraphics[width=3in]{figs/file_menu.jpg}
+	}
+	\caption{Mock up menu interface}
+	\label{fig:menu}
+\end{figure}

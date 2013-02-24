@@ -1,1 +1,63 @@
-Prototype plan of action
+We will be implementing a prototype world builder over the course of one semester.
+This prototype will stay true to the design, however, due to time constraints, not all features will be included.
+
+\subsection{Physical Environment}
+Fortunately, the physical environment remains the same between the end-goal and this prototype phase.
+We will still be using a Head Mounted Display, along with two Wiimotes.
+All will be independently tracked using a Vicon system in a 10'x30' space.
+Also, the Wiimotes provide 11 buttons each, that will be used for interaction and navigation (see Figure \ref{fig:wiimote}).
+
+\subsection{Virtual Environment}
+The virtual environment will still be an infinite world, with a goal of letting the user design any object, building, landscape, or geometrical feature they can imagine.
+However, simulation effects such as gravity and animation will not be included.
+The user can still create objects and place them together to make more complex and larger objects, but they will not be able to give them motion.
+
+Sound (as well as light) creation/manipulation are optional features that we hope to add in to the prototype.  See World Manipulation below.
+
+\subsection{Interaction}
+During this prototype phase, the most important aspect is the interaction abilities the user has.
+
+\subsubsection{Selection}
+We will be implementing both the Simple Virtual Hand and the Simple Ray-Casting.
+Both will be drawn using a 2'x2' rectangular prism.
+When in virtual hand mode, the prism will be 5' long, with the tip where the user's hand is.
+In ray-casting mode, the prism will extend, up to 1000', until it reaches an object.
+Since PORT is not being provided in the prototype, multi object selection will require the user to select objects in turn.
+
+\subsubsection{Manipulation}
+\paragraph{Single-Object Manipulation}
+All features discussed in the design section for single object manipulation will be included.
+The user will be able to create, delete, translate, rotate, scale, color, and texture all objects within the world.
+
+\paragraph{Multi-Object Manipulation}
+Boolean operations will not be provided in the prototype.
+However, the user will be able to group multiple objects to form a single object, and delete multiple selected objects.
+
+\paragraph{World Manipulation}
+Scale-the-World will be provided.
+This feature is essential given that the size of the world is so big, and the user will need to navigate large spaces.
+
+Sound and light creation will be focused on last.
+If there is time permitting after the essential manipulation features have been implemented, light and sound creation and manipulation will be included.
+
+\subsubsection{Navigation}
+Both real walking and virtual walking will be provided.
+Real walking is accomplished by the framework with very little effort on our part.
+Virtual walking will use the D-Pad and move the origin point of the environment, thereby moving the user through it.
+
+Since Scale-the-World is provided, as well as both walking schemes, the user will be able to magnify their steps using the method described in \ref{Design:Interaction:Navigation}.
+
+\subsubsection{System Control}
+Since many of the features described in \ref{Design:Interaction} require a menu, a menu will be provided.
+However, this will be simpler than the menu described there.
+An object category and material category will be provided, as well as a tools category.
+The tools category will only contain the features described in this section however, namely, deletion and grouping.
+
+If time permits, the file category will be provided that will allow the user to save/load the world they have spent time to create.
+
+\subsection{Implementation}
+We will be implementing the World Builder application using the \href{http://syzygy.isl.uiuc.edu/szg/szgsrc/doc/index.html}{Syzygy} virtual reality API created at the University of Illinois for the development.
+This API allows us to do rapid prototype development, since some of the most complex features of an immersive virtual environment have been completed, such as head based rendering, interaction with objects, and input device drivers.
+
+The Syzygy API contains two frameworks that are used for development, \verb|arMasterSlaveFramework| and \verb|arDistSceneGraphFramework|.
+We will be using the \verb|arMasterSlaveFramework|, but we are using a helper class created by the FIVE lab at UTD to include a Scene Graph in an \verb|arMasterSlaveFramework|.
