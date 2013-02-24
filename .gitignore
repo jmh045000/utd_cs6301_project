@@ -17,3 +17,4 @@
 .depend
 *.exe
 .*.swp
+.DS_Store
