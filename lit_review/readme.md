@@ -13,7 +13,7 @@ __augmented reality/Trends in Augmented Reality Tracking, Interaction and Displa
 * decent trends paper (useful for finding other papers)
 
 __augmented reality/Mathematics And Geometry Education With Collaborative Augmented Reality (2007).pdf__
-* ACM (bibtext added)
+* ACM (+bibtext)
 * describes teaching with Construct3D
 
 __virtual reality/3D Arrow a Virtual Pointer for Immersive Sculpting (2011).pdf__
@@ -32,11 +32,11 @@ __virtual reality/Interaction Techniques for Immersive Virtual Environments: Des
 * referenced by above
 
 __virtual reality/Moving Objects In Space: Exploiting Proprioception In Virtual-Environment Interaction (1997).pdf__
-* ACM (bibtext added)
+* ACM (+bibtext)
 * very relevent
 
 __virtual reality/Virtual Notepad Handwriting in Immersive VR (1998).pdf__
-* IEEE
+* IEEE (+bibtext)
 * interesting method of interaction (possible way to do interaction...  drawing tablets or digitizers are quite common for CAD)
 
 
