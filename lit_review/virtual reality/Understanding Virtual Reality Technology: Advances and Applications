@@ -1,0 +1,772 @@
+4
+Understanding Virtual Reality Technology:Advances and Applications
+Moses Okechukwu Onyesolu1 and Felista Udoka Eze2
+1Nnamdi Azikiwe University, Awka, Anambra State.
+2Federal University of Technology, Owerri, Imo State,
+Nigeria
+1. Introduction
+Virtual Reality (VR) is not an entirely new concept; it has existed in various forms since the
+late 1960s. It has been known by names such as synthetic environment, cyberspace, artificial
+reality, simulator technology and so on and so forth before VR was eventually adopted. The
+latest manifestation of VR is desktop VR. Desktop VR is also known by other names such as
+Window on World (WoW) or non-immersive VR (Onyesolu, 2006). As a result of
+proliferation of desktop VR, the technology has continued to develop applications that are
+less than fully immersive. These non-immersive VR applications are far less expensive and
+technically daunting and have made inroads into industry training and development. VR
+has perhaps at last come within the realm of possibility for general creation and use most
+especially in education where computer-based virtual learning environments (VLE) are
+packaged as desktop VR. This, in turn, points the way for its inclusion in educational
+programs (Ausburn & Ausburn, 2004). These computer-based virtual learning environments
+(VLEs) have opened new realms in the teaching, learning, and practice of medicine, physical
+sciences and engineering among others. VLEs provide students with the opportunity to
+achieve learning goals. VLE-based applications have thus emerged in mainstream education
+in schools and universities as successful tools to supplement traditional teaching methods.
+These learning environments have been discovered to have greater pedagogical
+effectiveness on learners. Virtual learning environments provide three-dimensional (3D)
+insights into the structures and functions of any system desired. Students can thereby learn
+the principles of such system in a fast, effective and pleasurable way by interacting with and
+navigating through the environment created for such system (Onyesolu, 2009a; Onyesolu,
+2009b). It is known that VR can make the artificial as realistic as, and even more realistic
+than, the real (Negroponte, 1995).
+2. The technology: Virtual Reality
+There are some people to whom VR is a specific collection of technologies; that is, headset,
+glove and walker (Haag et al., 1998; Williams & Sawyer, 2001; Isdale, 1993). VR is defined as
+a highly interactive, computer-based multimedia environment in which the user becomes
+the participant in a computer-generated world (Kim et al., 2000; Onyesolu, 2009a; Onyesolu
+& Akpado, 2009). It is the simulation of a real or imagined environment that can be
+www.intechopen.com
+Advances in Computer Science and Engineering
+54
+experienced visually in the three dimensions of width, height, and depth and that may
+additionally provide an interactive experience visually in full real-time motion with sound
+and possibly with tactile and other forms of feedback. VR is a way for humans to visualize,
+manipulate and interact with computers and extremely complex data (Isdale, 1998). It is an
+artificial environment created with computer hardware and software and presented to the
+user in such a way that it appears and feels like a real environment (Baieier, 1993). VR is a
+computer-synthesized, three-dimensional environment in which a plurality of human
+participants, appropriately interfaced, may engage and manipulate simulated physical
+elements in the environment and, in some forms, may engage and interact with
+representations of other humans, past, present or fictional, or with invented creatures. It is a
+computer-based technology for simulating visual auditory and other sensory aspects of
+complex environments (Onyesolu, 2009b). VR incorporates 3D technologies that give a reallife
+illusion. VR creates a simulation of real-life situation (Haag et al., 1998).
+Therefore, VR refers to an immersive, interactive, multi-sensory, viewer-centered, 3D
+computer-generated environment and the combination of technologies required to build
+such an environment (Aukstakalnis & Blatner, 1992; Cruz-Niera, 1993). By immersing
+viewers in a computer-generated stereoscopic environment, VR technology breaks down
+barriers between humans and computers. VR technology simulates natural stereoscopic
+viewing processes by using computer technology to create right-eye and left-eye images of a
+given 3D object or scene. The viewer’s brain integrates the information from these two
+perspectives to create the perception of 3D space. Thus, VR technology creates the illusion
+that on-screen objects have depth and presence beyond the flat image projected onto the
+screen. With VR technology, viewers can perceive distance and spatial relationships
+between different object components more realistically and accurately than with
+conventional visualization tools (such as traditional CAD tools).
+3. Virtual Reality components
+The components necessary for building and experiencing VR are divided into two main
+components-the hardware components and the software components.
+3.1 Hardware components
+The hardware components are divided into five sub-components: computer workstation,
+sensory displays, process acceleration cards, tracking system and input devices.
+3.1.1 Computer workstation
+A computer workstation is a high-end microcomputer designed for technical or scientific
+applications. Intended primarily to be used by one person at a time, workstations are
+commonly connected to a local area network and run multi-user operating systems. The
+term workstation has also been used to refer to a mainframe computer terminal or a
+personal computer (PC) connected to a network.
+Workstations had offered higher performance than personal computers, especially with
+respect to CPU and graphics, memory capacity and multitasking capability. They are
+optimized for the visualization and manipulation of different types of complex data such as
+3D mechanical design, engineering simulation animation and rendering of images, and
+mathematical plots. Workstations are the first segment of the computer market to present
+advanced accessories and collaboration tools. Presently, the workstation market is highly
+www.intechopen.com
+Understanding Virtual Reality Technology: Advances and Applications
+55
+commoditized and is dominated by large PC vendors, such as Dell and HP, selling
+Microsoft Windows/Linux running on Intel Xeon/AMD Opteron. Alternative UNIX based
+platforms are provided by Apple Inc., Sun Microsystems, and Silicon Graphics International
+(SGI) (http://en.wikipedia.org/wiki/Workstation). Computer workstation is used to
+control several sensory display devices to immerse you in 3D virtual environment.
+3.1.2 Sensory displays
+Sensory displays are used to display the simulated virtual worlds to the user. The most
+common sensory displays are the computer visual display unit, the head-mounted display
+(HMD) for 3D visual and headphones for 3D audio.
+3.1.2.1 Head mounted displays
+Head mounted displays place a screen in front of each of the viewer's eyes at all times. The
+view, the segment of the virtual environment generated and displayed, is controlled by
+orientation sensors mounted on the “helmet”. Head movement is recognized by the
+computer, and a new perspective of the scene is generated. In most cases, a set of optical
+lens and mirrors are used to enlarge the view to fill the field of view and to direct the scene
+to the eyes (Lane, 1993).
+Fig. 1. Visette 45 SXGA Head Mounted Display (HMD)
+3.1.2.2 Binocular Omni-Orientation Monitor (BOOM)
+The BOOM is mounted on a jointed mechanical arm with tracking sensors located at the
+joints. A counterbalance is used to stabilize the monitor, so that when the user releases the
+monitor, it remains in place. To view the virtual environment, the user must take hold of the
+monitor and put her face up to it. The computer will generate an appropriate scene based on
+the position and orientation of the joints on the mechanical arm (Aukstakalnis & Blatner,
+Fig. 2. A Binocular Omni-Orientation Monitor (BOOM)
+www.intechopen.com
+Advances in Computer Science and Engineering
+56
+1992). Some of the problems associated with HMDs can be solved by using a BOOM display.
+The user does not have to wear a BOOM display as in the case of an HMD. This means that
+crossing the boundary between a virtual world and the real world is simply a matter of
+moving your eyes away from the BOOM.
+3.1.2.3 Visual Display Unit (VDU) or monitors
+There are two types of computer visual display unit. The CRT monitors and the LCD
+monitors. The distinguishing characteristics of the two types are beyond the scope of this
+piece.
+3.1.3 Process acceleration cards
+These cards help to update the display with new sensory information. Examples are 3D
+graphic cards and 3D sound cards.
+3.1.4 Tracking system
+This system tracks the position and orientation of a user in the virtual environment. This
+system is divided into: mechanical, electromagnetic, ultrasonic and infrared trackers.
+Fig. 3. Patriot wireless electromagnetic tracker
+Fig. 4. Logitech ultrasonic tracker
+3.1.5 Input devices
+They are used to interact with the virtual environment and objects within the virtual
+environment. Examples are joystick (wand), instrumented glove, keyboard, voice
+recognition etc.
+3.2 Software components
+The software components are divided into four sub-components: 3D modeling software, 2D
+graphics software, digital sound editing software and VR simulation software.
+www.intechopen.com
+Understanding Virtual Reality Technology: Advances and Applications
+57
+Fig. 5. An instrumented glove (Nintendo power glove)
+3.2.1 3D modeling software
+3D modeling software is used in constructing the geometry of the objects in a virtual world
+and specifies the visual properties of these objects.
+3.2.2 2D graphics software
+2D graphics software is used to manipulate texture to be applied to the objects which
+enhance their visual details.
+3.2.3 Digital sound editing software
+Digital sound editing software is used to mix and edit sounds that objects make within the
+virtual environment.
+3.2.3 VR simulation software
+Simulation software brings the components together. It is used to program how these
+objects behave and set the rules that the virtual world follows.
+4. Classification of Virtual Reality systems
+VR is classified into three major types: (a) Non-Immersive VR Systems, (b) Semi-Immersive
+VR Systems and (c) Immersive (Fully Immersive) VR systems. Other forms of classification
+are levels of VR and methods of VR. Levels of VR deals with efforts employed to develop
+VR technology. Under this classification we have entry level, basic level, advanced level,
+immersive systems and big-time systems. Methods of VR classification deals with methods
+employed in developing VR system. Under this class we have simulation based systems,
+projector based systems, avatar-image based systems and desktop based system.
+4.1 Non-immersive VR systems
+As the name suggests, are the least implementation of VR techniques. It involves
+implementing VR on a desktop computer. This class is also known as Window on World
+(WoW) (Onyesolu, 2006). Using the desktop system, the virtual environment is viewed
+through a portal or window by utilizing a standard high resolution monitor. Interaction
+with the virtual environment can occur by conventional means such as keyboard, mouse or
+trackball
+4.2 Semi-immersive VR systems
+A semi immersive VR system comprise of a relatively high performance graphics computing
+system which can be coupled with either a large screen monitor; a large screen projection
+www.intechopen.com
+Advances in Computer Science and Engineering
+58
+system or multiple television projection system. Using a wide field of view, these systems
+increase the feeling of immersion or presence experienced by the user and stereographic
+imaging can be achieved using some type of shutter glasses.
+4.3 Immersive (fully immersive) VR systems
+An Immersive VR system is the most direct experience of virtual environments. Here the
+user either wears an head mounted display (HMD) or uses some form of head-coupled
+display such as a Binocular Omni-Orientation Monitor (BOOM) to view the virtual
+environment, in addition to some tracking devices and haptic devices. An HMD or BOOM
+uses small monitors placed in front of each eye which provide stereo, bi-ocular or
+monocular images.
+Fig. 6. Schematic representation of a CAVE
+5. Low-cost VR technology
+Low-cost VR, also called personal computer (PC)-based VR, uses inexpensive devices such
+as PC workstations and VR glasses, combined with VR-enabled software applications or
+playstations and projectors, to partially immerse viewers in a virtual scene (Fang et al., n.d.).
+Fig 5 is a low-cost VR system developed with three playstations, a network switch and two
+projectors.
+Fig. 7. PlayStation2 VR system
+Projectors
+www.intechopen.com
+Understanding Virtual Reality Technology: Advances and Applications
+59
+The benefits of low cost virtual reality hardware are obvious; high performance systems
+which were previously exclusive to research institutions with well funded budget can now
+be constructed relatively cheaper. The reduced price/performance ratio has positive
+implications for hospitals, educational institutions, museums and other organizations where
+funding of new technologies are often limited. Previously disadvantaged communities can
+also benefit from this new technology. In education, cheap VR can provide massive quality
+education through the interactive learning environment; in medicine, cheap virtual
+environment has been shown to provide promising results in the field of exposure therapy
+(Fang et al., n.d.).
+6. How Virtual Reality works
+The idea behind VR is to deliver a sense of being there by giving at least the eye what it
+would have received if it were there and, more important to have the image change
+instantly as the point of view is changed (Smith & Lee, 2004). The perception of spatial
+reality is driven by various visual cues, like relative size, brightness and angular movement.
+One of the strongest is perspective, which is particularly powerful in its binocular form in
+that the right and left eyes see different images. Fusing these images into one 3D perception
+is the basis of stereovision.
+The perception of depth provided by each eye seeing a slightly different image, eye parallax,
+is most effective for objects very near you. Objects farther away essentially cast the same
+image on each eye. The typical dress code for VR is a helmet with goggle-like displays, one
+for each eye. Each display delivers a slightly different perspective image of what you would
+see if you were there. As you move your head, the image rapidly updates so that you feel
+you are making these changes by moving your head (versus the computer actually
+following your movement, which it is). You feel you are the cause not the effect.
+7. VR development tools and resources
+There are many VR development tools and resources. Some of these tools and resources are
+free (open source to use), some are proprietary (closed source) (Wang & Canon, 1996). VR
+related development is in progress regarding the availability, usability and capability of
+customization for existing development tools and resources. VR development tools and
+resources are quite numerous; some examples are presented:
+7.1 Virtual Heroes Inc. (VHI)
+This is an “Advanced Learning Technology Company” that creates collaborative interactive
+learning solutions for Federal Systems, Healthcare and Corporate Training markets
+(http://www.virtualheroes.com/about.asp). VHI applications facilitate highly interactive,
+self-paced learning and instructor-led, distributed team training on its Advanced Learning
+Technology (ALT) platform. Major components of this platform include the Unreal® Engine
+3 by Epic Games, and Dynamic Virtual Human Technology (DVHT). ALT leverages
+simulation learning and digital game-based learning paradigms to accelerate learning,
+increase proficiency and reduce costs. DVHT combines best-in-class electronic computer
+game technology with a digital human physiology engine, digital pharmacokinetic drug
+models, accurate biomechanical parameters and artificial intelligence subroutines for the
+most realistic virtual humans available anywhere.
+www.intechopen.com
+Advances in Computer Science and Engineering
+60
+7.2 On-Line Interactive Virtual Environment (OLIVE)
+This is a product of Forterra Systems Inc. Forterra Systems Inc. builds distributed virtual
+world technology and turnkey applications for defense, homeland security, medical,
+corporate training, and entertainment industries (http://company.mmosite.com/forterra
+/index.shtml). Using the On-Line Interactive Virtual Environment (OLIVE) technology
+platform, customers can rapidly generate realistic three-dimensional virtual environments
+that easily scale from single user applications to large scale simulated environments
+supporting many thousands of concurrent users. Forterra’s technology and services enable
+organizations to train, plan, rehearse, and collaborate in ways previously considered
+impossible or impractical.
+OLIVE combines multimedia, scalable computing and network enabled connectivity to
+provide a complete IT-ready platform for developing and supporting truly collaborative,
+multiplayer interactive virtual environments. It is a 3D client-server virtual world platform
+using PC clients connected to a central server via a network. The architecture scales from a
+Windows based development environment to large scale Linux clusters. This architecture
+supports many thousands of concurrent, geographically distributed users
+(http://www.webbuyersguide.com/product/brief.aspx?src=rss&kc=rss&id=52841)
+7.3 Icarus Studios Inc.
+The company offers tools and products for creating massively multi-player online (MMO)
+environments, virtual worlds, and serious games for major entertainment, corporate, and
+government clients (Mousa, n.d). Icarus provides next generation technology, tools and
+production services enabling publishers and marketers to develop immersive environments
+to create new revenue streams and branding opportunities (http://www.icarusstudios.com/).
+Icarus Studios products include compatibility with industry standard tools such as 3D Max,
+Collada, and other 3D applications with simple editors.
+7.4 OpenSimulator (OpenSim)
+OpenSimulator is a 3D application server. It can be used to create a virtual environment
+(world) which can be accessed through a variety of clients, on multiple protocols (Mousa,
+n.d). OpenSimulator allows you to develop your environment using technologies you feel
+work best. OpenSimulator has numerous advantages which among other things are:
+i. OpenSimulator is released under BSD license, making it both open source, and
+commercially friendly to embed in products.
+ii. It has many tools for developers to build various applications (chat application,
+buildings, and avatars among others).
+iii. OpenSimulator can be extended via modules to build completely custom configuration.
+iv. It is a world building tools for creating content real time in the environment.
+v. Supports many programming languages for application development such as Linden
+Scripting Language / OpenSimulator Scripting Language (LSL/OSSL), C#, and/or
+Jscript and VB.NET
+vi. It incorporates rich and handy documentations and tutorials.
+7.5 Croquet
+Croquet is an open source 3D graphical platform that is used by experienced software
+developers to create and deploy deeply collaborative multi-user online virtual world
+www.intechopen.com
+Understanding Virtual Reality Technology: Advances and Applications
+61
+applications on and across multiple operating systems and devices
+(http://www.opencroquet.org/index.php/Main_Page). Croquet is a next generation virtual
+operating system (OS) written in Squeak. Squeak is a modern variant of Smalltalk. Squeak
+runs mathematically identical on all machines. Croquet system features a peer-based
+messaging protocol that dramatically reduces the need for server infrastructures to support
+virtual world deployment and makes it easy for software developers to create deeply
+collaborative applications. Croquet provides rich tutorials, resources and videos
+as educational materials for developers.
+7.6 Ogoglio
+Ogoglio is an open source 3D graphical platform like Croquet. The main goal of the Ogoglio
+is to build an online urban style space for creative collaboration. Ogoglio platform is built
+from the languages and protocols of the web. Therefore, it’s scripting language is javascript;
+it’s main data transfer protocol is hypertext transfer protocol (HTTP), it’s 2D layout is
+hypertext markup language (HTML) and cascading style sheet (CSS), and it has lightwave
+object geometry format for its 3D (http://foo.secondlifeherald.com/slh/2007/01/
+interview_with_.html). Ogoglio is very different from the other virtual reality world
+development platforms because it uses Windows, Linux, Solaris operating system platforms
+and runs on web browsers such as Internet Explorer, Firefox, and Safari.
+7.7 QuickDraw 3D (QD3D)
+QuickDraw 3D is a 3D graphics API developed by Apple Inc. in 1995. It was delivered as a
+cross-platform system, though originally developed for their Macintosh computers. QD3D
+provides a high-level API with a rich set of 3D primitives that is generally much more fullfeatured
+and easier to develop than low-level APIs such as OpenGL or Direct3D.
+7.8 Autodesk 3d Max (3D Studio MAX)
+Autodesk 3d Max (formerly known as 3D Studio MAX) is a modeling, animation and
+rendering package developed by Autodesk Media and entertainment. 3d Max is the third
+most widely-used off the shelf 3D animation program by content creation professionals. It
+has strong modeling capabilities, a flexible plugin architecture and a long heritage on the
+Microsoft Windows platform. It is mostly used by video game developers, television
+commercial studios and architectural visualization studios. It is also used for movie effects
+and movie pre-visualization.
+7.9 Blink 3D Builder
+Blink 3D Builder is a proprietary authoring tool for creating immersive 3D environments.
+The 3D environments can be viewed using the Blink 3D Viewer on the Web or locally.
+8. Applications and advancements in VR technology
+There are a lot of applications and advancements in VR technology. VR is being applied in
+all areas of human endeavour and many VR applications have been developed for
+manufacturing, training in a variety of areas ( military, medical, equipment operation, etc.),
+education, simulation, design evaluation (virtual prototyping), architectural walk-through,
+ergonomic studies, simulation of assembly sequences and maintenance tasks, assistance for
+www.intechopen.com
+Advances in Computer Science and Engineering
+62
+the handicapped, study and treatment of phobias (e.g., fear of height), entertainment, rapid
+prototyping and much more (Onyesolu, 2006). This has been made possible due to the
+power of VR in transporting customers to a virtual environment and convincing them of
+their presence in it (Wittenberg, 1993).
+In industry, VR has proven to be an effective tool for helping workers evaluates product
+designs. In 1999, BMW explored the capability of VR for verifying product designs (Gomes
+de Sa & Zachmann, 1999). They concluded that VR has the potential to reduce the number of
+physical mockups needed to improve overall product quality, and to obtain quick answers
+in an intuitive way during the concept phase of a product. In addition, Motorola developed
+a VR system for training workers to run a pager assembly line (Wittenberg, 1995). They
+found that VR can be used to successfully train manufacturing personnel, and that
+participants trained in VR environments perform better on the job than those trained for the
+same time in real environments.
+In 1998, GE Corporate Research developed two VR software applications, Product Vision
+and Galileo, which allowed engineers to interactively fly through a virtual jet engine
+(Abshire, & Barron, 1998). They reported that the two applications were used successfully to
+enhance design communication and to solve maintenance problems early, with minimal
+cost, delays, and effort. They also reported that using the VR applications helped make
+maintenance an integral part of their product design process.
+The success stories from industry show that VR-technology-literate professionals are a
+present and future industry need. However, most students currently do not have an
+opportunity to experience VR technologies while they are in school. Therefore, introducing
+VR into design and graphics curricula is imperative, to keep pace with the changing needs
+of industry.
+Boeing (the largest aircraft manufacturers in the world) developed the Virtual Space
+eXperiment (VSX). VSX is a demonstration of how virtual environment systems can be
+applied to the design of aircraft and other complex systems involving human interactions
+(Kalawsky, 1993). It is a 3D virtual model of the interior and exterior of a tilt-rotor aircraft in
+virtual space that allows persons to interact with various items such as maintenance hatch,
+cargo ramp. McDonnell Douglas uses a ProVision 100 VPX system to evaluate how a virtual
+environment can aid the design of new engine types. The system is utilized to explore the
+processes for installing and removing engines, especially for detecting the potential interface
+with other devices. The automotive industry starts to use the VR technology to design and
+build cars. It can take two years or more to advance from the development of an initial
+concept for a new type of car to the moment that a production version rolls off the assembly
+line.
+A virtual reality-based point-and-direct (VR-PAD) system was developed to improve the
+flexibility in passive robot inspection (Wang & Cannon, 1996). An operator in a remote
+control room monitors the real working environment through live video views displayed on
+the screen and uses the virtual gripper to indicate desirable picking and placing locations.
+The robot in the inspection system completes material handling as specified so that the
+system can achieve flaw identification. The CERN, European Laboratory for Particle
+Physics, performed the pilot project that evaluated and promoted the use of virtual
+environment technology to help design, building and maintaining the Large Hedron
+Collider (LHC) premises and equipment (Balaguer & Gennaro, 1996). The project consists of
+several applications, such as network design and integration, territory impact study, and
+assembly planning and control to respond to the needs of LHC engineers.
+www.intechopen.com
+Understanding Virtual Reality Technology: Advances and Applications
+63
+Virtual Reality is a powerful tool for education since people comprehend images much
+faster than they grasp lines of text or columns of numbers. VR offers multisensory
+immersive environments that engage students and allow them visualize information
+(Eslinger, 1993). Mathematics and science teachers have used VR for explaining abstract
+spatial data. Winn and Bricken (1992) used VR to help students learn elementary algebra.
+They used three-dimensional space to express algebraic concepts and to interact with spatial
+representations in a virtual environment. They concluded that VR has the potential for
+making a significant improvement in the way students learn mathematics. Haufmann et al
+(2000) used VR in mathematics and geometry education, especially in vector analysis and
+descriptive geometry. Their survey showed that all participants (10 students) rated VR as a
+very good playground for experiments, and all participants wanted to experience VR again.
+Students also thought it was easier to view a 3D world in VR rather than on a flat screen.
+VR was used to demonstrate molecular mechanisms in chemical engineering courses (Bell,
+1996; Bell & Fogler, 1998). Though no statistical analysis was provided, some evidence of
+enhanced learning in some cases was reported. At the University of Michigan, Vicher
+(Virtual Chemical Reactors) was developed in the department of Chemical Engineering to
+teach students catalyst decay, non-isothermal effects in kinetics and reactor design and
+chemical plant safety (Bell & Fogler, 1996a; Bell & Fogler, 1996b). The developers believed
+that humans retain up to 90% of what they learn through active participation. The most
+exciting possibilities in terms of education and VR are found as it is implemented in the
+education of the disabled.
+Sulbaran and Baker (2000) created an online learning system to study the effectiveness of VR
+in engineering education. They used VR to train participants on how to operate a lock and
+to identify construction machines. They found that 82% of learners thought learning with
+VR was more engaging than learning from reading books and listening to lectures using
+overheads containing graphics or pictures. They also found, in their first survey, that 69% of
+the students thought they had learned how a lock operates, and 57% thought they had
+learned how to identify construction machines. 7 to 21 days later, 92% of the students were
+still able to operate a lock and identify construction machines. Finally, in their second
+survey, 91% of the learners strongly agreed or agreed that the learning experience benefits
+from the use of VR.
+VR technology promises to shorten a product development cycle greatly by skipping the
+need for physical mockups (Vince, 1995). The Ford’s Alpha simultaneous engineering team
+developed a VR system for evaluating process installation feasibility in automotive
+assembly. In Japan, customers bring the architectural layout of their home kitchen to the
+Matsushita store and plug it into the computer system to generate its virtual copy
+(Newquist III, 1993). They can install appliances and cabinets, and change colors and sizes to
+see what their complete kitchen will look like without ever installing a single item in the
+actual location. Similarly, Mike Rosen and Associates has been using an interactive and
+immersive VR technology to assist its building industry clients in the design, visualization,
+marketing, and sales (Neil, 1996). The applications let the customers become actively
+involved in the visualization process, such as making changes of colors, textures, materials,
+lighting, and furniture on the fly.
+Researchers at NASA Johnson Space Center in Texas have developed an impressive virtual
+learning environment for high school students--a virtual physics laboratory which enables
+students to explore such concepts as gravity, friction, and drag in an interactive, virtual
+environment. Students have several balls and a pendulum with which to work. They also
+www.intechopen.com
+Advances in Computer Science and Engineering
+64
+have several investigative tools, such as a distance measuring device and a digital
+stopwatch. In addition, the computer provides several interesting capabilities such as the
+ability to view dynamic events in slow motion or to show trails on objects to better show
+their movements (Dedula, 1997).
+9. The impact of VR
+There has been increasing interest in the potential social impact of VR. VR will lead to a
+number of important changes in human life and activity (Cline, 2005). Cline (2005) argued
+that: VR will be integrated into daily life and activity and it will be used in various human
+ways; techniques will be developed to influence human behavior, interpersonal
+communication, and cognition (i.e., virtual genetics); as we spend more and more time in
+virtual space, there will be a gradual “migration to virtual space,” resulting in important
+changes in economics, worldview, and culture and the design of virtual environments may
+be used to extend basic human rights into virtual space, to promote human freedom and
+well-being, and to promote social stability as we move from one stage in socio-political
+development to the next. VR has had and is still having impact in heritage and archeology,
+mass media, fiction books, television, motion pictures, music videos, games, fine arts,
+marketing, health care, therapeutic uses, real estates and others numerous to mention.
+9.1 Heritage and archaeology
+The first use of a VR presentation in a Heritage application was in 1994 when a museum
+visitor interpretation provided an interactive “walk-through” of a 3D reconstruction of
+Dudley Castle in England as it was in 1550 (Colin, 2006). This comprised of a computer
+controlled laser disc based system designed by British-based engineer Colin Johnson. The
+use of VR in Heritage and Archaeology has enormous potential in museum and visitor
+centre applications. There have been many historic reconstructions. These reconstructions
+are presented in a pre-rendered format to a shared video display, thus allowing more than
+one person to view a computer generated world, but limiting the interaction that full-scale
+VR can provide.
+9.2 Mass media
+Mass media has been a great advocate and perhaps a great hindrance to the development of
+VR over the years. In 1980s and 1990s the news media’s prognostication on the potential of
+VR built up the expectations of the technology so high as to be impossible to achieve under
+the technology then or any technology to date. Entertainment media reinforced these
+concepts with futuristic imagery many generations beyond contemporary capabilities
+(http://en.wikipedia.org/wiki/virtual reality).
+9.3 Fiction books
+There are many science fiction books which described VR. One of the first modern works to
+use this idea was Daniel F. Galouye’s novel “Simulacron-3”. The Piers Anthony’s novel
+“Killobyte” follows the story of a paralysed cop trapped in a VR game by a hacker, whom
+he must stop to save a fellow trapped player with diabetes slowly succumbing to insulin
+shock. The first fictional work to fully describe VR was included in the 1951 book-“The
+Illustrated Man”. The “Otherland” series of novels by Tad Williams shows a world where
+www.intechopen.com
+Understanding Virtual Reality Technology: Advances and Applications
+65
+the Internet has become accessible via VR. It has become so popular and somewhat
+commonplace that, with the help of surgical implants, people can connect directly into this
+future VR environment. Some other popular fictional works that use the concept of VR
+include William Gibson’s “Neuromancer” which defined the concept of cyberspace, Neal
+Stephenson’s “Snow Crash”, in which he made extensive reference to the term avatar to
+describe one’s representation in a virtual world, and Rudy Rucker’s “The Hacker and the
+Ants”, in which programmer Jerzy Rugby uses VR for robot design and testing.
+Fig. 8. Fiction books that described Virtual Reality
+9.4 Television
+Perhaps the earliest example of VR on television is a Doctor Who serial “The Deadly
+Assassin”. This story introduced a dream-like computer-generated reality known as the
+Matrix. The first major television series to showcase VR was “Star Trek: the Next
+Generation”. They featured the holodeck, a VR facility on starships that enabled its users to
+recreate and experience anything they wanted. One difference from current VR technology,
+however, was that replicators, force fields, holograms, and transporters were used to
+actually recreate and place objects in the holodeck, rather than relying solely on the illusion
+of physical objects, as is done today.
+9.5 Motion pictures
+There are a lot of motion pictures that explored and used the idea of VR. Steven Lisberger’s
+film “TRON” was the first motion picture to explore the idea. This idea was popularized by
+the Wachowski brothers in 1999’s motion picture “The Matrix”. The Matrix was significant
+in that it presented VR and reality as often overlapping, and sometimes indistinguishable.
+Total Recall and David Cronenberg’s film “ExistenZ” dealt with the danger of confusion
+between reality and VR in computer games. Cyberspace became something that most
+movies completely misunderstood, as seen in “The Lawnmower Man”. Also, the British
+comedy “Red Dwarf” used in several episodes the idea that life is a VR game. This idea was
+also used in “Spy Kids 3D: Game Over”. Another movie that has a bizarre theme is
+“Brainscan”, where the point of the game is to be a virtual killer. A more artistic and
+philosophical perspective on the subject can be seen in Avalon. There is also a film from
+1995 called “Virtuosity” with Denzel Washington and Russell Crowe that dealt with the
+creation of a serial killer, used to train law enforcement personnel, that escapes his VR into
+the real world.
+www.intechopen.com
+Advances in Computer Science and Engineering
+66
+9.6 Music videos
+The lengthy video for hard rock band Aerosmith’s 1993 single “Amazing” depicted VR,
+going so far as to show two young people participating in VR simultaneously from their
+separate personal computers (while not knowing the other was also participating in it) in
+which the two engage in a steamy makeout session, sky-dive, and embark on a motorcycle
+journey together.
+9.7 Games
+A lot of industries sprang up and started developing VR games. In 1991, the W Industries
+released a VR gaming system called the 1000CS. This was a stand-up immersive HMD
+platform with a tracked 3D joystick. The system featured several VR games including
+“Dactyl Nightmare”, “Legend Quest”, “Hero”, and “Grid Busters”. There were other games
+developed such as “VR World 3D Color Ninja”, “VR Wireless TV Tennis Game”, “Mage: the
+Ascension”, “Kingdom Hearts II”, “System Shock”, “System Shock2”, and “VR 3D
+Drangonflight” among others.
+9.8 Fine art
+Fine art is also influenced by VR. Artists stated to create impressions using VR. David Em
+was the first fine artist to create navigable virtual worlds. Jeffrey Shaw explored the
+potential of VR in fine arts with early works like “Legible City”, “Virtual Museum”, and
+“Golden Calf”. Char Davies created immersive VR art pieces in “Osmose” and “Ephémère”.
+Works such as “Is God Flat”, The “Tunnel under the Atlantic “, and “World Skin”, by
+Maurice Benayoun introduced metaphorical, philosophical or political content, combining
+VR, network, generation and intelligent agents. There are other pioneering artists working
+in VR.
+9.9 Marketing
+Advertising and merchandise have been associated with VR. There are a lot of television
+commercials using VR. TV commercials featuring VR have been made products, such as
+Nike’s “Virtual Andre”. This commercial features a teenager playing tennis using a goggle
+and gloves system against a computer generated Andre Agassi. There are some others
+commercials as seen in most English premier league commercials.
+9.10 Health care
+VR is finding its way into the training of health care professionals. Use ranges from anatomy
+instruction to surgery simulation. VR also has numerous applications that can be directly
+related to health care. In a white paper on the use of Virtual Environments for Health Care,
+Moline (1995) indicated several areas where patient care can be assisted by VR techniques.
+These include the use of VR for remote tele-surgery; the use of VR techniques in local
+surgery such as endoscopy, where the surgeon manipulates instruments by viewing a TV
+monitor; the use of virtual environments as surgical simulators or trainers; the use of virtual
+environments as therapy devices to reduce anxiety or fear. One example is dentists using 3D
+eyeglasses to divert a patient’s attention during dental operations and the use of virtual
+environments to reduce phobias such as agoraphobia and vertigo. North et al (1996)
+provided an overview of current work in the use of VR techniques to reduce phobias in their
+book VR Therapy.
+www.intechopen.com
+Understanding Virtual Reality Technology: Advances and Applications
+67
+9.11 Therapeutic uses
+The primary use of VR in a therapeutic role is its application to various forms of exposure
+therapy, ranging from phobia treatments, to newer approaches to treating Post Traumatic
+Stress Disorder (PTSD) (Goslin & Morie, 1996; Krijn, 2005; Schuemie, 2003; Schuemie et al.,
+2001). A very basic VR simulation with simple sight and sound models has been shown to
+be invaluable in phobia treatment as a step between basic exposure therapy such as the use
+of simulacra and true exposure (North et al., 1996). A much more recent application is being
+piloted by the U.S. Navy to use a much more complex simulation to immerse veterans
+(specifically of Iraq) suffering from PTSD in simulations of urban combat settings. Much as
+in phobia treatment, exposure to the subject of the trauma or fear seems to lead to
+desensitization, and a significant reduction in symptoms.
+9.12 Real estate
+The real estate sector has used the term VR for websites that offer panoramic images laced
+into a viewer such as QuickTime player in which the viewer can rotate to see all 360 degrees
+of the image.
+10. Advantages and uses of VR
+Researchers in the field have generally agreed that VR technology is exciting and can
+provide a unique and effective way to learn and that VR projects are highly motivating to
+learners (Mantovani et al., 2003). From research, several specific situations have emerged in
+which VR has strong benefits or advantages. For example, VR has great value in situations
+where exploration of environments or interactions with objects or people is impossible or
+inconvenient, or where an environment can only exist in computer-generated form. VR is
+also valuable when the experience of actually creating a simulated environment is important
+to learning. Creating their own virtual worlds has been shown to enable some students to
+master content and to project their understanding of what they have learned (Ausburn &
+Ausburn, 2004).
+One of the beneficial uses of VR occurs when visualization, manipulation, and interaction
+with information are critical for its understanding; it is, in fact, its capacity for allowing
+learners to display and interact with information and environment that some believe is VR’s
+greatest advantage. Finally, VR is a very valuable instructional and practice alternative
+when the real thing is hazardous to learners, instructors, equipment, or the environment.
+This advantage of the technology has been cited by developers and researchers from such
+diverse fields as firefighting, anti-terrorism training, nuclear decommissioning, crane
+driving and safety, aircraft inspection and maintenance, automotive spray painting and
+pedestrian safety for children (Ausburn & Ausburn, 2004).
+11. Disadvantages and limitations of VR
+One important issue in the use of VR is the high level of skill and cost required to develop
+and implement VR, particularly immersive systems. Very high levels of programming and
+graphics expertise and very expensive hardware and software are necessary to develop
+immersive VR, and considerable skill is needed to use it effectively in instruction. While
+desktop VR technology has dramatically reduced the skill and cost requirement of virtual
+environments, it still demands some investment of money and time.
+www.intechopen.com
+Advances in Computer Science and Engineering
+68
+Another set of limitations of VR environments stems from the nature of the equipment they
+require. A long-standing problem with immersive VR has been health and safety concerns
+for its users. The early literature was top-heavy with studies of headaches, nausea, balance
+upsets, and other physical effects of HMD systems. While these problems have largely
+disappeared from current VR research as the equipment has improved, and appear to be
+completely absent in the new desktop systems, little is known about long-term physical or
+psychological effects of VR usage. A second equipment limitation of VR arises from the fact
+that it is computer-based and requires high-end hardware for successful presentation.
+Inadequate computing gear can dramatically limit the response time for navigation and
+interaction in a virtual environment, possibly destroying its sense of presence for users and
+damaging or destroying its usefulness as a simulation of reality. This response situation
+sometimes referred to as the “latency problem” of VR, can also arise from bandwidth
+limitations when VR is distributed over a network or the Internet.
+12. Conclusion
+A lot of advancements have been made using VR and VR technology. VR has cut across all
+facets of human endeavours-manufacturing/business, exploration, defense, leisure
+activities, and medicine among others. The exciting field of VR has the potential to change
+our lives in many ways. There are many applications of VR presently and there will be
+many more in the future. Many VR applications have been developed for manufacturing,
+education, simulation, design evaluation, architectural walk-through, ergonomic studies,
+simulation of assembly sequences and maintenance tasks, assistance for the handicapped,
+study and treatment of phobias, entertainment, rapid prototyping and much more. VR
+technology is now widely recognized as a major break through in the technological advance
+of science.
+13. References
+Abshire, K. J. & Barron, M. K. (1998). Virtual maintenance: Real-world applications within
+virtual environments, IEEE Proceedings Annual Reliability and Maintainability
+Symposium, 132-137.
+Aukstakalnis, S. & Blatner, D. (1992). Silicon mirage: The art and science of virtual reality.
+Peachpit Press, Berkley.
+Ausburn, L. J. & Ausburn, F. B. (2004). Desktop virtual reality: A powerful new technology
+for teaching and research in industrial teacher education. Journal of Industrial
+Technical Education, Vol. 41, No.4, [Online], Available:
+http://scholar.lib.vt.edu/ejournals/JITE/v41n4/ausburn.html
+Baieier, K.P. (1993). Virtual reality: Short introduction. [Online]. Available:
+http://www-vrl.umich.edu/intro.html/
+Balaguer, J. & Gennaro, S. (1996). VENUS: A virtual reality project at CERN. Computer
+Graphics, 30, 40-43.
+Bell, J.T. (1996). Introducing virtual reality into the engineering curriculum, Proc. of
+University Programs in Computer Aided Engineering and Design Manufacturing,
+Charlottesville, VA. [Online]. Available: http://www.vrupl.evl.uic.edu/vrichel/.
+Bell, J.T. &. Fogler, H.S. (1998). Virtual Reality in the Chemical Engineering Classroom, Proc.
+of American Society for Engineering Education Annual Conference, Seattle, WA.
+www.intechopen.com
+Understanding Virtual Reality Technology: Advances and Applications
+69
+Bell, J.T. &. Fogler, H.S. (1996a). Vicher: A prototype virtual reality based educational
+module for chemical reaction engineering, Computer Applications in Engineering
+Education, 4(4).
+Bell, J.T. &. Fogler, H.S. (1996b). Recent developments in virtual reality based education,
+Proc. of the American Society for Engineering Education Annual Conference,
+Washington, DC.
+Cline, M. S. (2005). Power, madness, and immortality: The future of virtual reality. [Online].
+Available: http://virtualreality.universityvillagepress.com/index.php
+Colin, J. (2006). Computer Visualization of Dudley Castle. [Online]. Available:
+http://www.extrenda.net/dudley/index.htm
+Croquet. [Online]. Available: http://www.opencroquet.org/index.php/Main_Page
+Cruz-Niera, C. (1993). Virtual reality overview. Proceeding of ACM SISGRAPH 93 Conference
+on Applied Virtual Reality, Anaheim, California.
+Dedula, W. T. (1997). About virtual reality and its use in the mobile aeronautics education
+laboratory (MAEL). [Online]. Available:
+http://www.grc.nasa.gov/WWW/MAELVRSTATION/news_info.html
+Eslinger, C. (1993). Education. Encyclopedia of Virtual Environments. World Wide Web URL:
+http://www.hitl.washington.edu/scivw/EVE/I.A.1.Displays.html
+Fang, K.P., Feng, F.K. & Wai , K.K. (n.d). Low Cost Virtual Reality System: PlayStation 2 VR
+system: Technical Report No. CS031900. [Online]. http://cs.uct.ac.za
+Forterra System Inc. [Online]. Available:
+http://company.mmosite.com/forterra/index.shtml
+Gomes de Sa, A. & Zachmann, G. (1999). Virtual reality as a tool for verification of assembly
+and maintenance processes, Computers and Graphics, 23, 389-403.
+Goslin, M. & Morie, J. F. (1996). Virtopia: Emotional experiences in virtual environments.
+Leonardo, 29(2), 95-100.
+Haag, S.; Cummings, M., & Dawkins, J. (1998). Management Information Systems for the
+Information Age. Irwin/McGraw Hill, ISBN 0-07-025465-6, New York.
+Haufmann, H., Schmalstieg, D. & Wagner, M. (2000). Construct3D: A Virtual Reality
+Application for Mathematics and Geometry Education, Education and Information
+Technologies, 5 (4), 263-276.
+Icarus Studio :Worlds Beyond Reality. [Online]. Available: http://www.icarusstudios.com/
+Isdale, J. (1998). What is virtual reality? A web-based introduction. Retrieved November 12,
+2005. [Online]. Available:
+http://whatis.techtarget.com/definition//0.sid9_gci213303,00.html
+Isdale, J. (1993). What is virtual reality? A homebrew introduction. Retrieved November 12,
+2005. [Online]. Available: http://whatis.techtarget.com
+Kalawsky, R. S. (1993). The Science of Virtual Reality and Virtual Environments. Wokingham:
+Addison-Wesley
+Kim, J., Park, S., Yuk, K., Lee, H. and Lee, H. ( 2000). Virtual reality simulations in physics
+education. Interactive Multimedia Electronic Journal of Computer-Enhanced Learning
+[Online]. Available: http://imej.wfu.edu/articles/2001/2/02/index.asp
+Krijn, M. (2005). Virtual reality and specific phobias: Welcome to the real world. Retrieved
+September 20, 2007 from
+http://graphics.tudelft.nl/~vrphobia/Thesis_Krijn_DRUKKER.pdf
+Lane, C. (1993). Display Technologies. Encyclopedia of Virtual Environments. World Wide Web
+URL: http://www.hitl.washington.edu/scivw/EVE/I.A.1.Displays.html
+Mantovani, F., Gaggiolo, A., Castelnuovo, G. & Riva, G. (2003). Virtual reality training for
+health-care professionals. CyberPsychology and Behavior, 6(4), 389-395.
+www.intechopen.com
+Advances in Computer Science and Engineering
+70
+Moline, J. (1995). Virtual environments for health care. White paper for the advanced
+technology program (ATP). National Institute of Standards and Technology.
+Mousa, H. E. (n.d.). Alternative Virtual reality and virtual worlds development tools and
+Health care! [Online], Available: http://www.goomedic.com/alternative-virtualreality-
+and-virtual-worlds-development-tools-and-health-care.html
+Negroponte, N. (1995). Being Digital. Vintage Books, New York, USA.
+Neil, M. J. (1996). Architectural Virtual Reality Applications, Computer Graphics, 30, 53-54.
+Newquist III, H. P. (1993). Virtual Reality Special Report. AI Expert.
+North, M., North, S. & Coble, J. (1996). Virtual Reality Therapy. IPI Press, Colorado Springs,
+CO, USA.
+Onyesolu, M.O. (2009a). Virtual reality laboratories: The pedagogical effectiveness and use
+in obtaining cheap laboratories using the computer laboratory, Journal of Science
+Engineering and Technology, Vol. 16, No.1, (March 2009) 8679-8689, ISSN 1117-4196.
+Onyesolu, M.O. (2009b). Virtual reality laboratories: An ideal solution to the problems
+facing laboratory setup and management, Proceedings of world congress on
+engineering and computer science 2009, pp. 291-295, ISBN: 978-988-17012-6-8, San
+Francisco, USA, October 2009, Newswood Limited, Hong Kong.
+Onyesolu, M.O. & Akpado, K.A. (2009). Virtual reality simulations in computer engineering
+education. International Journal of Electrical and Telecommunication Systems Research,
+Vol. 3, No.3, (July 2009) 56-61, ISSN 0795-2260.
+Onyesolu, M.O. (2006). Virtual reality: An emerging computer technology of the 21st
+century. International Journal of Electrical and Telecommunication Systems Research,
+Vol. 1, No.1, (August 2006) 36-40, ISSN 0795-2260.
+Schuemie, M.J. (2003). Human-Computer Interaction and Presence in Virtual Reality
+Exposure Therapy. Retrieved September 23, 2006 from
+http://graphics.tudelft.nl/~vrphobia/dissertation.pdf
+Schuemie, M.J., Van Der Straaten, P., Krijn, M. & Van Der Mast, C.A.P.G. (2001). Research
+on presence in virtual reality: A survey. Cyberpsychology and Behavior, 4(2).
+Smith, S. &. Lee, S. (2004). A pilot study for integrating virtual reality into an introductory
+design and graphics course. Journal of Industrial Technology. 20(4).
+Sulbaran, T. & Baker, N. C. (2000). Enhancing engineering education through distributed
+virtual reality, 30th ASEE/IEEE frontiers in Education Conference, October 18-21,
+Kansas City, MO, S1D-13 – S1D-18.
+The Alphaville Herald: Interview with Ogoglio's Trevor Smith. [Online]. Available:
+http://foo.secondlifeherald.com/slh/2007/01/interview_with_.html
+Vince, J. (1995). Virtual Reality Systems. (Reading, Massachusetts: Addison-Wesley).
+Wang, C. & Cannon, D. J. (1996). Virtual-Reality-Based Point-and-Direct robotic inspection
+in manufacturing. IEEE Trans.
+We are virtual heroes. [Online]. Available: http://www.virtualheroes.com /about.asp
+Williams, B.K., & Sawyer, S.C. (2001). Using Information Technology: A Practical Introduction to
+Computers and Communications. McGraw Hill, ISBN 0-07-239803-5, New York.
+Winn, W. & Bricken, W. (1992). Designing virtual worlds for use in mathematics education:
+The example of experiential algebra, Educational Technology, 32 (12), 12-19.
+Wittenberg, G. (1995). Training with virtual reality, Assembly Automation, 15 (3), 12-14.
+Wittenberg, G. (1993). Virtual reality in engineering, The Industrial Robot, 20, 21-22.
+Ziff Davis enterprise web buyer's guide. [Online]. Available:
+http://www.webbuyersguide.com/product/brief.aspx?src=rss&kc=rss&id=52841
+www.intechopen.com
+Advances in Computer Science and Engineering
+Edited by Dr. Matthias Schmidt
+ISBN 978-953-307-173-2
+Hard cover, 462 pages
+Publisher InTech
+Published online 22, March, 2011
+Published in print edition March, 2011
+InTech Europe
+University Campus STeP Ri
+Slavka Krautzeka 83/A
+51000 Rijeka, Croatia
+Phone: +385 (51) 770 447
+Fax: +385 (51) 686 166
+www.intechopen.com
+InTech China
+Unit 405, Office Block, Hotel Equatorial Shanghai
+No.65, Yan An Road (West), Shanghai, 200040, China
+Phone: +86-21-62489820
+Fax: +86-21-62489821
+The book Advances in Computer Science and Engineering constitutes the revised selection of 23 chapters
+written by scientists and researchers from all over the world. The chapters cover topics in the scientific fields of
+Applied Computing Techniques, Innovations in Mechanical Engineering, Electrical Engineering and
+Applications and Advances in Applied Modeling.
+How to reference
+In order to correctly reference this scholarly work, feel free to copy and paste the following:
+Moses Okechukwu Onyesolu and Felista Udoka Eze (2011). Understanding Virtual Reality Technology:
+Advances and Applications, Advances in Computer Science and Engineering, Dr. Matthias Schmidt (Ed.),
+ISBN: 978-953-307-173-2, InTech, Available from: http://www.intechopen.com/books/advances-in-computerscience-
+and-engineering/understanding-virtual-reality-technology-advances-and-applications
