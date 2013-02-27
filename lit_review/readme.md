@@ -51,4 +51,6 @@ __virtual reality/Virtual Notepad Handwriting in Immersive VR (1998).pdf__
 * +bibtex
 * interesting method of interaction (possible way to do interaction...  drawing tablets or digitizers are quite common for CAD)
 
+__virtual reality/Virtual Reality- How Much Immersion is Enough.pd__
+* +bibtex
 
