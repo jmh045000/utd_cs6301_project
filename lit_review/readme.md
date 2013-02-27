@@ -17,6 +17,10 @@ __augmented reality/Mathematics And Geometry Education With Collaborative Augmen
 * +bibtex
 * describes teaching with Construct3D
 
+__misc/Learning design patterns with bayesian grammar induction.pdf__
+* +bibtex
+* we're using this for something, right?
+
 __virtual reality/3D Arrow a Virtual Pointer for Immersive Sculpting (2011).pdf__
 * +bibtex
 * might be useful
@@ -58,3 +62,5 @@ __virtual reality/Virtual Notepad Handwriting in Immersive VR (1998).pdf__
 __virtual reality/Virtual Reality- How Much Immersion is Enough.pd__
 * +bibtex
 
+__virtual reality/What's Real About Virtual Reality (1999).pdf__
+* +bibtex
