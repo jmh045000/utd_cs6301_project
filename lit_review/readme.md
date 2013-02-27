@@ -31,6 +31,10 @@ __virtual reality/Designing Immersive Virtual Reality for Geometry Education (20
 
 > In fact, Bowman [4] and other studies suggest that for direct input in 3D space six degrees of freedom are not expedient most of the time. Therefore it is very reasonable to restrict the user’s input to two dimensions for instance.  Commonly grids and snapping functions are used to enable exact modeling.
 
+__virtual reality/Exploring the integration of spatial grammars and open-source CAD systems (2009).pdf__
+* +bibtex (from google scholar)
+* could be relevent as a way to design in 3D...
+
 __virtual reality/Interaction Techniques for Immersive Virtual Environments- Design, Evaluation, and Application.pdf__
 * +bibtex (not sure if totally correct...)
 * http://people.cs.vt.edu/~bowman/papers/hcic.pdf
