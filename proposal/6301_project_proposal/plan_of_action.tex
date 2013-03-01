@@ -2,7 +2,7 @@ We will be implementing a prototype world builder over the course of one semeste
 This prototype will stay true to the design, however, due to time constraints, not all features will be included.
 
 \subsection{Physical Environment}
-Fortunately, the physical environment remains the same between the end-goal and this prototype phase.
+The physical environment remains the same between the end-goal and this prototype phase.
 We will still be using a Head Mounted Display, along with two Wiimotes.
 All will be independently tracked using a Vicon system in a 10'x30' space.
 Also, the Wiimotes provide 11 buttons each, that will be used for interaction and navigation (see Figure \ref{fig:wiimote}).
@@ -42,22 +42,22 @@ If there is time permitting after the essential manipulation features have been 
 
 \subsubsection{Navigation}
 Both real walking and virtual walking will be provided.
-Real walking is accomplished by the framework with very little effort on our part.
+Real walking is accomplished by the framework with little effort.
 Virtual walking will use the D-Pad and move the origin point of the environment, thereby moving the user through it.
 
 Since Scale-the-World is provided, as well as both walking schemes, the user will be able to magnify their steps using the method described in \ref{Design:Interaction:Navigation}.
 
 \subsubsection{System Control}
-Since many of the features described in \ref{Design:Interaction} require a menu, a menu will be provided.
-However, this will be simpler than the menu described there.
+Many of the features described in \ref{Design:Interaction} require a menu, so a menu will be provided.
+However, this will be simpler than the menu described in \ref{Design:Interaction}.
 An object category and material category will be provided, as well as a tools category.
-The tools category will only contain the features described in this section however, namely, deletion and grouping.
+The tools category will only contain the features described in this section, namely, deletion and grouping.
 
 If time permits, the file category will be provided that will allow the user to save/load the world they have spent time to create.
 
 \subsection{Implementation}
 We will be implementing the World Builder application using the \href{http://syzygy.isl.uiuc.edu/szg/szgsrc/doc/index.html}{Syzygy} virtual reality API created at the University of Illinois for the development.
-This API allows us to do rapid prototype development, since some of the most complex features of an immersive virtual environment have been completed, such as head based rendering, interaction with objects, and input device drivers.
+This API allows us to do rapid prototype development, since some of the most complex features of an immersive virtual environment have been completed, including head based rendering, interaction with objects, and input device drivers.
 
 The Syzygy API contains two frameworks that are used for development, \verb|arMasterSlaveFramework| and \verb|arDistSceneGraphFramework|.
 We will be using the \verb|arMasterSlaveFramework|, but we are using a helper class created by the FIVE lab at UTD to include a Scene Graph in an \verb|arMasterSlaveFramework|.

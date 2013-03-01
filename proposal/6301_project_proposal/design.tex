@@ -18,18 +18,17 @@ The virtual environment is an empty and infinite 3D canvas for the user to creat
 This allows the user to create any object, building, landscape, or geometrical feature that is possible, with any size imaginable.
 Since the user is creating a world, there are no sounds, animations, or simulation effects in place to begin with.
 However, the user may create any item within the world, which can be utilized to create moving objects, 3D sounds, and simulation effects.
-For instance, the user can create a car that moves along a street, which associated engine and tire noise as it moves.
-The user could also create the ground, and say that objects must ``rest'' upon the ground (simulating gravity).
+For instance, the user can create a car that moves along a street, with associated engine and tire noise as it moves.
+The user could also create the ground and say that objects must ``rest'' upon the ground (simulating gravity).
 
 \subsection{Interaction}
 \label{Design:Interaction}
 
-
-
 \subsubsection{Selection}
 \label{Design:Interaction:Selection}
 Object selection is a crucial task for most of the features within this project.
-We will be augmenting object selection with tactile feedback provided through the Wiimote's rumble feature, when a user selects a new object, the Wiimote will rumble for a predetermined amount of time.
+We will be augmenting object selection with tactile feedback provided through the Wiimote's rumble feature.
+When a user selects a new object, the Wiimote will rumble for a predetermined amount of time.
 Several selection selection methods are provided, which can be selected based on the users preference.
 \begin{itemize}
 	\item Simple Virtual Hand
@@ -39,19 +38,19 @@ Several selection selection methods are provided, which can be selected based on
 
 \paragraph{Simple Virtual Hand}
 A virtual hand will be co-located with the user's real hand.
-The user will not be able grasp any objects out of their reach, and must navigate to manipulate anything.
-This method of selection is the easiest to understand and use, but affords the least flexibility.
+The user will not be able grasp any objects out of their reach, and must navigate to manipulate them.
+This method of selection is the easiest to understand and use but affords the least flexibility.
 
 \paragraph{Simple Ray-Casting}
-Much like Simple Virtual Hand, however the user is able to reach out to infinity, or until an object is encountered.
-This affords the user to be able to manipulate objects that are very far out of reach, but requires the user to learn to take advantage of this.
-We believe this will require very little cognitive overhead, and should not cause problems for any user.
+This is similar to Simple Virtual Hand, however the user is able to reach out to infinity or until an object is encountered.
+This affords the user to be able to manipulate objects that are very far out of reach but requires the user to learn to take advantage of this.
+We believe this will require little cognitive overhead and should not cause problems for most users.
 As such, this will be the default selection method.
 
 \paragraph{PORT}
-The user can create a 3D selection box, where all objects within the box become selected.
-This selection method provides the most flexibility, especially within our application, however the cognitive overhead on the user is much higher.
-Once a user is proficient with the system, we believe this will be the most used selection method.
+The user can create a 3D selection box where all objects within the box become selected.
+This selection method provides the most flexibility, especially within our application, however the cognitive overhead on the user is  higher.
+Once a user is proficient with the system, we believe this will be a frequently used selection method.
 
 \subsubsection{Manipulation}
 \label{Design:Interaction:Manipulation}
@@ -81,14 +80,14 @@ Creation and deletion will be done through a menu (described \ref{Design:Interac
 Translation, rotation, and scaling will all be performed with button interaction on the Wiimote, after an object is selected.
 Scaling is unique, as it requires bimanual input.
 The user must select and object, press buttons on both Wiimotes, and move both hands for the object to be scaled.
-The actual motion will be determined by the hand movement while interaction button is being held down.
-Coloring and texturing will also be performed through a menu (see \ref{Design:Interaction:SystemControl}), and will also require an object to be selected first.
+The actual motion will be determined by the hand movement while the interaction button is being held down.
+Coloring and texturing will also be performed through a menu (see \ref{Design:Interaction:SystemControl}) and will also require an object to be selected first.
 
 \paragraph{Multi-Object Manipulation}
 There are three boolean operations using multiple objects provided.  Boolean operations can be performed when there are overlapping portions of multiple selected objects.
 \begin{enumerate}
 	\item Union
-	\subitem When the user selects the union operation and multiple objects are selected, it creates a single object made up of all the objects that were selected.
+	\subitem When the user selects the union operation and multiple objects are selected, it creates a single, fused, object made up of all the objects that were selected.
 	\item Intersection
 	\subitem When intersection is selected, the non-overlapping portions of the selected objects will be removed, leaving a single object made up of only the intersecting portion.
 	\item Subtraction
@@ -96,7 +95,7 @@ There are three boolean operations using multiple objects provided.  Boolean ope
 \end{enumerate}
 
 Grouping objects allows the user create a single object from a group of selected objects.
-Unlike the boolean operations, no logic is performed on the group besides making them behave as a single object.
+Unlike the boolean operations, no logic is performed on the group other than making them behave as a single object.
 The grouped objects, for all intents and purposes, behave as a single object, all the single object manipulations above work on a grouped objects.
 One benefit grouped objects provide over the boolean operations, is that it can be undone.
 Multiple objects can be grouped, manipulated, ungrouped, and manipulated independently.
@@ -124,12 +123,12 @@ i.e. If the user presses ``Up'' on the D-Pad, they will move forward in the virt
 
 Another navigation feature is to use the manipulation feature Scale-the-World.
 Since the user can scale the entire world down, they can make everything smaller, making their steps (both real and virtual) much larger.
-This method forsakes some interaction fidelity for the benefit of an infinite world.
+This method loses some interaction fidelity for the benefit of an infinite world.
 
 \subsubsection{System Control}
 \label{Design:Interaction:SystemControl}
-As mentioned above, a menu will be present.
-The menu is created in 3D space where the user's hand is when they press the menu key on the right-hand Wiimote.
+As mentioned before, a menu will be present.
+The menu is created in 3D space where the user's right hand is when activating the menu.
 The menu is a collection of categories laid out in tabs, with buttons under each tab for the functions available in that category.
 The categories provided are:
 \begin{itemize}
