@@ -1,33 +1,43 @@
 While computer power has increased exponentially over the past several years, we still rely on the same interface that was created over 20 years ago, namely a 2D screen with interaction through a keyboard and mouse.
-While this is sufficient for every day tasks, it is quickly becoming more and more cumbersome on designers of 3D objects (architects, mechanical engineers, 3D artists, etc) \cite{Dekker199242}.
+While this is sufficient for every day tasks, it is quickly becoming more and more cumbersome on designers of 3D objects (architects, mechanical engineers, 3D artists, etc)\cite{Dekker199242}.
 
-It has been shown that creating 3D objects within an Immersive Virtual Environment (IVE) has significant benefits over developing on a 2D surface (a monitor)\cite{Kaufmann:Usability}, especially in a classroom setting \cite{Kaufmann:LearningGeometry}.
+It has been shown that creating 3D objects within an Immersive Virtual Environment (IVE) has significant benefits over developing on a 2D surface (a monitor)\cite{Kaufmann:Usability}, especially in a classroom setting\cite{Kaufmann:LearningGeometry}.
+Our application will allow a teacher to create an interactive 3D model to be used for instruction of students.
 
-Previous studies have shown that it is beneficial to break the design in to different groups of tools, such as creation, editing, and grouping
-\cite{Butterworth:1992:3DM}.
+We plan on breaking the design in to several pieces such as creation, editing, and grouping.
+This allows the user to focus on the task at hand, creating a more efficient workflow\cite{Butterworth:1992:3DM}.
 
-Also, other research has given evidence that careful attention needs to be placed on the method of interaction \cite{Bowman98interactiontechniques}.
-There have been extensive studies on locomotion within IVEs, such as World in Miniature \cite{Pausch:WorldInMiniature}.
+Other research has given evidence that careful attention needs to be placed on the method of interaction\cite{Bowman98interactiontechniques}.
+We will be using several interaction techniques.
+Bimanual interaction has been shown to allow the user more fine-grained and contextual control\cite{Zeleznik:1997:TPI:253284.253316}.
+Some research has shown that using an augmented reality system to construct a virtual world along side a real one provides intuitive benefit\cite{Jota:2011:CVM:1979742.1979915}.
+Since we are using 6DOF devices based on where the users' hands are, we can take advantage of proprioception.
+This allows the user to have a more phyical ``sense'' of where the object is being moved \cite{Mine:MovingObjects}.
+We allow the user to point and select in a 3D space, which gives the user more fine-grained control of indvidual points on the object \cite{5759472}.
+This could be extended to allow a user to manipulate individual points (vertices) on an object, giving very precise control of the detail of the object.
+Dexterity in IVEs is also a problem, one group used a pressure sensitive notepad tracked in 3D to simulate a digitizer which allowed manipulation of objects in the environment\cite{658467}.
+We will be overcoming this problem by using two 6DOF devices for interaction, this way, the user will have very find control over each object.
 
-Manipulating and creating objects in 3D is a relatively hard task\cite{Mine:MovingObjects}.
-One proposal is to use real objects in an Augmented Reality setting
-\cite{Jota:2011:CVM:1979742.1979915}.
+Selection techniques often use ray casting.
+Some work focused on pointing from the user's hand\cite{Mine:MovingObjects}.
+Others used the user's eye as the start of the ray\cite{Pierce:1997:IPI:253284.253303}.
+More recent research has indicated that a combination of the two leads to the best results for user accuracy\cite{5307641}.
+We will be focusing on simple ray-casting, although the system can be extended to allow for any number of selection methods to be chosen by the user.
 
-Another proposal is to use a "3D arrow" to move individual points on a object\cite{5759472}.
+There have been extensive studies on locomotion within IVEs, such as World in Miniature\cite{Pausch:WorldInMiniature}.
+We will be using a modified World in Miniature scheme.
+The user will be able to shrink the world around them, thereby allowing them to navigate quickly and efficiently, without taking up valuable space in the display.
 
-Dexterity in IVEs is also a problem.
-One group used a pressure sensitive notepad tracked in 3D to simulate a digitizer which allowed manipulation of
-objects in the environment\cite{658467}.
+One feature that is very promising is the automatic creation of object based on shape grammars\cite{Goswell:ShapeGrammer}.
+This allows a user to define a ``rule'' for creating an object, and the system can create multiple variances of that object for them.
 
-Selection techniques often use ray casting.  Some work focused on pointing from the user's hand\cite{Mine:MovingObjects}. Others used the user's eye as the start of the ray \cite{Pierce:1997:IPI:253284.253303}.  More recent research has indicated that a combination of the two leads to the best results for user accuracy\cite{5307641}.
-
-Someone did 2 pointer work, but in a desktop environment\cite{Zeleznik:1997:TPI:253284.253316}.
-
-There is evidence portraying the lack of useful computer based tools for architecture, especially within architecture education \cite{Dobson:Architecture}.
+There is evidence portraying the lack of useful computer based tools for architecture, especially within architecture education\cite{Dobson:Architecture}.
+Our system will allow the design and study of full-scale buildings in minute detail.
+Once real-world simulation effects are in place, the user could add a life-size skyscraper and view the effects of gravity and wind at the top floors.
 
 The ability of an IVE to design and view 3D models dynamically extends well beyond architecture and simple CAD.
-Volkswagen has been designing a virtual reality system, RAMSIS, that allows its engineers to study the styling and design of their vehicles before production \cite{Purschke:Cars}.
+Volkswagen has been designing a virtual reality system, RAMSIS, that allows its engineers to study the styling and design of their vehicles before production\cite{Purschke:Cars}.
 We believe we can take this one step further: by allowing a user to bring a model in to the world, the user can design an entire world and place objects, such as cars, within it.
 
-Another exciting possibility for the uses of a generic 3D design system is that of Micro-Electro-Mechanical Systems (MEMS) \cite{Zhao:MEMS}.
+Another exciting possibility for the uses of a generic 3D design system is that of Micro-Electro-Mechanical Systems (MEMS)\cite{Zhao:MEMS}.
 By extending our system to allow for real-world simulation effects, the user could prototype the device and study its behavior in an intuitive manner.
