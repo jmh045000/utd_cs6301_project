@@ -32,6 +32,9 @@ __virtual reality/3D Arrow a Virtual Pointer for Immersive Sculpting (2011).pdf_
 __virtual reality/3DM- A Three Dimenional Modeler Using a Head-Mounted Display.pdf__
 * +bibtex Butterworth:1992:3DM
 
+__virtual reality/Architectural Composition in the Electronic Design Studio- Conceptual Design using CAD Visualisation and Virtual Reality Modeling.pdf__
+* +bibtex Dobson:Architecture
+
 __virtual reality/Designing Immersive Virtual Reality for Geometry Education (2006).pdf__
 * +bibtex Kaufmann:LearningGeometry
 * another paper by the initial author
@@ -39,6 +42,8 @@ __virtual reality/Designing Immersive Virtual Reality for Geometry Education (20
 
 > In fact, Bowman [4] and other studies suggest that for direct input in 3D space six degrees of freedom are not expedient most of the time. Therefore it is very reasonable to restrict the user’s input to two dimensions for instance.  Commonly grids and snapping functions are used to enable exact modeling.
 
+__virtual reality/Efficient 3D Pointing Selection in Cluttered Virtual Environments.pdf__
+* +bibtex 5307641
 
 __virtual reality/Interaction Techniques for Immersive Virtual Environments- Design, Evaluation, and Application.pdf__
 * +bibtex (not sure if totally correct...) Bowman98interactiontechniques
