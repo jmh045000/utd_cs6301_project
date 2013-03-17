@@ -1,199 +1,338 @@
-//********************************************************
-// Syzygy is licensed under the BSD license v2
-// see the file SZG_CREDITS for details
-//********************************************************
 
-// precompiled header include MUST appear as the first non-comment line
-#include "arPrecompiled.h"
-// MUST come before other szg includes. See arCallingConventions.h for details.
-#define SZG_DO_NOT_EXPORT
-#include <stdio.h>
-#include <stdlib.h>
-#include "arEffector.h"
-#include "arDistSceneGraphFramework.h"
-#include "arPerspectiveCamera.h"
-#include "arMesh.h"
-#include "arInteractableThing.h"
-#include "arInteractionUtilities.h"
+#include "arPrecompiled.h" // This HAS to be first... ugh
+
+
+#include <list>
+#include <assert.h>
+
+#include "arMasterSlaveFramework.h"
 #include "arGlut.h"
-#include "arMaterial.h"
+#include "arInteractionUtilities.h"
+
+#include "Node.h"
+#include "SceneGraph.h"
 
 #include "MyConditions.h"
 #include "WiiMote.h"
 
-#include <windows.h>
-// The following converts a sleep(n) in seconds call to a Sleep(n) in milliseconds call
-#define sleep(n) Sleep(1000 * n)
-
-const float FEET_TO_LOCAL_UNITS = 2.0f;
-const float nearClipDistance = .1*FEET_TO_LOCAL_UNITS;
-const float farClipDistance = 100.*FEET_TO_LOCAL_UNITS;
-
-static const float EFFECTOR_LENGTH = 1;
-
-class MyCombinedNode : public arInteractable
+class MenuItem : public Node
 {
-	
-	arTransformNode *transformNode;
-	arMesh		    *meshObj;
-
+protected:
+    const char *name;
+    bool selected;
 public:
-	MyCombinedNode(arDatabaseNode *parent, arMesh *mesh) : transformNode((arTransformNode*)parent->newNode("transform")), meshObj(mesh)
-	{
-		transformNode->setTransform(ar_TM(0, 5, 0));
-		setMatrix(ar_TM(0, 5, 0));
-		meshObj->attachMesh((arGraphicsNode*)transformNode);
-	}
-	~MyCombinedNode()
-	{
-		delete transformNode;
-		delete meshObj;
-	}
-	
-	void setMatrix( const arMatrix4& matrix )
-	{
-		_matrix = matrix;
-		transformNode->setTransform(matrix);
-	}
-	
-	operator arTransformNode*() { return transformNode; }
-	operator arInteractable*() { return this; }
-	operator arInteractable() { return *this; }
-	
+    MenuItem( const char *n, bool s ) : Node(), name( n ), selected( s ) {}
+    
+    friend class MenuNode;
 };
 
-class MyCombinedEffector : public WiiMote
+class Tab : public MenuItem
 {
-	arTransformNode *transformNode;
-	arMesh			*meshObj;
-	arSZGAppFramework *framework;
-	
+private:
+    
+    void draw();
 public:
-	MyCombinedEffector(WiiMote::controller_t con, arDatabaseNode *parent, arMesh *mesh, arSZGAppFramework *fw) : 
-		WiiMote(con), transformNode((arTransformNode*)parent->newNode("transform")), meshObj(mesh), framework(fw)
-	{
-		meshObj->attachMesh((arGraphicsNode*)transformNode);
-	}
-	
-	~MyCombinedEffector()
-	{
-		delete transformNode;
-		delete meshObj;
-	}
-	
-	void update()
-	{
-		updateState(framework->getInputState());
-		transformNode->setTransform(getMatrix());
-	}
-	
-	operator arTransformNode*() { return transformNode; }
+    Tab( const char *name, bool selected = false ) : MenuItem( name, selected ) {}
+    
+    friend struct _TabGroup_s;
 };
 
-int main(int argc, char** argv) {
+void Tab::draw()
+{
+//glDisable(GL_DEPTH_TEST);
+    if( selected )
+        glColor3f( 1, 1, 1 );
+    else
+        glColor3f( 0.5, 0.5, 0.5 );
+    float hsize = 1;
+    float vsize = 0.5;
+    GLfloat v[4][3] =
+    {
+        { -hsize / 2, -vsize / 2, 0.0001 },
+        { hsize / 2, -vsize / 2, 0.0001 },
+        { hsize / 2, vsize / 2, 0.0001 },
+        { -hsize / 2, vsize / 2, 0.0001 }
+    };
+    
+    glBegin( GL_QUADS );
+        glTexCoord2f( 0, 0 ); glVertex3fv( v[0] );
+        glTexCoord2f( 1, 0 ); glVertex3fv( v[1] );
+        glTexCoord2f( 1, 1 ); glVertex3fv( v[2] );
+        glTexCoord2f( 0, 1 ); glVertex3fv( v[3] );
+    glEnd();
+    /**/
+    
+    glColor3f( 0, 0, 0 );
+    glPushMatrix();
+        glTranslatef( ( -hsize / 2 ) + 0.3 , 0, 0.001);
+        glScalef(0.0009, 0.0009, 0.0009);
+        for (const char* c = name; *c; ++c)
+        {
+            glutStrokeCharacter(GLUT_STROKE_ROMAN, *c);
+        }
+    glPopMatrix();
+//glEnable(GL_DEPTH_TEST);
+}
 
-	arDistSceneGraphFramework framework;
+typedef struct _TabGroup_s
+{
+    Tab *objectTab;
+    Tab *materialTab;
+    Tab *toolsTab;
+    
+    Tab* operator++(int)
+    {
+        assert( objectTab && materialTab && toolsTab );
+        if( objectTab->selected ) { objectTab->selected = false; materialTab->selected = true; return materialTab; }
+        else if( materialTab->selected ) { materialTab->selected = false; toolsTab->selected = true; return toolsTab; }
+        else { toolsTab->selected = false; objectTab->selected = true; return objectTab; }
+    }
+    
+    Tab* operator--(int)
+    {
+        assert( objectTab && materialTab && toolsTab );
+        if( objectTab->selected ) { objectTab->selected = false; toolsTab->selected = true; return toolsTab; }
+        else if( materialTab->selected ) { materialTab->selected = false; objectTab->selected = true; return objectTab; }
+        else { toolsTab->selected = false; materialTab->selected = true; return materialTab; }
+    }
+} TabGroup;
 
-	framework.setNavTransCondition( 'z', AR_EVENT_AXIS, 1, 0.2 );
-	framework.setNavRotCondition( 'y', AR_EVENT_AXIS, 0, 0.2 );    
-	//framework.setUnitConversion(FEET_TO_LOCAL_UNITS);
-	framework.setClipPlanes(nearClipDistance, farClipDistance);
-	
-	// initialize framework
-	if(!framework.init(argc, argv))
-	{
-		return 1;
-	}
-	
-	if(framework.getStandalone())
-	{
-		printf("Doesn't work in standalone\n");
-		return 1;
-	}
-	
-	// Set up the light...
-	arLight light;
-	light.lightID = 0;
-	light.position = arVector4(0, 0, 1, 0);
-	light.diffuse = arVector3(1, 1, 1);
-	
-	arLight omnilight;
-	omnilight.lightID = 1;
-	omnilight.position = arVector4(0, 5, 0, 1);
-	omnilight.diffuse = arVector3(1, 1, 1);
-	omnilight.specular = arVector3(0.5, 0.5, 0.5);
-		
-	// Add a material for the sphere to attach to
-	arMaterial material;
-	material.diffuse = arVector3(1, 0, 0);
+class MenuNode : public Node
+{
+private:
+    typedef enum { TAB, ITEM, ARROW, MAX_GROUPS } SelectedGroup;
+    TabGroup tabs;
+    
+    MenuItem *currentSelected;
+    void draw();
+public:
+    MenuNode() : Node() {}
+    
+    void pressedDown();
+    void pressedLeft();
+    void pressedRight();
+    void pressedUp();
+    void pressedA();
+    
+    friend MenuNode* initMenu();
+    friend void buildMenu();
+    friend void tearDownMenu();
+};
 
-	arGraphicsDatabase* graphics = framework.getDatabase();
-	//graphics->setTexturePath(".");
-	arDatabaseNode* root = (arDatabaseNode*)graphics->getRoot();
-	arTransformNode* headNode = (arTransformNode*)root->newNode("transform");
+void MenuNode::draw()
+{
+    float hsize = 5;
+    float vsize = 3;
+    GLfloat v[4][3] =
+    {
+        { -hsize / 2, -vsize / 2, 0 },
+        { hsize / 2, -vsize / 2, 0 },
+        { hsize / 2, vsize / 2, 0 },
+        { -hsize / 2, vsize / 2, 0 }
+    };
+    glBegin( GL_QUADS );
+        glTexCoord2f( 0, 0 ); glVertex3fv( v[0] );
+        glTexCoord2f( 1, 0 ); glVertex3fv( v[1] );
+        glTexCoord2f( 1, 1 ); glVertex3fv( v[2] );
+        glTexCoord2f( 0, 1 ); glVertex3fv( v[3] );
+    glEnd();
+}
 
-	// Set a material, so we can change the color
-	arMaterialNode* materialNode = (arMaterialNode*)root->newNode("material");
-	materialNode->setMaterial(material);
-	
-	// Add a transform to the material, the sphere will attach to this node, so that it gets moved
-	arTransformNode* transformNode = (arTransformNode*)root->newNode("transform");
-	//transformNode->setTransform(ar_TM(0, 0, -3));
-	
-	// Add the light to the root
-	arLightNode* lightNode = (arLightNode*)root->newNode("light");
-	lightNode->setLight(light);
-	
-	arLightNode* omniLightNode = (arLightNode*)root->newNode("light");
-	omniLightNode->setLight(omnilight);
-	
-	MyCombinedNode mynode(materialNode, new arSphereMesh(25));
-	
-	myDragManager myDrag;
-	
-	MyCombinedEffector primary(WiiMote::CONTROLLER_1, root, new arCubeMesh(ar_SM(2./12., 2./12., EFFECTOR_LENGTH)), &framework);
-	MyCombinedEffector secondary(WiiMote::CONTROLLER_2, root, new arCubeMesh(ar_SM(2./12., 2./12., EFFECTOR_LENGTH)), &framework);
-	
-	primary.setDragManager(&myDrag);
-	secondary.setDragManager(&myDrag);
-	
-	vector<ConditionEffectorPair> c1;
-	c1.push_back(ConditionEffectorPair(arGrabCondition(AR_EVENT_BUTTON, 3, 0.5), &primary));
-	c1.push_back(ConditionEffectorPair(arGrabCondition(AR_EVENT_BUTTON, 3, 0.5), &secondary));
-	primary.setDrag(UnionGrabCondition(c1), ScaleWithProportions(&primary, &secondary));
-	
-	vector<ConditionEffectorPair> c2;
-	c2.push_back(ConditionEffectorPair(arGrabCondition(AR_EVENT_BUTTON, 2, 0.5), &primary));
-	c2.push_back(ConditionEffectorPair(arGrabCondition(AR_EVENT_BUTTON, 2, 0.5), &secondary));
-	primary.setDrag(UnionGrabCondition(c2), ScaleWithoutProportions(&primary, &secondary));
-  
-	primary.setDrag(arGrabCondition(AR_EVENT_BUTTON, 3, 0.5), arWandRelativeDrag());
+void MenuNode::pressedDown()
+{
 
-	if(!framework.start()) {
-		return 1;
-	}
-	
-	float position = 0.;
-	float delta = 0.0001;
-	
-	primary.update();
-	secondary.update();
-	
-	while(true)
-	{
-		framework.loadNavMatrix();
+}
 
-		headNode->setTransform(framework.getMidEyeMatrix());
-		
-		primary.update();
-		secondary.update();
-		
-		ar_pollingInteraction( primary, mynode );
-		ar_pollingInteraction( secondary, mynode );
-		
-		framework.setViewer();
-		Sleep(1);
-	}
+void MenuNode::pressedLeft()
+{
+    currentSelected = tabs--;
+}
 
-	return 0;
+void MenuNode::pressedRight()
+{
+    currentSelected = tabs++;
+}
+
+void MenuNode::pressedUp()
+{
+
+}
+
+void MenuNode::pressedA()
+{
+    cout << currentSelected->name << " is currently selected!" << endl;
+}
+
+SceneGraph *sg;
+MenuNode *menu;
+WiiMote primary( WiiMote::CONTROLLER_1 );
+WiiMote secondary( WiiMote::CONTROLLER_2 );
+bool menuOn = false;
+
+std::list<arInteractable*> objects_;
+
+MenuNode* initMenu()
+{
+    MenuNode *menu = new MenuNode();
+    menu->setColor( CYAN );
+    
+    Tab *objectTab = new Tab( "Objects", true );
+    objectTab->setNodeTransform( ar_TM( -1.5, 1, 0 ) );
+    menu->tabs.objectTab = objectTab;
+    menu->currentSelected = objectTab;
+    
+    Tab *materialTab = new Tab( "Materials" );
+    materialTab->setNodeTransform( ar_TM( 0, 1, 0 ) );
+    menu->tabs.materialTab = materialTab;
+    
+    Tab *toolsTab = new Tab( "Tools" );
+    toolsTab->setNodeTransform( ar_TM( 1.5, 1, 0 ) );
+    menu->tabs.toolsTab = toolsTab;
+    
+    return menu;
+}
+
+void buildMenu()
+{
+    sg->addChild( menu );
+    sg->addChild( menu->tabs.objectTab, menu );
+    sg->addChild( menu->tabs.materialTab, menu );
+    sg->addChild( menu->tabs.toolsTab, menu );
+}
+
+void tearDownMenu()
+{
+    sg->removeChild( menu->tabs.toolsTab );
+    sg->removeChild( menu->tabs.materialTab );
+    sg->removeChild( menu->tabs.objectTab );
+    sg->removeChild( menu );
+}
+
+bool initSceneGraph( arMasterSlaveFramework &fw, arSZGClient &client )
+{
+    sg = new SceneGraph( fw );
+    
+    menu = initMenu();
+    
+    return true;
+}
+
+void onPreExchange( arMasterSlaveFramework &fw )
+{
+    fw.navUpdate();
+    
+    // update the input state (placement matrix & button states) of our effector.
+    primary.updateState( fw.getInputState() );
+    secondary.updateState( fw.getInputState() );
+    
+    WiiMote::ButtonList buttons = secondary.getDownButtons();
+    for( WiiMote::ButtonList::iterator it = buttons.begin(); it != buttons.end(); ++it )
+    {  // Process all butons just pressed on secondary
+        switch( *it )
+        {
+        case WiiMote::HOME:
+            if( menuOn )
+            {
+                tearDownMenu();
+            }
+            else
+            {
+                arEulerAngles angles( AR_YXZ );
+                angles.extract( secondary.getMatrix() );
+                angles.setAngles( arVector3( angles )[0], 0, 0 );
+                menu->setNodeTransform( ar_ETM( secondary.getMatrix() ) * angles.toMatrix() );
+                buildMenu();
+            }
+            menuOn = !menuOn;
+            break;
+        case WiiMote::DOWN:
+            menu->pressedDown();
+            break;
+        case WiiMote::RIGHT:
+            menu->pressedRight();
+            break;
+        case WiiMote::LEFT:
+            menu->pressedLeft();
+            break;
+        case WiiMote::UP:
+            menu->pressedUp();
+            break;
+        case WiiMote::A:
+            menu->pressedA();
+            break;
+        }
+    }
+    buttons = primary.getDownButtons();
+    for( WiiMote::ButtonList::iterator it = buttons.begin(); it != buttons.end(); ++it )
+    {  // Process all butons just pressed on primary
+        switch( *it )
+        {
+        case WiiMote::HOME:
+            if( menuOn )
+            {
+                tearDownMenu();
+            }
+            else
+            {
+                arEulerAngles angles( AR_YXZ );
+                angles.extract( primary.getMatrix() );
+                angles.setAngles( arVector3( angles )[0], 0, 0 );
+                menu->setNodeTransform( ar_ETM( primary.getMatrix() ) * angles.toMatrix() );
+                buildMenu();
+            }
+            menuOn = !menuOn;
+            break;
+        case WiiMote::DOWN:
+            menu->pressedDown();
+            break;
+        case WiiMote::RIGHT:
+            menu->pressedRight();
+            break;
+        case WiiMote::LEFT:
+            menu->pressedLeft();
+            break;
+        case WiiMote::UP:
+            menu->pressedUp();
+            break;
+        case WiiMote::A:
+            menu->pressedA();
+            break;
+        }
+    }    
+
+    // Handle any interaction with the square (see interaction/arInteractionUtilities.h).
+    // Any grabbing/dragging happens in here.
+    ar_pollingInteraction( primary, objects_ );
+    ar_pollingInteraction( secondary, objects_ );
+}
+
+void doSceneGraph( arMasterSlaveFramework &fw )
+{
+    fw.loadNavMatrix();
+    primary.draw();
+    secondary.draw();
+    sg->drawSceneGraph();
+    ar_usleep( 100000 / 200 );
+}
+
+
+int main(int argc, char *argv[])
+{
+
+    // Initialize framework and bring up window
+    
+    arMasterSlaveFramework framework;
+    if ( !framework.init( argc, argv ) )
+    {
+        std::cerr << "Failed to init framework!" << std::endl;
+        return -1;
+    }
+    
+    framework.setStartCallback( initSceneGraph );
+    framework.setDrawCallback( doSceneGraph );
+    framework.setPreExchangeCallback( onPreExchange );
+    
+    return framework.start() ? 0 : 1; // Return 0 if framework.start exits ok
+    
+    return 0;
 }

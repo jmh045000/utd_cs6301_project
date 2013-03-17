@@ -96,7 +96,7 @@ const WiiMote::ButtonList& WiiMote::getDownButtons()
 	downButtons.clear();
 	for(int i = 0; i < NUM_BUTTONS; i++)
 	{
-		if( getOnButton( (controller_*NUM_BUTTONS)+i ) )
+		if( getOnButton( i ) )
 		{
 			downButtons.push_back( (button_t)i );
 		}
@@ -109,7 +109,7 @@ const WiiMote::ButtonList& WiiMote::getOnButtons()
 	onButtons.clear();
 	for(int i = 0; i < NUM_BUTTONS; i++)
 	{
-		if( getButton( (controller_*NUM_BUTTONS)+i ) )
+		if( getButton( i ) )
 		{
 			onButtons.push_back( (button_t)i );
 		}
@@ -122,7 +122,7 @@ const WiiMote::ButtonList& WiiMote::getUpButtons()
 	upButtons.clear();
 	for(int i = 0; i < NUM_BUTTONS; i++)
 	{
-		if( getOffButton( (controller_*NUM_BUTTONS)+i ) )
+		if( getOffButton( i ) )
 		{
 			upButtons.push_back( (button_t)i );
 		}

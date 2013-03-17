@@ -94,6 +94,11 @@ MYOBJS := WiiMote$(OBJ_SUFFIX) MyConditions$(OBJ_SUFFIX) $(OBJ_WIIUSE)
 # are stored.
 #	
 
+SCENEGRAPHDIR = $(SZGHOME)/scenegraph
+COMPILE_FLAGS += -w -D_WIN32_WINNT=0x0501 -DWINVER=0x0501 
+SZG_INCLUDE += -I$(SCENEGRAPHDIR)/src  -I$(SCENEGRAPHDIR)/include
+MYOBJS += $(SCENEGRAPHDIR)/build/win32/Node.o $(SCENEGRAPHDIR)/build/win32/SceneGraph.o
+
 worldbuilder$(EXE): worldbuilder$(OBJ_SUFFIX) $(MYOBJS) $(SZG_LIBRARY_DEPS)
 	$(SZG_USR_FIRST) worldbuilder$(OBJ_SUFFIX) $(MYOBJS) $(SZG_USR_SECOND)
 	$(COPY)
