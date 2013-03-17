@@ -1,3 +1,6 @@
-include $(SZGHOME)/build/make/Makefile.toprule
 
+default : all
 
+all $(MAKECMDGOALS):
+	$(MAKE) -C scenegraph $(MAKECMDGOALS)
+	$(MAKE) -C worldbuilder $(MAKECMDGOALS)
