@@ -59,7 +59,8 @@ __virtual reality/Navigation and locomotion in virtual worlds via flight into ha
 * renamed from "World in Miniature.pdf"
 
 __virtual reality/Understanding Virtual Reality Technology: Advances and Applications__
-* need source
+* +bibtex AdvanceAndApplication
+* A general outline on the Virtual Reality hadware and interaction techniques
 
 __virtual reality/Virtual Notepad Handwriting in Immersive VR (1998).pdf__
 * +bibtex 658467
@@ -71,3 +72,19 @@ __virtual reality/Virtual Reality- How Much Immersion is Enough.pd__
 
 __virtual reality/What's Real About Virtual Reality (1999).pdf__
 * +bibtex 799723
+
+__virtual reality/interfaces, algorithms, and applications (2009).pdf__
+* +bibtex Interactions
+* Discussion on the interfaces and algorithms involved in 3D interaction
+
+__virtual reality/Virtual audio systems (Dec 2008).pdf__
+* +bibtex VAS
+* Paper on the omportance of auditory cues and its usefulness
+
+__augmented reality/Augmenting the Reality with 3D Sound Sources (2002).pdf__
+* +bibtex ASR
+* An example for placement of 3D sound using augmented reality
+
+__augmented reality/VisHap - Augmented Reality Combining Haptics (2003).pdf__
+* +bibtex VisHap 
+* An example for applying haptic feedback
