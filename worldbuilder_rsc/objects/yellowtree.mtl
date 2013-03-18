@@ -1,0 +1,10 @@
+newmtl trunk_material
+Kd 1 1 0
+illum 2
+Ks .25 .25 .25
+Ns 20
+newmtl leaf_material
+Kd 0.0235294 0.65098 0.937255
+illum 2
+Ks .25 .25 .25
+Ns 20
