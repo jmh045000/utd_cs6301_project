@@ -10,13 +10,11 @@
 #ifndef BOOST_XPRESSIVE_PROTO_PROTO_TYPEOF_H
 #define BOOST_XPRESSIVE_PROTO_PROTO_TYPEOF_H
 
-#include <boost/proto/detail/prefix.hpp>
 #include <boost/config.hpp>
 #include <boost/typeof/typeof.hpp>
 #include <boost/proto/proto_fwd.hpp>
 #include <boost/proto/deep_copy.hpp>
 #include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
-#include <boost/proto/detail/suffix.hpp>
 
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::terminal)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::unary_plus)
@@ -61,6 +59,7 @@ BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::bitwise_and_assign)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::bitwise_or_assign)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::bitwise_xor_assign)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::subscript)
+BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::member)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::if_else_)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::function)
 

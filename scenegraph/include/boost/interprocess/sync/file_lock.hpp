@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2005-2008. Distributed under the Boost
+// (C) Copyright Ion Gaztanaga 2005-2009. Distributed under the Boost
 // Software License, Version 1.0. (See accompanying file
 // LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
@@ -18,16 +18,17 @@
 #include <boost/interprocess/detail/config_begin.hpp>
 #include <boost/interprocess/detail/workaround.hpp>
 #include <boost/interprocess/exceptions.hpp>
-#include <cassert>
 #include <boost/interprocess/detail/os_file_functions.hpp>
 #include <boost/interprocess/detail/os_thread_functions.hpp>
 #include <boost/interprocess/detail/posix_time_types_wrk.hpp>
+#include <boost/interprocess/detail/move.hpp>
 
 //!\file
 //!Describes a class that wraps file locking capabilities.
 
 namespace boost {
 namespace interprocess {
+
 
 //!A file lock, is a mutual exclusion utility similar to a mutex using a
 //!file. A file lock has sharable and exclusive locking capabilities and
@@ -38,17 +39,48 @@ class file_lock
 {
    /// @cond
    //Non-copyable
-   file_lock();
-   file_lock(const file_lock &);
-   file_lock &operator=(const file_lock &);
+   BOOST_INTERPROCESS_MOVABLE_BUT_NOT_COPYABLE(file_lock)
    /// @endcond
+
    public:
+   //!Constructs an empty file mapping.
+   //!Does not throw
+   file_lock()
+      :  m_file_hnd(file_handle_t(detail::invalid_file()))
+   {}
+
    //!Opens a file lock. Throws interprocess_exception if the file does not
    //!exist or there are no operating system resources.
    file_lock(const char *name);
 
+   //!Moves the ownership of "moved"'s file mapping object to *this. 
+   //!After the call, "moved" does not represent any file mapping object. 
+   //!Does not throw
+   file_lock(BOOST_INTERPROCESS_RV_REF(file_lock) moved)
+      :  m_file_hnd(file_handle_t(detail::invalid_file()))
+   {  this->swap(moved);   }
+
+   //!Moves the ownership of "moved"'s file mapping to *this.
+   //!After the call, "moved" does not represent any file mapping. 
+   //!Does not throw
+   file_lock &operator=(BOOST_INTERPROCESS_RV_REF(file_lock) moved)
+   {  
+      file_lock tmp(boost::interprocess::move(moved));
+      this->swap(tmp);
+      return *this;  
+   }
+
    //!Closes a file lock. Does not throw.
    ~file_lock();
+
+   //!Swaps two file_locks.
+   //!Does not throw.
+   void swap(file_lock &other)
+   {
+      file_handle_t tmp = m_file_hnd;
+      m_file_hnd = other.m_file_hnd;
+      other.m_file_hnd = tmp;
+   }
    
    //Exclusive locking
 
@@ -266,7 +298,6 @@ inline void file_lock::unlock_sharable()
 }
 
 }  //namespace interprocess {
-
 }  //namespace boost {
 
 #include <boost/interprocess/detail/config_end.hpp>

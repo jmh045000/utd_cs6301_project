@@ -13,7 +13,6 @@
     #ifndef BOOST_PROTO_TRANSFORM_PASS_THROUGH_HPP_EAN_12_26_2006
     #define BOOST_PROTO_TRANSFORM_PASS_THROUGH_HPP_EAN_12_26_2006
 
-    #include <boost/proto/detail/prefix.hpp>
     #include <boost/preprocessor/cat.hpp>
     #include <boost/preprocessor/repetition/enum.hpp>
     #include <boost/preprocessor/iteration/iterate.hpp>
@@ -22,7 +21,6 @@
     #include <boost/proto/proto_fwd.hpp>
     #include <boost/proto/args.hpp>
     #include <boost/proto/transform/impl.hpp>
-    #include <boost/proto/detail/suffix.hpp>
 
     namespace boost { namespace proto
     {
@@ -51,7 +49,7 @@
                   , State                                                                           \
                   , Data                                                                            \
                 >()(                                                                                \
-                    expr.proto_base().BOOST_PP_CAT(child, N), state, data                           \
+                    e.proto_base().BOOST_PP_CAT(child, N), s, d                           \
                 )
 
             #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_PROTO_MAX_ARITY, <boost/proto/transform/pass_through.hpp>))
@@ -66,16 +64,21 @@
             {
                 typedef Expr result_type;
 
-                /// \param expr An expression
-                /// \return \c expr
+                /// \param e An expression
+                /// \return \c e
                 /// \throw nothrow
-                typename pass_through_impl::expr_param operator()(
-                    typename pass_through_impl::expr_param expr
+                #ifdef BOOST_HAS_DECLTYPE
+                result_type
+                #else
+                typename pass_through_impl::expr_param 
+                #endif
+                operator()(
+                    typename pass_through_impl::expr_param e
                   , typename pass_through_impl::state_param
                   , typename pass_through_impl::data_param
                 ) const
                 {
-                    return expr;
+                    return e;
                 }
             };
 
@@ -92,8 +95,8 @@
         ///
         /// \code
         /// plus<
-        ///     T0::result<void(E0, S, V)>::type
-        ///   , T1::result<void(E1, S, V)>::type
+        ///     T0::result<T0(E0, S, V)>::type
+        ///   , T1::result<T1(E1, S, V)>::type
         /// >::type
         /// \endcode
         ///
@@ -165,12 +168,13 @@
                   , BOOST_PP_CAT(list, N)<
                         BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_TRANSFORM_TYPE, ~)
                     >
+                  , N
                 > result_type;
 
                 result_type operator ()(
-                    typename pass_through_impl::expr_param expr
-                  , typename pass_through_impl::state_param state
-                  , typename pass_through_impl::data_param data
+                    typename pass_through_impl::expr_param e
+                  , typename pass_through_impl::state_param s
+                  , typename pass_through_impl::data_param d
                 ) const
                 {
                     result_type that = {

@@ -9,7 +9,6 @@
 #ifndef BOOST_PROTO_DEBUG_HPP_EAN_12_31_2006
 #define BOOST_PROTO_DEBUG_HPP_EAN_12_31_2006
 
-#include <boost/proto/detail/prefix.hpp>
 #include <boost/preprocessor/iteration/local.hpp>
 #include <boost/preprocessor/repetition/repeat.hpp>
 #include <iomanip>
@@ -19,7 +18,6 @@
 #include <boost/proto/expr.hpp>
 #include <boost/proto/traits.hpp>
 #include <boost/proto/detail/dont_care.hpp>
-#include <boost/proto/detail/suffix.hpp>
 
 namespace boost { namespace proto
 {
@@ -65,6 +63,7 @@ namespace boost { namespace proto
         }                                                                       \
         /**/
 
+        BOOST_PROTO_DEFINE_TAG_NAME(terminal)
         BOOST_PROTO_DEFINE_TAG_NAME(unary_plus)
         BOOST_PROTO_DEFINE_TAG_NAME(negate)
         BOOST_PROTO_DEFINE_TAG_NAME(dereference)
@@ -107,6 +106,7 @@ namespace boost { namespace proto
         BOOST_PROTO_DEFINE_TAG_NAME(bitwise_or_assign)
         BOOST_PROTO_DEFINE_TAG_NAME(bitwise_xor_assign)
         BOOST_PROTO_DEFINE_TAG_NAME(subscript)
+        BOOST_PROTO_DEFINE_TAG_NAME(member)
         BOOST_PROTO_DEFINE_TAG_NAME(if_else_)
         BOOST_PROTO_DEFINE_TAG_NAME(function)
 
@@ -137,11 +137,12 @@ namespace boost { namespace proto
 
             /// \brief Pretty-print the current node in a Proto expression
             /// tree.
-            template<typename Args>
-            void operator()(proto::expr<tag::terminal, Args, 0> const &expr) const
+            template<typename Tag, typename Args>
+            void operator()(proto::expr<Tag, Args, 0> const &expr) const
             {
+                using namespace tag;
                 this->sout_ << std::setw(this->depth_) << (this->first_? "" : ", ")
-                    << "terminal(" << proto::value(expr) << ")\n";
+                    << proto_tag_name(Tag()) << "(" << proto::value(expr) << ")\n";
                 this->first_ = false;
             }
 
