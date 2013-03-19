@@ -3,11 +3,10 @@
 
 
 #include <list>
-#include <assert.h>
+#include <vector>
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
-/**/
 
 #include "arMasterSlaveFramework.h"
 #include "arGlut.h"
@@ -31,6 +30,9 @@ public:
     MenuItem( const char *n, bool s ) : Node(), name( n ), selected( s ) {}
     
     const char *name;
+    
+    void deselect() { selected = false; }
+    void select() { selected = true; }
     
     friend class MenuNode;
 };
@@ -120,7 +122,7 @@ public:
 
 void Item::draw()
 {
-    
+    glColor3f( 1, 1, 1 );
     float hsize = 1;
     float vsize = 1;
     GLfloat v[4][3] =
@@ -140,11 +142,18 @@ void Item::draw()
     
     if( selected )
     {
-        glBegin( GL_LINE );
+        glColor3f( 0, 0, 0 );
+        glBegin( GL_LINE_LOOP );
             for( int i = 0; i < 4; i++ )
             {
-                v[i][0] += 0.1;
-                v[i][1] += 0.1;
+                if( v[i][0] > 0 )
+                    v[i][0] += 0.1;
+                else
+                    v[i][0] -= 0.1;
+                if( v[i][1] > 0 )
+                    v[i][1] += 0.1;
+                else
+                    v[i][1] -= 0.1;
                 glVertex3fv( v[i] );
             }
         glEnd();
@@ -159,9 +168,9 @@ typedef struct _MenuGroup_s
     virtual MenuItem* operator--(int) = 0;
 } MenuGroup_t;
 
-
 typedef struct _TabGroup_s : public MenuGroup_t
 {
+    int cur;
     Tab *objectTab;
     Tab *materialTab;
     Tab *toolsTab;
@@ -178,24 +187,43 @@ typedef struct _TabGroup_s : public MenuGroup_t
     
     MenuItem* operator++(int)
     {
-        assert( objectTab && materialTab && toolsTab );
-        if( objectTab->selected ) { objectTab->selected = false; materialTab->selected = true; return materialTab; }
-        else if( materialTab->selected ) { materialTab->selected = false; toolsTab->selected = true; return toolsTab; }
-        else { toolsTab->selected = false; objectTab->selected = true; return objectTab; }
+        switch( cur )
+        {
+        case 0:
+            cur = 1;
+            return materialTab;
+        case 1:
+            cur = 2;
+            return toolsTab;
+        case 2:
+            cur = 0;
+            return objectTab;
+        }
     }
     
     MenuItem* operator--(int)
     {
-        assert( objectTab && materialTab && toolsTab );
-        if( objectTab->selected ) { objectTab->selected = false; toolsTab->selected = true; return toolsTab; }
-        else if( materialTab->selected ) { materialTab->selected = false; objectTab->selected = true; return objectTab; }
-        else { toolsTab->selected = false; materialTab->selected = true; return materialTab; }
+        switch( cur )
+        {
+        case 0:
+            cur = 2;
+            return toolsTab;
+        case 1:
+            cur = 0;
+            return objectTab;
+        case 2:
+            cur = 1;
+            return materialTab;
+        }
     }
+    
+    _TabGroup_s() : MenuGroup_t(), cur( 0 ) {}
 } TabGroup;
 
 typedef struct _ItemGroup_s : public MenuGroup_t
 {
-    list<Item*> items;
+    int cur;
+    list<Item*> itemlist;
     
     string name()
     {
@@ -204,22 +232,70 @@ typedef struct _ItemGroup_s : public MenuGroup_t
     
     MenuItem* first()
     {
-        return items.front();
+        return itemlist.front();
     }
     
     MenuItem* operator++ (int)
     {
-        return items.front();
+        int _ = 0;
+        Item *i;
+        switch( cur )
+        {
+        case 0:
+            cur = 1;
+            for( list<Item*>::iterator it = itemlist.begin(); it != itemlist.end() && _++ <= cur; ++it )
+                i = *it;
+            return i;
+        case 1:
+            cur = 2;
+            for( list<Item*>::iterator it = itemlist.begin(); it != itemlist.end() && _++ <= cur; ++it )
+                i = *it;
+            return i;
+        case 2:
+            cur = 0;
+            for( int _ = 0; _ < 3; _++ )
+            {
+                Item *i = itemlist.front();
+                itemlist.push_back( i );
+                itemlist.pop_front();
+            }
+            return itemlist.front();
+        }
     }
     
     MenuItem* operator-- (int)
     {
-        return items.front();
+        int _ = 0;
+        Item *i;
+        switch( cur )
+        {
+        case 0:
+            cur = 2;
+            for( _ = 0; _ < 3; _++ )
+            {
+                i = itemlist.back();
+                itemlist.push_front( i );
+                itemlist.pop_back();
+            }
+            for( list<Item*>::iterator it = itemlist.begin(); it != itemlist.end() && _++ <= cur; ++it )
+                i = *it;
+            return i;
+        case 1:
+            cur = 0;
+            return itemlist.front();
+        case 2:
+            cur = 1;
+            for( list<Item*>::iterator it = itemlist.begin(); it != itemlist.end() && _++ <= cur; ++it )
+                i = *it;
+            return i;
+        }
     }
     
-    _ItemGroup_s( list<Item*> i ) : MenuGroup_t(), items( i ) {}
+    _ItemGroup_s( list<Item*> i ) : MenuGroup_t(), cur( 0 ), itemlist( i ) {}
     
 } ItemGroup;
+
+typedef enum { NONE, REDRAW, CLOSE, MAX } MenuAction;
 
 class MenuNode : public Node
 {
@@ -228,17 +304,31 @@ private:
     
     TabGroup tabs;
     ItemGroup *items;
+    
     SelectedGroup selectedGroup;
     MenuItem *currentSelected;
+    
+    ItemGroup *objects;
+    ItemGroup *textures;
+    
     void draw();
 public:
     MenuNode() : Node(), selectedGroup( TAB ), currentSelected( NULL )  {}
+    
+    void setObjects( list<Item*> l ) { objects = new ItemGroup( l ); 
+        for(list<Item*>::const_iterator it = l.begin(); it != l.end(); ++it )
+            cout << "Object=" << (*it)->name << endl;
+    }
+    void setTextures( list<Item*> l ) { textures = new ItemGroup( l ); 
+        for(list<Item*>::const_iterator it = l.begin(); it != l.end(); ++it )
+            cout << "Texture=" << (*it)->name << endl;
+    }
     
     void pressedDown();
     void pressedLeft();
     void pressedRight();
     void pressedUp();
-    bool pressedA();
+    MenuAction pressedA();
     
     friend SelectedGroup operator++(SelectedGroup);
     friend SelectedGroup operator--(SelectedGroup);
@@ -269,6 +359,7 @@ void MenuNode::draw()
 void MenuNode::pressedDown()
 {
     selectedGroup = ++selectedGroup;
+    currentSelected->deselect();
     switch( selectedGroup )
     {
     case TAB:
@@ -278,35 +369,43 @@ void MenuNode::pressedDown()
         currentSelected = items->first();
         break;
     }
+    currentSelected->select();
 }
 
 void MenuNode::pressedLeft()
 {
+    currentSelected->deselect();
     switch( selectedGroup )
     {
     case TAB:
         currentSelected = tabs--;
         break;
     case ITEM:
+        currentSelected = (*items)--;
         break;
     }
+    currentSelected->select();
 }
 
 void MenuNode::pressedRight()
 {
+    currentSelected->deselect();
     switch( selectedGroup )
     {
     case TAB:
         currentSelected = tabs++;
         break;
     case ITEM:
+        currentSelected = (*items)++;
         break;
     }
+    currentSelected->select();
 }
 
 void MenuNode::pressedUp()
 {
     selectedGroup = ++selectedGroup;
+    currentSelected->deselect();
     switch( selectedGroup )
     {
     case TAB:
@@ -316,9 +415,10 @@ void MenuNode::pressedUp()
         currentSelected = items->first();
         break;
     }
+    currentSelected->select();
 }
 
-bool MenuNode::pressedA()
+MenuAction MenuNode::pressedA()
 {
     switch( selectedGroup )
     {
@@ -329,9 +429,18 @@ bool MenuNode::pressedA()
         if( Tab *t = dynamic_cast<Tab*>(currentSelected) )
         {
             t->activate();
+            if( t == tabs.objectTab )
+                items = objects;
+            else if( t == tabs.materialTab )
+                items = textures;
+            else if( t == tabs.toolsTab )
+                items = textures;
+            return REDRAW;
         }
         break;
     }
+    
+    return NONE;
 }
 
 MenuNode::SelectedGroup operator++( MenuNode::SelectedGroup s )
@@ -366,7 +475,6 @@ MenuNode::SelectedGroup operator--( MenuNode::SelectedGroup s )
 
 list<Item*> findObjects()
 {
-
     list<Item*> l;
     
     fs::path p( "./worldbuilder_rsc/" );
@@ -376,16 +484,44 @@ list<Item*> findObjects()
     p /= "objects";
     if( !fs::exists( p ) )
         throw( "worldbuilder_rsc must contain an \"objects\" directory" );
-        
-    
-    
     
     fs::directory_iterator end_itr;
     for( fs::directory_iterator it( p ); it != end_itr; ++it )
     {
+        char *n = new char[it->path().filename().length()];
+        strcpy( n, it->path().filename().c_str() );
         if( it->path().extension() == ".obj" )
-            l.push_back( new Item( it->path().filename().c_str(), Item::OBJECT, it->path().filename() ) );
+            l.push_back( new Item( n, Item::OBJECT, it->path().filename() ) );
     }
+    
+    for( list<Item*>::iterator it = l.begin(); it != l.end(); ++it )
+        cout << "objectlist[i] = " << (*it)->name << endl;
+    
+    return l;
+}
+
+list<Item*> findTextures()
+{
+    list<Item*> l;
+    
+    fs::path p( "./worldbuilder_rsc/" );
+    if( !fs::exists( p ) )
+        throw( "Must run in directory with worldbuilder_rsc" );
+    
+    p /= "textures";
+    if( !fs::exists( p ) )
+        throw( "worldbuilder_rsc must contain an \"objects\" directory" );
+    
+    fs::directory_iterator end_itr;
+    for( fs::directory_iterator it( p ); it != end_itr; ++it )
+    {
+        cout << "Texture=" << it->path().filename().c_str() << endl;
+        if( it->path().extension() == ".jpg" || it->path().extension() == ".jpeg" )
+            l.push_back( new Item( it->path().filename().c_str(), Item::TEXTURE, it->path().filename() ) );
+    }
+    
+    for( list<Item*>::iterator it = l.begin(); it != l.end(); ++it )
+        cout << "texturelist[i] = " << (*it)->name << endl;
     
     return l;
 }
@@ -419,7 +555,47 @@ MenuNode* initMenu()
     }
     
     {   // Initialize Items in each Tab
-        list<Item*> l = findObjects();
+        menu->setObjects( findObjects() );
+        menu->setTextures( findTextures() );
+        menu->items = menu->objects;
+        
+        cout << "objectlist.size() = " << menu->objects->itemlist.size() << endl;
+        
+        int i = 0;
+        for( list<Item*>::iterator it = menu->objects->itemlist.begin(); it != menu->objects->itemlist.end(); ++it )
+        {
+            switch( i )
+            {
+            case 0:
+                (*it)->setNodeTransform( ar_TM( -1.5, 0, 0 ) );
+                break;
+            case 1:
+                (*it)->setNodeTransform( ar_TM( 0, 0, 0 ) );
+                break;
+            case 2:
+                (*it)->setNodeTransform( ar_TM( 1.5, 0, 0 ) );
+                break;
+            }
+            i = (i+1) % 3;
+        }
+        
+        i = 0;
+        for( list<Item*>::iterator it = menu->textures->itemlist.begin(); it != menu->textures->itemlist.end(); ++it )
+        {
+            switch( i )
+            {
+            case 0:
+                (*it)->setNodeTransform( ar_TM( -1.5, 0, 0 ) );
+                break;
+            case 1:
+                (*it)->setNodeTransform( ar_TM( 0, 0, 0 ) );
+                break;
+            case 2:
+                (*it)->setNodeTransform( ar_TM( 1.5, 0, 0 ) );
+                break;
+            }
+            i = (i+1) % 3;
+        }
     }
     return menu;
 }
@@ -430,10 +606,21 @@ void buildMenu()
     sg->addChild( menu->tabs.objectTab, menu );
     sg->addChild( menu->tabs.materialTab, menu );
     sg->addChild( menu->tabs.toolsTab, menu );
+    
+    int i = 0;
+    for( list<Item*>::iterator it = menu->items->itemlist.begin(); it != menu->items->itemlist.end() && i++ < 3; ++it )
+        sg->addChild( *it, menu );
 }
 
 void tearDownMenu()
 {
+    int i = 0;
+    list<Item*> l;
+    for( list<Item*>::iterator it = menu->items->itemlist.begin(); it != menu->items->itemlist.end() && i++ < 3; ++it )
+        l.push_front( *it );
+    for( list<Item*>::iterator it = l.begin(); it != l.end(); ++it )
+        sg->removeChild( *it );
+    
     sg->removeChild( menu->tabs.toolsTab );
     sg->removeChild( menu->tabs.materialTab );
     sg->removeChild( menu->tabs.objectTab );
@@ -490,7 +677,17 @@ void onPreExchange( arMasterSlaveFramework &fw )
             menu->pressedUp();
             break;
         case WiiMote::A:
-            menu->pressedA();
+            switch( menu->pressedA() )
+            {
+            case REDRAW:
+                tearDownMenu();
+                buildMenu();
+                break;
+            case CLOSE:
+                tearDownMenu();
+                menuOn = false;
+                break;
+            }
             break;
         }
     }
