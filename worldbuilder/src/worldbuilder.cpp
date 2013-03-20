@@ -4,6 +4,7 @@
 
 #include <list>
 #include <vector>
+#include <sstream>
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
@@ -113,12 +114,22 @@ public:
 private:
     ItemType type;
     string filename;
+    arTexture texture;
     void draw();
 public:
-    Item( const char *name, ItemType t, string f, bool selected = false ) : MenuItem( name, selected ), type( t ), filename( f ) {}
+    Item( const char *name, ItemType t, string f, bool selected = false );
     
     friend struct _ItemGroup_s;
 };
+
+Item::Item( const char *name, ItemType t, string f, bool selected ) : MenuItem( name, selected ), type( t ), filename( f )
+{
+    if( type == TEXTURE )
+    {
+        texture.readJPEG( filename );
+        texture.repeating( true );
+    }
+}
 
 void Item::draw()
 {
@@ -133,12 +144,21 @@ void Item::draw()
         { -hsize / 2, vsize / 2, 0.0001 }
     };
     
+    if( type == TEXTURE )
+    {
+        //cout << "Activating Texture" << endl;
+        texture.activate();
+    }
+    
     glBegin( GL_QUADS );
         glTexCoord2f( 0, 0 ); glVertex3fv( v[0] );
         glTexCoord2f( 1, 0 ); glVertex3fv( v[1] );
         glTexCoord2f( 1, 1 ); glVertex3fv( v[2] );
         glTexCoord2f( 0, 1 ); glVertex3fv( v[3] );
     glEnd();
+    
+    if( type == TEXTURE )
+        texture.deactivate();
     
     if( selected )
     {
@@ -311,9 +331,11 @@ private:
     ItemGroup *objects;
     ItemGroup *textures;
     
+    SceneGraph *scenegraph;
+    
     void draw();
 public:
-    MenuNode() : Node(), selectedGroup( TAB ), currentSelected( NULL )  {}
+    MenuNode( ) : Node(), selectedGroup( TAB ), currentSelected( NULL )  {}
     
     void setObjects( list<Item*> l ) { objects = new ItemGroup( l ); 
         for(list<Item*>::const_iterator it = l.begin(); it != l.end(); ++it )
@@ -430,11 +452,23 @@ MenuAction MenuNode::pressedA()
         {
             t->activate();
             if( t == tabs.objectTab )
+            {
+                tearDownMenu();
                 items = objects;
+                buildMenu();
+            }
             else if( t == tabs.materialTab )
+            {
+                tearDownMenu();
                 items = textures;
+                buildMenu();
+            }
             else if( t == tabs.toolsTab )
+            {
+                tearDownMenu();
                 items = textures;
+                buildMenu();
+            }
             return REDRAW;
         }
         break;
@@ -491,11 +525,8 @@ list<Item*> findObjects()
         char *n = new char[it->path().filename().length()];
         strcpy( n, it->path().filename().c_str() );
         if( it->path().extension() == ".obj" )
-            l.push_back( new Item( n, Item::OBJECT, it->path().filename() ) );
+            l.push_back( new Item( n, Item::OBJECT, ( p / it->path() ).filename() ) );
     }
-    
-    for( list<Item*>::iterator it = l.begin(); it != l.end(); ++it )
-        cout << "objectlist[i] = " << (*it)->name << endl;
     
     return l;
 }
@@ -515,13 +546,13 @@ list<Item*> findTextures()
     fs::directory_iterator end_itr;
     for( fs::directory_iterator it( p ); it != end_itr; ++it )
     {
-        cout << "Texture=" << it->path().filename().c_str() << endl;
         if( it->path().extension() == ".jpg" || it->path().extension() == ".jpeg" )
-            l.push_back( new Item( it->path().filename().c_str(), Item::TEXTURE, it->path().filename() ) );
+        {
+            stringstream ss;
+            ss << it->path();
+            l.push_back( new Item( it->path().filename().c_str(), Item::TEXTURE, ss.str() ) );
+        }
     }
-    
-    for( list<Item*>::iterator it = l.begin(); it != l.end(); ++it )
-        cout << "texturelist[i] = " << (*it)->name << endl;
     
     return l;
 }
