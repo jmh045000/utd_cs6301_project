@@ -93,11 +93,11 @@ void Node::setSound( string filename )
     }
 }
 
-void Node::setTexture( string filename )
+void Node::setTexture( string filename, string subdirectory, string path )
 {
     if( filename.find( ".jpg" ) != string::npos || filename.find( ".jpeg" ) != string::npos )
     {
-        texture.readJPEG( filename );
+        texture.readJPEG( filename, subdirectory, path );
     }
 
     glEnable( GL_TEXTURE_2D );

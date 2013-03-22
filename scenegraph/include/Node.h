@@ -96,7 +96,7 @@ public:
     void soundPlayCont( ) { soundState_ = SOUNDPLAYCONTINOUS; }
     void soundStop( ) { soundState_ = SOUNDSTOP; }
     
-    void setTexture( std::string filename );
+    void setTexture( std::string filename, std::string subdirectory = "", std::string path = "" );
 };
 
 class RootNode : public Node
@@ -192,13 +192,14 @@ class ObjNode : public Node
 {
 private:
     std::string     filename_;
-    arOBJRenderer   obj_;
+    
     
     void draw();
 public:
-    ObjNode( std::string filename ) : Node(), filename_( filename )
+    arOBJRenderer   obj_;
+    ObjNode( std::string filename, std::string path = "" ) : Node(), filename_( filename )
     {
-        obj_.readOBJ( filename );
+        obj_.readOBJ( filename, path );
     }
 };
 

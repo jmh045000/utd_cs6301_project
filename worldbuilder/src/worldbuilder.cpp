@@ -112,21 +112,28 @@ class Item : public MenuItem
 public:
     typedef enum { OBJECT, TEXTURE, TOOL, MAX_ITEM_TYPES } ItemType;
 private:
-    ItemType type;
     string filename;
+    string path;
+    arOBJRenderer obj;
     arTexture texture;
     void draw();
 public:
-    Item( const char *name, ItemType t, string f, bool selected = false );
+    Item( const char *name, ItemType t, string f, string p, bool selected = false );
+    
+    ItemType type;
     
     friend struct _ItemGroup_s;
 };
 
-Item::Item( const char *name, ItemType t, string f, bool selected ) : MenuItem( name, selected ), type( t ), filename( f )
+Item::Item( const char *name, ItemType t, string f, string p, bool selected ) : MenuItem( name, selected ), type( t ), filename( f ), path( p )
 {
-    if( type == TEXTURE )
+    if( type == OBJECT )
     {
-        texture.readJPEG( filename );
+        obj.readOBJ( filename, path );
+    }
+    else if( type == TEXTURE )
+    {
+        texture.readJPEG( filename, "", path );
         texture.repeating( true );
     }
 }
@@ -134,30 +141,37 @@ Item::Item( const char *name, ItemType t, string f, bool selected ) : MenuItem( 
 void Item::draw()
 {
     glColor3f( 1, 1, 1 );
-    float hsize = 1;
-    float vsize = 1;
+    float size = 1;
     GLfloat v[4][3] =
     {
-        { -hsize / 2, -vsize / 2, 0.0001 },
-        { hsize / 2, -vsize / 2, 0.0001 },
-        { hsize / 2, vsize / 2, 0.0001 },
-        { -hsize / 2, vsize / 2, 0.0001 }
+        { -size / 2, -size / 2, 0.0001 },
+        { size / 2, -size / 2, 0.0001 },
+        { size / 2, size / 2, 0.0001 },
+        { -size / 2, size / 2, 0.0001 }
     };
     
-    if( type == TEXTURE )
+    if( type == OBJECT )
     {
-        //cout << "Activating Texture" << endl;
+        arBoundingSphere s = obj.getBoundingSphere();
+        float scale = size / ( s.radius * 2 );
+        glPushMatrix();
+        glMultMatrixf( ar_SM( scale, scale, scale ).v );
+        obj.draw();
+    }
+    else if( type == TEXTURE )
+    {
         texture.activate();
+        glBegin( GL_QUADS );
+            glTexCoord2f( 0, 0 ); glVertex3fv( v[0] );
+            glTexCoord2f( 1, 0 ); glVertex3fv( v[1] );
+            glTexCoord2f( 1, 1 ); glVertex3fv( v[2] );
+            glTexCoord2f( 0, 1 ); glVertex3fv( v[3] );
+        glEnd();
     }
     
-    glBegin( GL_QUADS );
-        glTexCoord2f( 0, 0 ); glVertex3fv( v[0] );
-        glTexCoord2f( 1, 0 ); glVertex3fv( v[1] );
-        glTexCoord2f( 1, 1 ); glVertex3fv( v[2] );
-        glTexCoord2f( 0, 1 ); glVertex3fv( v[3] );
-    glEnd();
-    
-    if( type == TEXTURE )
+    if( type == OBJECT )
+        glPopMatrix();
+    else if( type == TEXTURE )
         texture.deactivate();
     
     if( selected )
@@ -472,6 +486,16 @@ MenuAction MenuNode::pressedA()
             return REDRAW;
         }
         break;
+    case ITEM:
+        if( Item *i = dynamic_cast<Item*>( currentSelected ) )
+        {
+            if( i->type == Item::OBJECT )
+            {
+                
+            }
+            return CLOSE;
+        }
+        break;
     }
     
     return NONE;
@@ -525,7 +549,11 @@ list<Item*> findObjects()
         char *n = new char[it->path().filename().length()];
         strcpy( n, it->path().filename().c_str() );
         if( it->path().extension() == ".obj" )
-            l.push_back( new Item( n, Item::OBJECT, ( p / it->path() ).filename() ) );
+        {
+            stringstream ss;
+            ss << p;
+            l.push_back( new Item( n, Item::OBJECT, it->path().filename(), ss.str() ) );
+        }
     }
     
     return l;
@@ -549,8 +577,8 @@ list<Item*> findTextures()
         if( it->path().extension() == ".jpg" || it->path().extension() == ".jpeg" )
         {
             stringstream ss;
-            ss << it->path();
-            l.push_back( new Item( it->path().filename().c_str(), Item::TEXTURE, ss.str() ) );
+            ss << p;
+            l.push_back( new Item( it->path().filename().c_str(), Item::TEXTURE, it->path().filename(), ss.str() ) );
         }
     }
     
@@ -663,6 +691,58 @@ bool initSceneGraph( arMasterSlaveFramework &fw, arSZGClient &client )
     sg = new SceneGraph( fw );
     
     menu = initMenu();
+    
+    ObjNode *obj = new ObjNode( "al.obj", "worldbuilder_rsc/objects" );
+    obj->setNodeTransform( ar_TM( 0, 5, -5 ) );
+    
+    
+    cout << "teapot: number of materials=" << obj->obj_.getNumberMaterials() << endl;
+    cout << "teapot: number of textures=" << obj->obj_.getNumberTextures() << endl;
+    
+    
+    arTexture *t = obj->obj_.getTexture( 4 );
+    cout << "texture*=" << t << endl;
+    if( t )
+    {
+        t->readJPEG( "brick.jpg", "", "worldbuilder_rsc/textures" );
+        cout << "Texture is good!" << endl;
+    }
+    else
+    {
+        cerr << "Failed to set texture!" << endl;
+    }
+    /**/
+    
+    arMaterial *m = obj->obj_.getMaterial( 2 );
+    cout << "material*=" << m << endl;
+    if( m )
+    {
+        m->diffuse = arVector3( 0, 0, 1 );
+        m->ambient = arVector3( 0, 0, 1 );
+        m->activateMaterial();
+    }
+    else
+    {
+        cerr << "Failed to set material " << 2 << "!" << endl;
+    }
+    
+    m = obj->obj_.getMaterial( 3 );
+    m = 0;
+    t = new arTexture();
+    
+    t->readJPEG( "rainbow.jpg", "", "worldbuilder_rsc/textures" );
+    
+    obj->obj_.setTexture( 3, t );
+    
+    //obj->obj_.activateTextures();
+    
+    for( int i = 0; i < obj->obj_.getNumberGroups(); i++ )
+    {
+        arOBJGroupRenderer *g = obj->obj_.getGroup( i );
+        cout << "Found group: " << g->getName() << endl;
+    }
+    
+    sg->addChild( obj );
     
     return true;
 }
