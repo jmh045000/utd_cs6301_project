@@ -21,6 +21,11 @@
 
 namespace fs = boost::filesystem;
 
+extern SceneGraph *sg;
+extern WiiMote primary;
+extern WiiMote secondary;
+extern std::list<arInteractable*> interactableObjects;
+
 class MenuItem : public Node
 {
 protected:
@@ -112,15 +117,17 @@ class Item : public MenuItem
 public:
     typedef enum { OBJECT, TEXTURE, TOOL, MAX_ITEM_TYPES } ItemType;
 private:
-    string filename;
-    string path;
+    std::string filename;
+    std::string path;
     arOBJRenderer obj;
     arTexture texture;
     void draw();
 public:
-    Item( const char *name, ItemType t, string f, string p, bool selected = false );
+    Item( const char *name, ItemType t, std::string f, std::string p, bool selected = false );
     
     ItemType type;
+    std::string getFilename() { return filename; }
+    std::string getPath() { return path; }
     
     friend struct _ItemGroup_s;
 };
@@ -345,8 +352,6 @@ private:
     ItemGroup *objects;
     ItemGroup *textures;
     
-    SceneGraph *scenegraph;
-    
     void draw();
 public:
     MenuNode( ) : Node(), selectedGroup( TAB ), currentSelected( NULL )  {}
@@ -491,7 +496,10 @@ MenuAction MenuNode::pressedA()
         {
             if( i->type == Item::OBJECT )
             {
-                
+                ObjNode *obj = new ObjNode( i->getFilename(), i->getPath() );
+                sg->addChild( obj );
+                obj->setNodeTransform( primary.getMatrix() );
+                interactableObjects.push_back( obj );
             }
             return CLOSE;
         }
@@ -591,7 +599,7 @@ WiiMote primary( WiiMote::CONTROLLER_1 );
 WiiMote secondary( WiiMote::CONTROLLER_2 );
 bool menuOn = false;
 
-std::list<arInteractable*> objects_;
+std::list<arInteractable*> interactableObjects;
 
 MenuNode* initMenu()
 {
@@ -692,6 +700,9 @@ bool initSceneGraph( arMasterSlaveFramework &fw, arSZGClient &client )
     
     menu = initMenu();
     
+    primary.setDrag( primary.getGrabCondition( WiiMote::A ), arWandRelativeDrag() );
+    secondary.setDrag( primary.getGrabCondition( WiiMote::A ), arWandRelativeDrag() );
+    
     ObjNode *obj = new ObjNode( "al.obj", "worldbuilder_rsc/objects" );
     obj->setNodeTransform( ar_TM( 0, 5, -5 ) );
     
@@ -742,7 +753,7 @@ bool initSceneGraph( arMasterSlaveFramework &fw, arSZGClient &client )
         cout << "Found group: " << g->getName() << endl;
     }
     
-    sg->addChild( obj );
+    //sg->addChild( obj );
     
     return true;
 }
@@ -788,16 +799,19 @@ void onPreExchange( arMasterSlaveFramework &fw )
             menu->pressedUp();
             break;
         case WiiMote::A:
-            switch( menu->pressedA() )
+            if( menuOn )
             {
-            case REDRAW:
-                tearDownMenu();
-                buildMenu();
-                break;
-            case CLOSE:
-                tearDownMenu();
-                menuOn = false;
-                break;
+                switch( menu->pressedA() )
+                {
+                case REDRAW:
+                    tearDownMenu();
+                    buildMenu();
+                    break;
+                case CLOSE:
+                    tearDownMenu();
+                    menuOn = false;
+                    break;
+                }
             }
             break;
         }
@@ -835,15 +849,28 @@ void onPreExchange( arMasterSlaveFramework &fw )
             menu->pressedUp();
             break;
         case WiiMote::A:
-            menu->pressedA();
+            if( menuOn )
+            {
+                switch( menu->pressedA() )
+                {
+                case REDRAW:
+                    tearDownMenu();
+                    buildMenu();
+                    break;
+                case CLOSE:
+                    tearDownMenu();
+                    menuOn = false;
+                    break;
+                }
+            }
             break;
         }
     }    
 
     // Handle any interaction with the square (see interaction/arInteractionUtilities.h).
     // Any grabbing/dragging happens in here.
-    ar_pollingInteraction( primary, objects_ );
-    ar_pollingInteraction( secondary, objects_ );
+    ar_pollingInteraction( primary, interactableObjects );
+    ar_pollingInteraction( secondary, interactableObjects );
 }
 
 void doSceneGraph( arMasterSlaveFramework &fw )
