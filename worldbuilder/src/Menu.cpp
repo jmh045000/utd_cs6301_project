@@ -171,6 +171,7 @@ void MenuNode::pressedDown()
 
 void MenuNode::pressedLeft()
 {
+    tearDownMenu( this );
     currentSelected->deselect();
     switch( selectedGroup )
     {
@@ -182,10 +183,12 @@ void MenuNode::pressedLeft()
         break;
     }
     currentSelected->select();
+    buildMenu( this );
 }
 
 void MenuNode::pressedRight()
 {
+    tearDownMenu( this );
     currentSelected->deselect();
     switch( selectedGroup )
     {
@@ -197,6 +200,7 @@ void MenuNode::pressedRight()
         break;
     }
     currentSelected->select();
+    buildMenu( this );
 }
 
 void MenuNode::pressedUp()
