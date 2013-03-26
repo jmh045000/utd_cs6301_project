@@ -41,6 +41,7 @@ class Item : public MenuItem
 {
 public:
     typedef enum { OBJECT, TEXTURE, TOOL, MAX_ITEM_TYPES } ItemType;
+	typedef enum { DELETE_TOOL, GROUP_TOOL, COPY_TOOL, PASTE_TOOL, MAX_TOOL_TYPES } ToolType;
 private:
     std::string filename;
     std::string path;
@@ -49,8 +50,10 @@ private:
     void draw();
 public:
     Item( const char *name, ItemType t, std::string f, std::string p, bool selected = false );
+	Item( const char *name, ItemType t, ToolType t2, bool selected = false );
     
     ItemType type;
+	ToolType tooltype;
     std::string getFilename() { return filename; }
     std::string getPath() { return path; }
     
@@ -207,6 +210,7 @@ private:
     
     ItemGroup *objects;
     ItemGroup *textures;
+	ItemGroup *tools;
     
     void draw();
 public:
@@ -214,6 +218,7 @@ public:
     
     void setObjects( list<Item*> l ) { objects = new ItemGroup( l ); }
     void setTextures( list<Item*> l ) { textures = new ItemGroup( l ); }
+	void setTools( list<Item*> l ) { tools = new ItemGroup( l ); }
     
     void pressedDown();
     void pressedLeft();

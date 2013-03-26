@@ -78,6 +78,10 @@ Item::Item( const char *name, ItemType t, string f, string p, bool selected ) : 
     }
 }
 
+Item::Item( const char *name, ItemType t, ToolType t2, bool selected ) : MenuItem( name, selected ), type( t ), tooltype( t2 )
+{
+}
+
 void Item::draw()
 {
     glColor3f( 1, 1, 1 );
@@ -89,16 +93,20 @@ void Item::draw()
         { size / 2, size / 2, 0.0001 },
         { -size / 2, size / 2, 0.0001 }
     };
-    
-    if( type == OBJECT )
-    {
+ 
+	switch( type )
+	{
+	case OBJECT:
+	{
         arBoundingSphere s = obj.getBoundingSphere();
         float scale = size / ( s.radius * 2 );
         glPushMatrix();
-        glMultMatrixf( ar_SM( scale, scale, scale ).v );
-        obj.draw();
-    }
-    else if( type == TEXTURE )
+			glMultMatrixf( ar_SM( scale, scale, scale ).v );
+			obj.draw();
+		glPopMatrix();
+	}
+	break;
+    case TEXTURE:
     {
         texture.activate();
         glBegin( GL_QUADS );
@@ -107,12 +115,30 @@ void Item::draw()
             glTexCoord2f( 1, 1 ); glVertex3fv( v[2] );
             glTexCoord2f( 0, 1 ); glVertex3fv( v[3] );
         glEnd();
+		texture.deactivate();
     }
-    
-    if( type == OBJECT )
-        glPopMatrix();
-    else if( type == TEXTURE )
-        texture.deactivate();
+	break;
+	case TOOL:
+	{
+		glColor3f( 0, 0.3, 0.8 );
+		glBegin( GL_QUADS );
+            glVertex3fv( v[0] );
+            glVertex3fv( v[1] );
+            glVertex3fv( v[2] );
+            glVertex3fv( v[3] );
+        glEnd();
+		glColor3f( 0, 0, 0 );
+		glPushMatrix();
+			glTranslatef( ( -size / 2 ) + 0.3 , 0, 0.001);
+			glScalef(0.0009, 0.0009, 0.0009);
+			for (const char* c = name; *c; ++c)
+			{
+				glutStrokeCharacter(GLUT_STROKE_ROMAN, *c);
+			}
+		glPopMatrix();
+	}
+	break;
+	}
     
     if( selected )
     {
@@ -247,7 +273,7 @@ MenuAction MenuNode::pressedA()
             else if( t == tabs.toolsTab )
             {
                 tearDownMenu( this );
-                items = textures;
+                items = tools;
                 buildMenu( this );
             }
             return REDRAW;
@@ -256,12 +282,24 @@ MenuAction MenuNode::pressedA()
     case ITEM:
         if( Item *i = dynamic_cast<Item*>( currentSelected ) )
         {
-            if( i->type == Item::OBJECT )
+            switch( i->type )
             {
+			case Item::OBJECT:
+			{
                 ObjNode *obj = new ObjNode( i->getFilename(), i->getPath() );
                 sg->addChild( obj );
                 obj->setNodeTransform( primary.getMatrix() );
                 interactableObjects.push_back( obj );
+			}
+			break;
+			case Item::TEXTURE:
+			{
+			}
+			break;
+			case Item::TOOL:
+			{
+			}
+			break;
             }
             return CLOSE;
         }
@@ -378,6 +416,14 @@ MenuNode* initMenu()
     {   // Initialize Items in each Tab
         menu->setObjects( findObjects() );
         menu->setTextures( findTextures() );
+		
+		list<Item*> tools;
+		tools.push_back( new Item( "Delete", Item::TOOL, Item::DELETE_TOOL ) );
+		tools.push_back( new Item( "Group", Item::TOOL, Item::GROUP_TOOL ) );
+		tools.push_back( new Item( "Copy", Item::TOOL, Item::COPY_TOOL ) );
+		tools.push_back( new Item( "Paste", Item::TOOL, Item::PASTE_TOOL ) );
+		menu->setTools( tools );
+		
         menu->items = menu->objects;
     }
     return menu;
