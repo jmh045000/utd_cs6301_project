@@ -171,7 +171,7 @@ void MenuNode::pressedDown()
 
 void MenuNode::pressedLeft()
 {
-    tearDownMenu( this );
+    
     currentSelected->deselect();
     switch( selectedGroup )
     {
@@ -179,16 +179,17 @@ void MenuNode::pressedLeft()
         currentSelected = tabs--;
         break;
     case ITEM:
+        tearDownMenu( this );
         currentSelected = (*items)--;
+        buildMenu( this );
         break;
     }
     currentSelected->select();
-    buildMenu( this );
 }
 
 void MenuNode::pressedRight()
 {
-    tearDownMenu( this );
+    
     currentSelected->deselect();
     switch( selectedGroup )
     {
@@ -196,11 +197,12 @@ void MenuNode::pressedRight()
         currentSelected = tabs++;
         break;
     case ITEM:
+        tearDownMenu( this );
         currentSelected = (*items)++;
+        buildMenu( this );
         break;
     }
     currentSelected->select();
-    buildMenu( this );
 }
 
 void MenuNode::pressedUp()
@@ -377,44 +379,6 @@ MenuNode* initMenu()
         menu->setObjects( findObjects() );
         menu->setTextures( findTextures() );
         menu->items = menu->objects;
-        
-        cout << "objectlist.size() = " << menu->objects->itemlist.size() << endl;
-        
-        int i = 0;
-        for( list<Item*>::iterator it = menu->objects->itemlist.begin(); it != menu->objects->itemlist.end(); ++it )
-        {
-            switch( i )
-            {
-            case 0:
-                (*it)->setNodeTransform( ar_TM( -1.5, 0, 0 ) );
-                break;
-            case 1:
-                (*it)->setNodeTransform( ar_TM( 0, 0, 0 ) );
-                break;
-            case 2:
-                (*it)->setNodeTransform( ar_TM( 1.5, 0, 0 ) );
-                break;
-            }
-            i = (i+1) % 3;
-        }
-        
-        i = 0;
-        for( list<Item*>::iterator it = menu->textures->itemlist.begin(); it != menu->textures->itemlist.end(); ++it )
-        {
-            switch( i )
-            {
-            case 0:
-                (*it)->setNodeTransform( ar_TM( -1.5, 0, 0 ) );
-                break;
-            case 1:
-                (*it)->setNodeTransform( ar_TM( 0, 0, 0 ) );
-                break;
-            case 2:
-                (*it)->setNodeTransform( ar_TM( 1.5, 0, 0 ) );
-                break;
-            }
-            i = (i+1) % 3;
-        }
     }
     return menu;
 }
@@ -426,9 +390,12 @@ void buildMenu( MenuNode *menu )
     sg->addChild( menu->tabs.materialTab, menu );
     sg->addChild( menu->tabs.toolsTab, menu );
     
-    int i = 0;
-    for( list<Item*>::iterator it = menu->items->itemlist.begin(); it != menu->items->itemlist.end() && i++ < 3; ++it )
+    float i = -1.5;
+    for( list<Item*>::iterator it = menu->items->itemlist.begin(); it != menu->items->itemlist.end() && i < 2; ++it, i += 1.5 )
+    {
+        (*it)->setNodeTransform( ar_TM( i, 0, 0 ) );
         sg->addChild( *it, menu );
+    }
 }
 
 void tearDownMenu( MenuNode *menu )

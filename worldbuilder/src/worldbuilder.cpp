@@ -35,6 +35,8 @@ bool initSceneGraph( arMasterSlaveFramework &fw, arSZGClient &client )
     primary.setDrag( primary.getGrabCondition( WiiMote::A ), arWandRelativeDrag() );
     secondary.setDrag( primary.getGrabCondition( WiiMote::A ), arWandRelativeDrag() );
     
+    /*
+    
     ObjNode *obj = new ObjNode( "al.obj", "worldbuilder_rsc/objects" );
     obj->setNodeTransform( ar_TM( 0, 5, -5 ) );
     
@@ -54,7 +56,6 @@ bool initSceneGraph( arMasterSlaveFramework &fw, arSZGClient &client )
     {
         cerr << "Failed to set texture!" << endl;
     }
-    /**/
     
     arMaterial *m = obj->obj_.getMaterial( 2 );
     cout << "material*=" << m << endl;
@@ -86,6 +87,8 @@ bool initSceneGraph( arMasterSlaveFramework &fw, arSZGClient &client )
     }
     
     //sg->addChild( obj );
+    
+    /**/
     
     return true;
 }

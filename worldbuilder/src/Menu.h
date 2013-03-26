@@ -212,14 +212,8 @@ private:
 public:
     MenuNode( ) : Node(), selectedGroup( TAB ), currentSelected( NULL )  {}
     
-    void setObjects( list<Item*> l ) { objects = new ItemGroup( l ); 
-        for(list<Item*>::const_iterator it = l.begin(); it != l.end(); ++it )
-            cout << "Object=" << (*it)->name << endl;
-    }
-    void setTextures( list<Item*> l ) { textures = new ItemGroup( l ); 
-        for(list<Item*>::const_iterator it = l.begin(); it != l.end(); ++it )
-            cout << "Texture=" << (*it)->name << endl;
-    }
+    void setObjects( list<Item*> l ) { objects = new ItemGroup( l ); }
+    void setTextures( list<Item*> l ) { textures = new ItemGroup( l ); }
     
     void pressedDown();
     void pressedLeft();

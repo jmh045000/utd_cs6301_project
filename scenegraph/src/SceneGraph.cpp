@@ -70,7 +70,6 @@ void SceneGraph::removeChild_( Vertex v )
 SceneGraph::SceneGraph( arSZGAppFramework &fw )
 {
     RootNode *root = new RootNode( fw );
-    cout << "Root node has id=" << root->id << std::endl;
     root_vertex_ = add_vertex( root, g_ );
     idToVertex_[root->id] = root_vertex_;
 }
@@ -84,7 +83,6 @@ void SceneGraph::drawSceneGraph()
 void SceneGraph::addChild( Node *newnode )
 {
     addChild_( newnode, root_vertex_ );
-    std::cout << "Adding node with id=" << newnode->id << std::endl;
 }
 
 void SceneGraph::addChild( Node *newnode, Node *parent )
