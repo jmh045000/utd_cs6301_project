@@ -41,7 +41,7 @@ class Item : public MenuItem
 {
 public:
     typedef enum { OBJECT, TEXTURE, TOOL, MAX_ITEM_TYPES } ItemType;
-	typedef enum { DELETE_TOOL, GROUP_TOOL, COPY_TOOL, PASTE_TOOL, MAX_TOOL_TYPES } ToolType;
+	typedef enum { DELETE_TOOL, GROUP_TOOL, UNGROUP_TOOL, COPY_TOOL, PASTE_TOOL, MAX_TOOL_TYPES } ToolType;
 private:
     std::string filename;
     std::string path;
@@ -56,6 +56,8 @@ public:
 	ToolType tooltype;
     std::string getFilename() { return filename; }
     std::string getPath() { return path; }
+    
+    void doAction();
     
     friend struct _ItemGroup_s;
 };
@@ -177,6 +179,7 @@ typedef struct _ItemGroup_s : public MenuGroup_t
                 itemlist.push_front( i );
                 itemlist.pop_back();
             }
+            _ = 0;
             for( list<Item*>::iterator it = itemlist.begin(); it != itemlist.end() && _++ <= cur; ++it )
                 i = *it;
             return i;
@@ -233,6 +236,11 @@ public:
     friend void tearDownMenu( MenuNode* );
 };
 
+class TextureMenu : public Node
+{
+private:
+    void draw();
+};
 
 extern SceneGraph *sg;
 extern WiiMote primary;

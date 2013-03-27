@@ -192,15 +192,16 @@ class ObjNode : public Node
 {
 private:
     std::string     filename_;
-    
+    arOBJRenderer   obj_;
     
     void draw();
 public:
-    arOBJRenderer   obj_;
     ObjNode( std::string filename, std::string path = "" ) : Node(), filename_( filename )
     {
         obj_.readOBJ( filename, path );
     }
+    
+    void setTexture( int i, arTexture *t ) { obj_.setTexture( i, t ); }
 };
 
 #endif

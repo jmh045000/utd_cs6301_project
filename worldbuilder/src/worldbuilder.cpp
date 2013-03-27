@@ -122,16 +122,20 @@ void onPreExchange( arMasterSlaveFramework &fw )
             menuOn = !menuOn;
             break;
         case WiiMote::DOWN:
-            menu->pressedDown();
+            if( menuOn )
+                menu->pressedDown();
             break;
         case WiiMote::RIGHT:
-            menu->pressedRight();
+            if( menuOn )
+                menu->pressedRight();
             break;
         case WiiMote::LEFT:
-            menu->pressedLeft();
+            if( menuOn )
+                menu->pressedLeft();
             break;
         case WiiMote::UP:
-            menu->pressedUp();
+            if( menuOn )
+                menu->pressedUp();
             break;
         case WiiMote::A:
             if( menuOn )
@@ -172,16 +176,20 @@ void onPreExchange( arMasterSlaveFramework &fw )
             menuOn = !menuOn;
             break;
         case WiiMote::DOWN:
-            menu->pressedDown();
+            if( menuOn )
+                menu->pressedDown();
             break;
         case WiiMote::RIGHT:
-            menu->pressedRight();
+            if( menuOn )
+                menu->pressedRight();
             break;
         case WiiMote::LEFT:
-            menu->pressedLeft();
+            if( menuOn )
+                menu->pressedLeft();
             break;
         case WiiMote::UP:
-            menu->pressedUp();
+            if( menuOn )
+                menu->pressedUp();
             break;
         case WiiMote::A:
             if( menuOn )
