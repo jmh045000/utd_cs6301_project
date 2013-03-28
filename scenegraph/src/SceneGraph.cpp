@@ -60,9 +60,6 @@ void SceneGraph::addChild_( Node *newnode, Vertex parent )
 
 void SceneGraph::removeChild_( Vertex v )
 {
-    if( idToVertex_.find( g_[v]->id ) == idToVertex_.end() )
-        throw NodeError( "Node doesn't exist in SceneGraph", __FUNCTION__, __LINE__ );
-    idToVertex_.erase( g_[v]->id );
     clear_vertex( v, g_ );
     remove_vertex( v, g_ );
 }
@@ -97,12 +94,18 @@ void SceneGraph::addChild( Node *newnode, NodeIdType parentId )
 
 void SceneGraph::removeChild( Node *node )
 {
+    if( idToVertex_.find( node->id ) == idToVertex_.end() )
+        throw( NodeError( "Node does not exist in SceneGraph", __FILE__, __LINE__ ) );
     removeChild_( idToVertex_[ node->id ] );
+    idToVertex_.erase( node->id );
 }
 
 void SceneGraph::removeChild( NodeIdType id )
 {
+    if( idToVertex_.find( id ) == idToVertex_.end() )
+        throw( NodeError( "Node does not exist in SceneGraph", __FILE__, __LINE__ ) );
     removeChild_( idToVertex_[ id ] );
+    idToVertex_.erase( id );
 }
 
 Node* SceneGraph::getChild( NodeIdType id )

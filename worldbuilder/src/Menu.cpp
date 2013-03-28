@@ -187,8 +187,30 @@ void Item::doAction()
             cout << "DELETING object" << endl;
             break;
         case GROUP_TOOL:
-            cout << "GROUPING objects" << endl;
-            break;
+        {
+            cout << "GROUPING" << endl;
+            NothingNode *nothing = new NothingNode();
+            sg->addChild( nothing );
+            cout << "Added nothing node with id=" << nothing->id << endl;
+            for( list<arInteractable*>::iterator it = interactableObjects.begin(); it != interactableObjects.end(); ++it )
+            {
+                if( Node *n = dynamic_cast<Node*>( *it ) )
+                {
+                    try {
+                        sg->removeChild( n );
+                        cout << "Removed node with id=" << n->id << endl;
+                        n->setParent( nothing );
+                        cout << "Set parent" << endl;
+                        sg->addChild( n, nothing );
+                        cout << "Adding node back as child of nothing" << endl;
+                    } catch( exception &e )
+                    {
+                        cerr << "exception:" << e.what() << endl;
+                    }
+                }
+            }
+        }
+        break;
         case UNGROUP_TOOL:
             cout << "UNGROUP objects" << endl;
             break;

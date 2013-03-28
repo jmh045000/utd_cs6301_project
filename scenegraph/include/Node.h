@@ -44,7 +44,11 @@ private:
     int soundId_;
     SoundState soundState_; // What are we doing with current sound?
     
+    Node *parentNode_; // This is used to group objects together
+    
+    // This is the callback from arInteractable
     void setMatrix( const arMatrix4 &mat );
+    void move( const arVector3 &vec );
     // drawBegin_ is the function that will do the pushing, and multiply by our transform
     virtual void drawBegin( arMatrix4 &currentView ); // RootNode overrides this, no others should
     // drawEnd_ will pop the matrix
@@ -76,7 +80,7 @@ protected:
 
 public:
     // *structors
-    Node() : arInteractable(), nextMatrix_(), color( 0, 0, 0 ), opengl_callback( NULL ), id( ++numObjects_ )
+    Node() : arInteractable(), nextMatrix_(), parentNode_( this ), color( 0, 0, 0 ), opengl_callback( NULL ), id( ++numObjects_ )
     {
     }
     virtual ~Node() {}
@@ -97,6 +101,16 @@ public:
     void soundStop( ) { soundState_ = SOUNDSTOP; }
     
     void setTexture( std::string filename, std::string subdirectory = "", std::string path = "" );
+    
+    void setParent( Node *n ) 
+    { 
+        if( parentNode_ != this )
+        {
+            for( int i = 12; i < 15; i++ )
+                nodeTransform[i] += parentNode_->nodeTransform[i];
+        }
+        parentNode_ = n;
+    }
 };
 
 class RootNode : public Node

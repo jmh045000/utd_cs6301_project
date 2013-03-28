@@ -35,61 +35,6 @@ bool initSceneGraph( arMasterSlaveFramework &fw, arSZGClient &client )
     primary.setDrag( primary.getGrabCondition( WiiMote::A ), arWandRelativeDrag() );
     secondary.setDrag( primary.getGrabCondition( WiiMote::A ), arWandRelativeDrag() );
     
-    /*
-    
-    ObjNode *obj = new ObjNode( "al.obj", "worldbuilder_rsc/objects" );
-    obj->setNodeTransform( ar_TM( 0, 5, -5 ) );
-    
-    
-    cout << "teapot: number of materials=" << obj->obj_.getNumberMaterials() << endl;
-    cout << "teapot: number of textures=" << obj->obj_.getNumberTextures() << endl;
-    
-    
-    arTexture *t = obj->obj_.getTexture( 4 );
-    cout << "texture*=" << t << endl;
-    if( t )
-    {
-        t->readJPEG( "brick.jpg", "", "worldbuilder_rsc/textures" );
-        cout << "Texture is good!" << endl;
-    }
-    else
-    {
-        cerr << "Failed to set texture!" << endl;
-    }
-    
-    arMaterial *m = obj->obj_.getMaterial( 2 );
-    cout << "material*=" << m << endl;
-    if( m )
-    {
-        m->diffuse = arVector3( 0, 0, 1 );
-        m->ambient = arVector3( 0, 0, 1 );
-        m->activateMaterial();
-    }
-    else
-    {
-        cerr << "Failed to set material " << 2 << "!" << endl;
-    }
-    
-    m = obj->obj_.getMaterial( 3 );
-    m = 0;
-    t = new arTexture();
-    
-    t->readJPEG( "rainbow.jpg", "", "worldbuilder_rsc/textures" );
-    
-    obj->obj_.setTexture( 3, t );
-    
-    //obj->obj_.activateTextures();
-    
-    for( int i = 0; i < obj->obj_.getNumberGroups(); i++ )
-    {
-        arOBJGroupRenderer *g = obj->obj_.getGroup( i );
-        cout << "Found group: " << g->getName() << endl;
-    }
-    
-    //sg->addChild( obj );
-    
-    /**/
-    
     return true;
 }
 
