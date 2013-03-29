@@ -17,7 +17,7 @@ uint64_t Node::numObjects_ = 0;
 void Node::setMatrix( const arMatrix4 &mat )
 {
     // Change the nodeTransform matrix when drawing, so we know what has been pushed so far...
-    cout << "setMatrix(\n" << mat << "\n)" << endl;
+    //cout << "setMatrix(\n" << mat << "\n)" << endl;
     nextMatrix_ = mat;
 }
 
@@ -25,7 +25,7 @@ void Node::move( const arVector3 &vec )
 {
     for( int i = 12; i < 15; i++ )
     nextMatrix_[i] = nodeTransform[i] + vec.v[i-12];
-    cout << "move() called with " << vec << ", nextMatrix_=\n" << nextMatrix_ << endl;
+    //cout << "move() called on id=" << id << " with " << vec << ", nextMatrix_=\n" << nextMatrix_ << endl;
 }
 
 void Node::drawBegin( arMatrix4 &currentView )

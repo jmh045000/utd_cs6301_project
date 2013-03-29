@@ -111,6 +111,8 @@ public:
         }
         parentNode_ = n;
     }
+    
+    Node *getParent() { return parentNode_; }
 };
 
 class RootNode : public Node

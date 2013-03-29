@@ -190,23 +190,22 @@ void Item::doAction()
         {
             cout << "GROUPING" << endl;
             NothingNode *nothing = new NothingNode();
-            sg->addChild( nothing );
-            cout << "Added nothing node with id=" << nothing->id << endl;
+            
             for( list<arInteractable*>::iterator it = interactableObjects.begin(); it != interactableObjects.end(); ++it )
             {
                 if( Node *n = dynamic_cast<Node*>( *it ) )
                 {
-                    try {
-                        sg->removeChild( n );
-                        cout << "Removed node with id=" << n->id << endl;
-                        n->setParent( nothing );
-                        cout << "Set parent" << endl;
-                        sg->addChild( n, nothing );
-                        cout << "Adding node back as child of nothing" << endl;
-                    } catch( exception &e )
-                    {
-                        cerr << "exception:" << e.what() << endl;
-                    }
+                    sg->removeChild( n );
+                    n->setParent( nothing );
+                }
+            }
+            
+            sg->addChild( nothing );
+            for( list<arInteractable*>::iterator it = interactableObjects.begin(); it != interactableObjects.end(); ++it )
+            {
+                if( Node *n = dynamic_cast<Node*>( *it ) )
+                {
+                    sg->addChild( n, nothing );
                 }
             }
         }

@@ -85,6 +85,7 @@ void SceneGraph::addChild( Node *newnode )
 void SceneGraph::addChild( Node *newnode, Node *parent )
 {
     addChild_( newnode, idToVertex_[ parent->id ] );
+    cout << "Adding node=" << newnode->id << " as a child of " << parent->id << endl;
 }
 
 void SceneGraph::addChild( Node *newnode, NodeIdType parentId )
