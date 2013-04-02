@@ -188,15 +188,22 @@ public:
     SolidTeapotNode( int size, bool wireframe = false ) : SolidNode( TEAPOT, wireframe ), size_( size ) {}
 };
 
+class wbOBJRenderer : public arOBJRenderer
+{
+public:
+	wbOBJRenderer() : arOBJRenderer() {}
+	
+	void setTexture( unsigned i, arTexture *t );
+};
+
 class ObjNode : public Node
 {
 private:
     std::string     filename_;
     
-    
     void draw();
 public:
-    arOBJRenderer   obj_;
+    wbOBJRenderer   obj_;
     ObjNode( std::string filename, std::string path = "" ) : Node(), filename_( filename )
     {
         obj_.readOBJ( filename, path );

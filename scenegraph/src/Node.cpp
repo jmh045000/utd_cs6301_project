@@ -216,6 +216,16 @@ void SolidTeapotNode::draw()
         glutSolidTeapot( size_ );
 }
 
+void wbOBJRenderer::setTexture( unsigned i, arTexture *t )
+{
+	if( i < _textures.size() )
+	{
+		if( _textures[i] )
+			delete _textures[i];
+		_textures[i] = t;
+	}
+}
+
 void ObjNode::draw()
 {
     if( !(!texture) ) std::cerr << "You shouldn't be setting a texture on an ObjNode, use the OBJ format" << std::endl;
