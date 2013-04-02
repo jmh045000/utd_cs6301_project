@@ -11,7 +11,7 @@
 #include "SceneGraph.h"
 
 static int indent = 1;
-arMatrix4 currentView;
+arMatrix4 currentView, currentScale;
 
 class dfs_visitor : public boost::default_dfs_visitor
 {
@@ -28,17 +28,17 @@ public:
         indent++;
         /**/
         
-        g[u]->drawBegin( currentView );
+        g[u]->drawBegin( currentView, currentScale );
     }
     
     template <typename Vertex, typename Graph>
     void finish_vertex( Vertex u, const Graph &g) const
     {
-        g[u]->drawLocalBegin( currentView );
+        g[u]->drawLocalBegin( currentView, currentScale );
         g[u]->draw();
-        g[u]->drawLocalEnd( currentView );
+        g[u]->drawLocalEnd( currentView, currentScale );
         
-        g[u]->drawEnd( currentView );
+        g[u]->drawEnd( currentView, currentScale );
         
         /*
         indent--;
@@ -66,9 +66,9 @@ void SceneGraph::removeChild_( Vertex v )
 
 SceneGraph::SceneGraph( arSZGAppFramework &fw )
 {
-    RootNode *root = new RootNode( fw );
-    root_vertex_ = add_vertex( root, g_ );
-    idToVertex_[root->id] = root_vertex_;
+    root_ = new RootNode( fw );
+    root_vertex_ = add_vertex( root_, g_ );
+    idToVertex_[root_->id] = root_vertex_;
 }
 
 void SceneGraph::drawSceneGraph()

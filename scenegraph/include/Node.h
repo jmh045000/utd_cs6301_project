@@ -50,12 +50,12 @@ private:
     void setMatrix( const arMatrix4 &mat );
     void move( const arVector3 &vec );
     // drawBegin_ is the function that will do the pushing, and multiply by our transform
-    virtual void drawBegin( arMatrix4 &currentView ); // RootNode overrides this, no others should
+    virtual void drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale ); // RootNode overrides this, no others should
     // drawEnd_ will pop the matrix
-    virtual void drawEnd( arMatrix4 &currentView ); // RootNode overrides this, no others should
+    virtual void drawEnd( arMatrix4 &currentView, arMatrix4 &currentScale ); // RootNode overrides this, no others should
     
-    void drawLocalBegin( arMatrix4 &currentView );
-    void drawLocalEnd( arMatrix4 &currentView );
+    void drawLocalBegin( arMatrix4 &currentView, arMatrix4 &currentScale );
+    void drawLocalEnd( arMatrix4 &currentView, arMatrix4 &currentScale );
 protected:
     
     // This is the transform matrix that this node and all children will have
@@ -120,7 +120,7 @@ class RootNode : public Node
 private:
     arSZGAppFramework &fw_;
     
-    void drawBegin( arMatrix4 &currentView );
+    void drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale );
     void draw() {}
 public:
     RootNode( arSZGAppFramework &fw );

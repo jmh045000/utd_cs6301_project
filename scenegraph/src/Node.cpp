@@ -28,7 +28,7 @@ void Node::move( const arVector3 &vec )
     //cout << "move() called on id=" << id << " with " << vec << ", nextMatrix_=\n" << nextMatrix_ << endl;
 }
 
-void Node::drawBegin( arMatrix4 &currentView )
+void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
 {
     if( nextMatrix_ != arMatrix4() )
     {   // If we've changed transform from being interacted with, remove the current state of the world (all the pushes)
@@ -44,25 +44,28 @@ void Node::drawBegin( arMatrix4 &currentView )
         
     }
     glPushMatrix();
-        glMultMatrixf( nodeTransform.v );
-        currentView = currentView * nodeTransform;
+        currentView = currentView * ar_ETM( nodeTransform );
+        currentScale = currentScale * ar_ESM( nodeTransform );
+        glMultMatrixf( currentView.v );
         arInteractable::setMatrix( currentView );
 }
 
-void Node::drawEnd( arMatrix4 &currentView )
+void Node::drawEnd( arMatrix4 &currentView, arMatrix4 &currentScale )
 {
     glPopMatrix();
-    currentView = currentView * nodeTransform.inverse();
+    currentView = currentView * ar_ETM( nodeTransform ).inverse();
+    currentScale = currentScale * ar_ESM( nodeTransform ).inverse();
     //std::cout << "drawEnd, currentView=\n" << currentView << std::endl;
 }
 
-void Node::drawLocalBegin( arMatrix4 &currentView )
+void Node::drawLocalBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
 {
     if( opengl_callback != NULL )
     {
         opengl_callback();
     }
     glPushMatrix();
+        glMultMatrixf( currentScale.v );
         glColor3f( color[0], color[1], color[2] );
         
         if( soundFile != "" )
@@ -79,9 +82,10 @@ void Node::drawLocalBegin( arMatrix4 &currentView )
         if( !(!texture) ) texture.activate();
 }
 
-void Node::drawLocalEnd( arMatrix4 &currentView )
+void Node::drawLocalEnd( arMatrix4 &currentView, arMatrix4 &currentScale )
 {
-    glPopMatrix();
+    glPopMatrix(); // currentScale
+    glPopMatrix(); // nodeTransform
     
     //std::cout << "drawLocalEnd, currentView=\n" << currentView << std::endl;
     if( !(!texture) ) texture.deactivate();
@@ -124,8 +128,11 @@ RootNode::RootNode( arSZGAppFramework &fw ) : Node(), fw_( fw )
     }
 }
 
-void RootNode::drawBegin( arMatrix4 &currentView )
+void RootNode::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
 {
+    glPushMatrix();
+        currentView = currentView * ar_ETM( nodeTransform );
+        currentScale = currentScale * ar_ESM( nodeTransform );
     dsTransform( soundId_, ar_getNavMatrix() );
 }
 

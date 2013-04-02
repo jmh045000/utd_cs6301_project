@@ -32,17 +32,16 @@ SolidCubeNode *cube2;
 bool initSceneGraph( arMasterSlaveFramework &fw, arSZGClient &client )
 {
     sg = new SceneGraph( fw );
+    sg->getRoot()->setNodeTransform( ar_SM( 2, 2, 2 ) );
     
     menu = initMenu();
     
     primary.setDrag( primary.getGrabCondition( WiiMote::A ), arWandRelativeDrag() );
     secondary.setDrag( primary.getGrabCondition( WiiMote::A ), arWandRelativeDrag() );
     
-    /*
     cube1 = new SolidCubeNode( 1 );
     cube1->setColor( RED );
     cube1->setNodeTransform( ar_TM( 2, 5, -5 ) );
-    
     
     cube2 = new SolidCubeNode( 1 );
     cube2->setColor( BLUE );
@@ -60,6 +59,10 @@ bool initSceneGraph( arMasterSlaveFramework &fw, arSZGClient &client )
 
 void onPreExchange( arMasterSlaveFramework &fw )
 {
+    static int i = 0;
+    static float scale = 1.0;
+    scale += 0.001;
+    sg->getRoot()->setNodeTransform( ar_SM( scale, scale, scale ) );
 #if 0
     static int i = 0;
     static bool grouped = false;
