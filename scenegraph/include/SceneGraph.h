@@ -23,6 +23,7 @@ private:
     Graph g_;
     Vertex root_vertex_;
     IdToVertexMap idToVertex_;
+    RootNode *root_;
     
     void addChild_( Node *newnode, Vertex parent );
     void removeChild_( Vertex v );
@@ -41,6 +42,7 @@ public:
     void removeChild( NodeIdType id );
     
     Node* getChild( NodeIdType id );
+    Node* getRoot() { return root_; }
 };
 
 class easyException : public std::exception

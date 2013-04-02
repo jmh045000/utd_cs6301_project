@@ -11,7 +11,7 @@
 #include "SceneGraph.h"
 
 static int indent = 1;
-arMatrix4 currentView;
+arMatrix4 currentView, currentScale;
 
 class dfs_visitor : public boost::default_dfs_visitor
 {
@@ -28,17 +28,17 @@ public:
         indent++;
         /**/
         
-        g[u]->drawBegin( currentView );
+        g[u]->drawBegin( currentView, currentScale );
     }
     
     template <typename Vertex, typename Graph>
     void finish_vertex( Vertex u, const Graph &g) const
     {
-        g[u]->drawLocalBegin( currentView );
+        g[u]->drawLocalBegin( currentView, currentScale );
         g[u]->draw();
-        g[u]->drawLocalEnd( currentView );
+        g[u]->drawLocalEnd( currentView, currentScale );
         
-        g[u]->drawEnd( currentView );
+        g[u]->drawEnd( currentView, currentScale );
         
         /*
         indent--;
@@ -60,18 +60,15 @@ void SceneGraph::addChild_( Node *newnode, Vertex parent )
 
 void SceneGraph::removeChild_( Vertex v )
 {
-    if( idToVertex_.find( g_[v]->id ) == idToVertex_.end() )
-        throw NodeError( "Node doesn't exist in SceneGraph", __FUNCTION__, __LINE__ );
-    idToVertex_.erase( g_[v]->id );
     clear_vertex( v, g_ );
     remove_vertex( v, g_ );
 }
 
 SceneGraph::SceneGraph( arSZGAppFramework &fw )
 {
-    RootNode *root = new RootNode( fw );
-    root_vertex_ = add_vertex( root, g_ );
-    idToVertex_[root->id] = root_vertex_;
+    root_ = new RootNode( fw );
+    root_vertex_ = add_vertex( root_, g_ );
+    idToVertex_[root_->id] = root_vertex_;
 }
 
 void SceneGraph::drawSceneGraph()
@@ -88,6 +85,7 @@ void SceneGraph::addChild( Node *newnode )
 void SceneGraph::addChild( Node *newnode, Node *parent )
 {
     addChild_( newnode, idToVertex_[ parent->id ] );
+    cout << "Adding node=" << newnode->id << " as a child of " << parent->id << endl;
 }
 
 void SceneGraph::addChild( Node *newnode, NodeIdType parentId )
@@ -97,12 +95,18 @@ void SceneGraph::addChild( Node *newnode, NodeIdType parentId )
 
 void SceneGraph::removeChild( Node *node )
 {
+    if( idToVertex_.find( node->id ) == idToVertex_.end() )
+        throw( NodeError( "Node does not exist in SceneGraph", __FILE__, __LINE__ ) );
     removeChild_( idToVertex_[ node->id ] );
+    idToVertex_.erase( node->id );
 }
 
 void SceneGraph::removeChild( NodeIdType id )
 {
+    if( idToVertex_.find( id ) == idToVertex_.end() )
+        throw( NodeError( "Node does not exist in SceneGraph", __FILE__, __LINE__ ) );
     removeChild_( idToVertex_[ id ] );
+    idToVertex_.erase( id );
 }
 
 Node* SceneGraph::getChild( NodeIdType id )

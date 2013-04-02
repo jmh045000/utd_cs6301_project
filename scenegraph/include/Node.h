@@ -44,14 +44,18 @@ private:
     int soundId_;
     SoundState soundState_; // What are we doing with current sound?
     
-    void setMatrix( const arMatrix4 &mat );
-    // drawBegin_ is the function that will do the pushing, and multiply by our transform
-    virtual void drawBegin( arMatrix4 &currentView ); // RootNode overrides this, no others should
-    // drawEnd_ will pop the matrix
-    virtual void drawEnd( arMatrix4 &currentView ); // RootNode overrides this, no others should
+    Node *parentNode_; // This is used to group objects together
     
-    void drawLocalBegin( arMatrix4 &currentView );
-    void drawLocalEnd( arMatrix4 &currentView );
+    // This is the callback from arInteractable
+    void setMatrix( const arMatrix4 &mat );
+    void move( const arVector3 &vec );
+    // drawBegin_ is the function that will do the pushing, and multiply by our transform
+    virtual void drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale ); // RootNode overrides this, no others should
+    // drawEnd_ will pop the matrix
+    virtual void drawEnd( arMatrix4 &currentView, arMatrix4 &currentScale ); // RootNode overrides this, no others should
+    
+    void drawLocalBegin( arMatrix4 &currentView, arMatrix4 &currentScale );
+    void drawLocalEnd( arMatrix4 &currentView, arMatrix4 &currentScale );
 protected:
     
     // This is the transform matrix that this node and all children will have
@@ -76,7 +80,7 @@ protected:
 
 public:
     // *structors
-    Node() : arInteractable(), nextMatrix_(), color( 0, 0, 0 ), opengl_callback( NULL ), id( ++numObjects_ )
+    Node() : arInteractable(), nextMatrix_(), parentNode_( this ), color( 0, 0, 0 ), opengl_callback( NULL ), id( ++numObjects_ )
     {
     }
     virtual ~Node() {}
@@ -97,6 +101,18 @@ public:
     void soundStop( ) { soundState_ = SOUNDSTOP; }
     
     void setTexture( std::string filename, std::string subdirectory = "", std::string path = "" );
+    
+    void setParent( Node *n ) 
+    { 
+        if( parentNode_ != this )
+        {
+            for( int i = 12; i < 15; i++ )
+                nodeTransform[i] += parentNode_->nodeTransform[i];
+        }
+        parentNode_ = n;
+    }
+    
+    Node *getParent() { return parentNode_; }
 };
 
 class RootNode : public Node
@@ -104,7 +120,7 @@ class RootNode : public Node
 private:
     arSZGAppFramework &fw_;
     
-    void drawBegin( arMatrix4 &currentView );
+    void drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale );
     void draw() {}
 public:
     RootNode( arSZGAppFramework &fw );
@@ -204,10 +220,14 @@ private:
     void draw();
 public:
     wbOBJRenderer   obj_;
+	
+public:
     ObjNode( std::string filename, std::string path = "" ) : Node(), filename_( filename )
     {
         obj_.readOBJ( filename, path );
     }
+    
+    void setTexture( int i, arTexture *t ) { obj_.setTexture( i, t ); }
 };
 
 #endif

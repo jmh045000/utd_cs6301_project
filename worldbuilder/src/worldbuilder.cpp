@@ -26,68 +26,32 @@ bool menuOn = false;
 
 std::list<arInteractable*> interactableObjects;
 
+SolidCubeNode *cube1;
+SolidCubeNode *cube2;
+
 bool initSceneGraph( arMasterSlaveFramework &fw, arSZGClient &client )
 {
     sg = new SceneGraph( fw );
+    sg->getRoot()->setNodeTransform( ar_SM( 2, 2, 2 ) );
     
     menu = initMenu();
     
     primary.setDrag( primary.getGrabCondition( WiiMote::A ), arWandRelativeDrag() );
     secondary.setDrag( primary.getGrabCondition( WiiMote::A ), arWandRelativeDrag() );
     
-    /*
+    cube1 = new SolidCubeNode( 1 );
+    cube1->setColor( RED );
+    cube1->setNodeTransform( ar_TM( 2, 5, -5 ) );
     
-    ObjNode *obj = new ObjNode( "al.obj", "worldbuilder_rsc/objects" );
-    obj->setNodeTransform( ar_TM( 0, 5, -5 ) );
+    cube2 = new SolidCubeNode( 1 );
+    cube2->setColor( BLUE );
+    cube2->setNodeTransform( ar_TM( -2, 5, -5 ) );
     
+    sg->addChild( cube1 );
+    sg->addChild( cube2 );
     
-    cout << "teapot: number of materials=" << obj->obj_.getNumberMaterials() << endl;
-    cout << "teapot: number of textures=" << obj->obj_.getNumberTextures() << endl;
-    
-    
-    arTexture *t = obj->obj_.getTexture( 4 );
-    cout << "texture*=" << t << endl;
-    if( t )
-    {
-        t->readJPEG( "brick.jpg", "", "worldbuilder_rsc/textures" );
-        cout << "Texture is good!" << endl;
-    }
-    else
-    {
-        cerr << "Failed to set texture!" << endl;
-    }
-    
-    arMaterial *m = obj->obj_.getMaterial( 2 );
-    cout << "material*=" << m << endl;
-    if( m )
-    {
-        m->diffuse = arVector3( 0, 0, 1 );
-        m->ambient = arVector3( 0, 0, 1 );
-        m->activateMaterial();
-    }
-    else
-    {
-        cerr << "Failed to set material " << 2 << "!" << endl;
-    }
-    
-    m = obj->obj_.getMaterial( 3 );
-    m = 0;
-    t = new arTexture();
-    
-    t->readJPEG( "rainbow.jpg", "", "worldbuilder_rsc/textures" );
-    
-    obj->obj_.setTexture( 3, t );
-    
-    //obj->obj_.activateTextures();
-    
-    for( int i = 0; i < obj->obj_.getNumberGroups(); i++ )
-    {
-        arOBJGroupRenderer *g = obj->obj_.getGroup( i );
-        cout << "Found group: " << g->getName() << endl;
-    }
-    
-    //sg->addChild( obj );
-    
+    interactableObjects.push_back( cube1 );
+    interactableObjects.push_back( cube2 );
     /**/
     
     return true;
@@ -95,6 +59,66 @@ bool initSceneGraph( arMasterSlaveFramework &fw, arSZGClient &client )
 
 void onPreExchange( arMasterSlaveFramework &fw )
 {
+    static int i = 0;
+    static float scale = 1.0;
+    scale += 0.001;
+    sg->getRoot()->setNodeTransform( ar_SM( scale, scale, scale ) );
+#if 0
+    static int i = 0;
+    static bool grouped = false;
+    
+    if( ++i == 500 )
+    {
+        if( !grouped )
+        {
+            cout << "Grouping cube1 and cube2" << endl;
+            NothingNode *nothing = new NothingNode();
+            
+            for( list<arInteractable*>::iterator it = interactableObjects.begin(); it != interactableObjects.end(); ++it )
+                if( Node *n = dynamic_cast<Node*>( *it ) )
+                {
+                    sg->removeChild( n );
+                    n->setParent( nothing );
+                }
+            
+            sg->addChild( nothing );
+            for( list<arInteractable*>::iterator it = interactableObjects.begin(); it != interactableObjects.end(); ++it )
+                if( Node *n = dynamic_cast<Node*>( *it ) )
+                    sg->addChild( n, nothing );
+            
+            /*
+            sg->removeChild( cube1 );
+            cube1->setParent( nothing );
+            sg->removeChild( cube2 );
+            cube2->setParent( nothing );
+            
+            sg->addChild( nothing );
+            sg->addChild( cube1, nothing );
+            sg->addChild( cube2, nothing );
+            /**/
+        }
+        else
+        {
+            cout << "Ungrouping cube1 and cube2" << endl;
+            sg->removeChild( cube1 );
+            sg->removeChild( cube2 );
+            
+            Node *toDelete = cube1->getParent();
+            cube1->setParent( cube1 );
+            cube2->setParent( cube2 );
+            
+            sg->removeChild( toDelete );
+            delete toDelete;
+            
+            sg->addChild( cube1 );
+            sg->addChild( cube2 );
+        }
+        i = 0;
+        grouped = !grouped;
+    }
+    
+#endif
+
     fw.navUpdate();
     
     // update the input state (placement matrix & button states) of our effector.
@@ -122,16 +146,20 @@ void onPreExchange( arMasterSlaveFramework &fw )
             menuOn = !menuOn;
             break;
         case WiiMote::DOWN:
-            menu->pressedDown();
+            if( menuOn )
+                menu->pressedDown();
             break;
         case WiiMote::RIGHT:
-            menu->pressedRight();
+            if( menuOn )
+                menu->pressedRight();
             break;
         case WiiMote::LEFT:
-            menu->pressedLeft();
+            if( menuOn )
+                menu->pressedLeft();
             break;
         case WiiMote::UP:
-            menu->pressedUp();
+            if( menuOn )
+                menu->pressedUp();
             break;
         case WiiMote::A:
             if( menuOn )
@@ -172,16 +200,20 @@ void onPreExchange( arMasterSlaveFramework &fw )
             menuOn = !menuOn;
             break;
         case WiiMote::DOWN:
-            menu->pressedDown();
+            if( menuOn )
+                menu->pressedDown();
             break;
         case WiiMote::RIGHT:
-            menu->pressedRight();
+            if( menuOn )
+                menu->pressedRight();
             break;
         case WiiMote::LEFT:
-            menu->pressedLeft();
+            if( menuOn )
+                menu->pressedLeft();
             break;
         case WiiMote::UP:
-            menu->pressedUp();
+            if( menuOn )
+                menu->pressedUp();
             break;
         case WiiMote::A:
             if( menuOn )

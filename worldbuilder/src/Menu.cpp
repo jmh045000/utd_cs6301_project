@@ -160,6 +160,69 @@ void Item::draw()
     }
 }
 
+void Item::doAction()
+{
+
+    if( type == OBJECT )
+    {
+        ObjNode *obj = new ObjNode( filename, path );
+        sg->addChild( obj );
+        obj->setNodeTransform( primary.getMatrix() );
+        interactableObjects.push_back( obj );
+    }
+    else if( type == TEXTURE )
+    {
+        if( ObjNode *obj = dynamic_cast<ObjNode*>( interactableObjects.front() ) )
+        {
+            arTexture *t = new arTexture();
+            t->readJPEG( filename, "", path );
+            obj->setTexture( 1, t );
+        }
+    }
+    else if( type == TOOL )
+    {
+        switch( tooltype )
+        {
+        case DELETE_TOOL:
+            cout << "DELETING object" << endl;
+            break;
+        case GROUP_TOOL:
+        {
+            cout << "GROUPING" << endl;
+            NothingNode *nothing = new NothingNode();
+            
+            for( list<arInteractable*>::iterator it = interactableObjects.begin(); it != interactableObjects.end(); ++it )
+            {
+                if( Node *n = dynamic_cast<Node*>( *it ) )
+                {
+                    sg->removeChild( n );
+                    n->setParent( nothing );
+                }
+            }
+            
+            sg->addChild( nothing );
+            for( list<arInteractable*>::iterator it = interactableObjects.begin(); it != interactableObjects.end(); ++it )
+            {
+                if( Node *n = dynamic_cast<Node*>( *it ) )
+                {
+                    sg->addChild( n, nothing );
+                }
+            }
+        }
+        break;
+        case UNGROUP_TOOL:
+            cout << "UNGROUP objects" << endl;
+            break;
+        case COPY_TOOL:
+            cout << "COPYING object" << endl;
+            break;
+        case PASTE_TOOL:
+            cout << "PASTING object" << endl;
+            break;
+        }
+    }
+}
+
 void MenuNode::draw()
 {
     float hsize = 5;
@@ -197,7 +260,6 @@ void MenuNode::pressedDown()
 
 void MenuNode::pressedLeft()
 {
-    
     currentSelected->deselect();
     switch( selectedGroup )
     {
@@ -215,7 +277,6 @@ void MenuNode::pressedLeft()
 
 void MenuNode::pressedRight()
 {
-    
     currentSelected->deselect();
     switch( selectedGroup )
     {
@@ -282,25 +343,7 @@ MenuAction MenuNode::pressedA()
     case ITEM:
         if( Item *i = dynamic_cast<Item*>( currentSelected ) )
         {
-            switch( i->type )
-            {
-			case Item::OBJECT:
-			{
-                ObjNode *obj = new ObjNode( i->getFilename(), i->getPath() );
-                sg->addChild( obj );
-                obj->setNodeTransform( primary.getMatrix() );
-                interactableObjects.push_back( obj );
-			}
-			break;
-			case Item::TEXTURE:
-			{
-			}
-			break;
-			case Item::TOOL:
-			{
-			}
-			break;
-            }
+            i->doAction();
             return CLOSE;
         }
         break;
@@ -420,6 +463,7 @@ MenuNode* initMenu()
 		list<Item*> tools;
 		tools.push_back( new Item( "Delete", Item::TOOL, Item::DELETE_TOOL ) );
 		tools.push_back( new Item( "Group", Item::TOOL, Item::GROUP_TOOL ) );
+        tools.push_back( new Item( "Ungroup", Item::TOOL, Item::UNGROUP_TOOL ) );
 		tools.push_back( new Item( "Copy", Item::TOOL, Item::COPY_TOOL ) );
 		tools.push_back( new Item( "Paste", Item::TOOL, Item::PASTE_TOOL ) );
 		menu->setTools( tools );
