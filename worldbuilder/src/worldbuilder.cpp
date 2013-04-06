@@ -189,6 +189,8 @@ int main(int argc, char *argv[])
         return -1;
     }
     
+    primary.setDrag( primary.getGrabCondition( WiiMote::A ), arWandRelativeDrag() );
+    
     framework.setStartCallback( initSceneGraph );
     framework.setDrawCallback( doSceneGraph );
     framework.setPreExchangeCallback( onPreExchange );

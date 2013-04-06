@@ -418,6 +418,7 @@ list<Item*> findObjects()
         {
             stringstream ss;
             ss << p;
+            cout << "Loading object: " << it->path().filename() << endl;
             l.push_back( new Item( n, Item::OBJECT, it->path().filename(), ss.str() ) );
         }
     }
@@ -444,6 +445,7 @@ list<Item*> findTextures()
         {
             stringstream ss;
             ss << p;
+            cout << "Loading Texture: " << it->path().filename() << endl;
             l.push_back( new Item( it->path().filename().c_str(), Item::TEXTURE, it->path().filename(), ss.str() ) );
         }
     }
