@@ -1,0 +1,617 @@
+newmtl blinn2SG
+illum 4
+Kd 0.90 0.86 0.58
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.50 0.50 0.50
+newmtl c70_Material__221
+illum 4
+Kd 0.31 0.31 0.31
+Ka 0.31 0.31 0.31
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 13.93
+newmtl c70_Material__222
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 11.31
+newmtl c70_Material__223
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 17.15
+newmtl c70_Material__224
+illum 4
+Kd 0.34 0.34 0.34
+Ka 0.34 0.34 0.34
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 4.00
+newmtl c70_Material__225
+illum 4
+Kd 0.47 0.20 0.07
+Ka 0.47 0.20 0.07
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 4.00
+newmtl c70_Material__233
+illum 4
+Kd 0.18 0.18 0.18
+Ka 0.18 0.18 0.18
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 13.00
+newmtl c70_Material__235
+illum 4
+Kd 0.00 0.00 0.00
+Ka 1.00 1.00 1.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 24.25
+newmtl c70_Material__237
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 16.00
+newmtl c70_Material__238
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 4.00
+newmtl c70_Material__240
+illum 4
+Kd 0.08 0.21 0.90
+Ka 0.08 0.21 0.90
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 4.00
+newmtl c70_Material__241
+illum 4
+Kd 0.22 0.22 0.22
+Ka 0.22 0.22 0.22
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 12.13
+newmtl c70_Material__242
+illum 4
+Kd 0.06 0.10 0.97
+Ka 0.06 0.10 0.97
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 4.00
+newmtl c70_Material__248
+illum 4
+Kd 0.40 0.40 0.40
+Ka 0.40 0.40 0.40
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 13.93
+newmtl c70_Material__250
+illum 4
+Kd 0.15 0.11 0.96
+Ka 0.15 0.11 0.96
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 4.00
+newmtl c70_Material__251
+illum 4
+Kd 0.15 0.15 0.15
+Ka 0.15 0.15 0.15
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 18.38
+newmtl c70_Material__253
+illum 4
+Kd 0.15 0.15 0.15
+Ka 0.15 0.15 0.15
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 18.38
+newmtl c70_Material__255
+illum 4
+Kd 0.59 0.59 0.59
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 16.00
+newmtl c70_Material__257
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 39.40
+newmtl c70_Material__259
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 8.57
+newmtl c70_Material__261
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 22.63
+newmtl c70_Material__264
+illum 4
+Kd 0.56 0.21 0.04
+Ka 0.56 0.21 0.04
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 29.86
+newmtl c70_Material__265
+illum 4
+Kd 0.30 0.30 0.30
+Ka 0.30 0.30 0.30
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 18.38
+newmtl c70_Material__267
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 11.31
+newmtl c70_Material__272
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 7.46
+newmtl c70_Material__274
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 22.63
+newmtl c70_Material__278
+illum 4
+Kd 0.34 0.34 0.34
+Ka 0.34 0.34 0.34
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 19.70
+newmtl c70_Material__285
+illum 4
+Kd 0.00 0.00 0.01
+Ka 0.00 0.00 0.01
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 6.06
+newmtl c70_Material__288
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 39.40
+newmtl c70_Material__292
+illum 4
+Kd 0.42 0.42 0.42
+Ka 0.42 0.42 0.42
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 11.31
+newmtl c70_Material__296
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 25.99
+newmtl c70_Material__299
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 13.93
+newmtl c70_Material__300
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 51.98
+newmtl c70_Material__301
+illum 4
+Kd 0.25 0.25 0.25
+Ka 0.25 0.25 0.25
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 18.38
+newmtl c70_Material__302
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 39.40
+newmtl c70_Material__304
+illum 4
+Kd 0.46 0.11 0.08
+Ka 0.46 0.11 0.08
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 64.00
+newmtl c70_Material__306
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 9.85
+newmtl c70_Material__307
+illum 4
+Kd 0.05 0.02 0.18
+Ka 0.05 0.02 0.18
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 12.13
+newmtl c70_Material__308
+illum 4
+Kd 0.52 0.65 0.69
+Ka 0.52 0.65 0.69
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 29.86
+newmtl c70_Material__309
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 14.93
+newmtl c70_Material__310
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 16.00
+newmtl c70_Material__311
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 22.63
+newmtl c70_Material__313
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 21.11
+newmtl c70_Material__314
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.95 0.83 0.75
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 18.38
+newmtl c70_Material__315
+illum 4
+Kd 0.19 0.19 0.19
+Ka 0.19 0.19 0.19
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 48.50
+newmtl c70_Material__420
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+map_Kd volvo-logo.jpg
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 12.13
+newmtl c70_Material__426
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 8.00
+newmtl c70_Material__427
+illum 4
+Kd 0.50 0.50 0.50
+Ka 1.00 1.00 1.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 1.00 1.00 1.00
+Ns 4.59
+newmtl c70_Material__451
+illum 4
+Kd 0.14 0.14 0.14
+Ka 0.14 0.14 0.14
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 1.00 1.00 1.00
+Ns 4.59
+newmtl c70_Material__453
+illum 4
+Kd 0.05 0.05 0.05
+Ka 0.05 0.05 0.05
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 1.00 1.00 1.00
+Ns 4.59
+newmtl c70_Material__455
+illum 4
+Kd 0.07 0.07 0.07
+Ka 1.00 1.00 1.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 1.00 1.00 1.00
+Ns 4.59
+newmtl c70_Material__457
+illum 4
+Kd 0.49 0.49 0.49
+Ka 0.49 0.49 0.49
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 1.00 1.00 1.00
+Ns 4.59
+newmtl c70_Material__2960
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 25.99
+newmtl c70_Metal
+illum 4
+Kd 0.59 0.59 0.59
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 9.19
+newmtl c70_black_plastic
+illum 4
+Kd 0.48 0.06 0.06
+Ka 0.48 0.06 0.06
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 4.29
+newmtl c70_body_color
+illum 4
+Kd 0.85 0.71 0.59
+Ka 0.85 0.71 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 22.63
+newmtl c70_body_color0
+illum 4
+Kd 0.85 0.71 0.59
+Ka 0.85 0.71 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 22.63
+newmtl c70_body_color3
+illum 4
+Kd 0.85 0.71 0.59
+Ka 0.85 0.71 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 22.63
+newmtl c70_body_color7
+illum 4
+Kd 0.62 0.51 0.42
+Ka 0.85 0.71 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 22.63
+newmtl c70_body_color9
+illum 4
+Kd 0.85 0.71 0.59
+Ka 0.85 0.71 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 22.63
+newmtl c70_chrome
+illum 4
+Kd 0.59 0.59 0.59
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 22.63
+newmtl c70_chrome0
+illum 4
+Kd 0.59 0.59 0.59
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 12.13
+newmtl c70_chrome7
+illum 4
+Kd 0.59 0.59 0.59
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 59.71
+newmtl c70_chrome9
+illum 4
+Kd 0.97 0.97 1.00
+Ka 0.97 0.97 1.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 42.22
+newmtl c70_chrome11
+illum 4
+Kd 0.59 0.59 0.59
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 34.30
+newmtl c70_chrome13
+illum 4
+Kd 0.59 0.59 0.59
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 34.30
+newmtl c70_chrome15
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.59 0.59 0.59
+Tf 1.00 1.00 1.00
+map_Kd kau.jpg
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 13.93
+newmtl c70_plastic
+illum 4
+Kd 0.21 0.21 0.21
+Ka 0.21 0.21 0.21
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 25.99
+newmtl c70_plastic0
+illum 4
+Kd 0.21 0.21 0.21
+Ka 0.21 0.21 0.21
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 25.99
+newmtl c70_plastic3
+illum 4
+Kd 0.21 0.21 0.21
+Ka 0.21 0.21 0.21
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 25.99
+newmtl c70_rotor1
+illum 4
+Kd 0.78 0.78 0.78
+Ka 0.78 0.78 0.78
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 19.70
+newmtl c70_rubber
+illum 4
+Kd 0.14 0.14 0.14
+Ka 0.14 0.14 0.14
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 18.38
+newmtl c70_wind_glass
+illum 4
+Kd 0.05 0.15 0.16
+Ka 0.05 0.15 0.16
+Tf 0.41 0.41 0.41
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 10.56
+newmtl c70_wind_glass0
+illum 4
+Kd 0.05 0.15 0.16
+Ka 0.05 0.15 0.16
+Tf 0.41 0.41 0.41
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 10.56
+newmtl c70_wind_glass3
+illum 4
+Kd 0.05 0.15 0.16
+Ka 0.05 0.15 0.16
+Tf 0.41 0.41 0.41
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 10.56
+newmtl lambert2SG
+illum 4
+Kd 0.86 0.70 0.57
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.50 0.50 0.50
+Ns 18.00
+newmtl phong3SG
+illum 4
+Kd 0.92 0.92 0.92
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.50 0.50 0.50
+Ns 18.00
