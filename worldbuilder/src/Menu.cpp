@@ -192,7 +192,6 @@ void Item::doAction()
                 interactableObjects.pop_front();
                 sg->removeChild( n );
             }
-            ar_usleep(3000000);
             break;
         case GROUP_TOOL:
         {

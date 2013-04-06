@@ -105,7 +105,8 @@ inline void setMenuOn( arMasterSlaveFramework &fw, WiiMote &eff )
 {
     menuOn = true;
 	
-    menu->setNodeTransform( fw.getMidEyeMatrix() * ar_TM( 0, 0, -5 ) 	 );
+    menu->setNodeTransform( fw.getMidEyeMatrix() * ar_TM( 0, 0, -5 ) );
+	
 	
     buildMenu( menu );
 }
