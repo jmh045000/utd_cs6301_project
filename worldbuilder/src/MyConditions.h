@@ -7,8 +7,6 @@
 #include <list>
 #include <set>
 
-#include "MyConditions.h"
-
 typedef std::pair<arGrabCondition, arEffector*> ConditionEffectorPair;
 
 //! \brief This is a grab condition that takes a vector of many conditions and the effectors for them, and makes sure they are all met before returning true
