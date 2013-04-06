@@ -44,7 +44,6 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
         }
         else
         {
-            cout << "TRANSFORMING" << endl;
             nodeTransform = nextMatrix_;
         }
         nextMatrix_ = arMatrix4();
@@ -244,8 +243,6 @@ void wbOBJRenderer::setTexture( unsigned i, arTexture *t )
 {
 	if( i < _textures.size() )
 	{
-		if( _textures[i] )
-			delete _textures[i];
 		_textures[i] = t;
 	}
 }
