@@ -18,6 +18,7 @@ void Node::setMatrix( const arMatrix4 &mat )
 {
     // Change the nodeTransform matrix when drawing, so we know what has been pushed so far...
     //cout << "setMatrix(\n" << mat << "\n)" << endl;
+    
     nextMatrix_ = mat;
 }
 
@@ -34,19 +35,25 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
     {   // If we've changed transform from being interacted with, remove the current state of the world (all the pushes)
         //std::cout << "Transforming.  nodeTransform=\n" << nodeTransform << "\ncurrentView=\n" << ar_ETM( currentView ) << "\nnextMatrix_\n" << nextMatrix_ << std::endl;
         // Remove the current transform from the next manipulation.
+        
         for(int i = 12; i < 15; i++)
             nextMatrix_[i] -= currentView[i];
         if( parentNode_ != this )
+        {
             parentNode_->move( arVector3( nextMatrix_[12] - nodeTransform[12], nextMatrix_[13] - nodeTransform[13], nextMatrix_[14] - nodeTransform[14] ) );
+        }
         else
+        {
+            cout << "TRANSFORMING" << endl;
             nodeTransform = nextMatrix_;
+        }
         nextMatrix_ = arMatrix4();
         
     }
     glPushMatrix();
+        glMultMatrixf( ar_ETM( nodeTransform ).v );
         currentView = currentView * ar_ETM( nodeTransform );
         currentScale = currentScale * ar_ESM( nodeTransform );
-        glMultMatrixf( currentView.v );
         arInteractable::setMatrix( currentView );
 }
 
@@ -85,7 +92,6 @@ void Node::drawLocalBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
 void Node::drawLocalEnd( arMatrix4 &currentView, arMatrix4 &currentScale )
 {
     glPopMatrix(); // currentScale
-    glPopMatrix(); // nodeTransform
     
     //std::cout << "drawLocalEnd, currentView=\n" << currentView << std::endl;
     if( !(!texture) ) texture.deactivate();
@@ -242,6 +248,13 @@ void wbOBJRenderer::setTexture( unsigned i, arTexture *t )
 			delete _textures[i];
 		_textures[i] = t;
 	}
+}
+
+ObjNode::ObjNode( ObjNode &otherObj ) : filename_ ( otherObj.filename_ ), path_( otherObj.path_ )
+{
+    obj_.readOBJ( filename_, path_ );
+    for( int i = 0; i < numTextures(); ++i )
+        setTexture( i, otherObj.obj_.getTexture( i ) );
 }
 
 void ObjNode::draw()

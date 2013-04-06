@@ -2,31 +2,37 @@
 #ifndef _SCENEGRAPH_H_
 #define _SCENEGRAPH_H_
 
+#include <set>
 #include <map>
-
-
-#include <boost/graph/adjacency_list.hpp>
-
 
 #include "Node.h"
 
-typedef boost::adjacency_list<boost::listS, boost::vecS, boost::directedS, Node* > Graph;
-typedef boost::graph_traits<Graph>::vertex_descriptor Vertex;
-typedef boost::graph_traits<Graph>::edge_descriptor Edge;
+class Vertex
+{
+private:
+    Node *me;
+    std::set<Vertex*> children;
+    Vertex *parent;
+    
+    Vertex( Node *n ) : me( n ), parent( NULL ) {}
+    
+friend class SceneGraph;
+};
 
-typedef std::map<NodeIdType, Vertex> IdToVertexMap;
+typedef std::map<NodeIdType, Vertex*> IdToVertexMap;
 
 // The SceneGraph MUST be instantiated during or after the start callback of the framework.
 class SceneGraph
 {
 private:
-    Graph g_;
     Vertex root_vertex_;
     IdToVertexMap idToVertex_;
-    RootNode *root_;
+    bool drawing_;
     
-    void addChild_( Node *newnode, Vertex parent );
-    void removeChild_( Vertex v );
+    void addChild_( Node *newnode, Vertex *parent );
+    Node* removeChild_( Vertex *v );
+    void processDeferred_();
+    void dfs_( Vertex *r );
 
 public:
     SceneGraph( arSZGAppFramework &fw );
@@ -42,7 +48,22 @@ public:
     void removeChild( NodeIdType id );
     
     Node* getChild( NodeIdType id );
-    Node* getRoot() { return root_; }
+    Node* getRoot() { return root_vertex_.me; }
+};
+
+class GraphAction
+{
+    typedef enum { ADD, REMOVE, INVALID } GraphActionType;
+    
+    GraphActionType type;
+    Node *newtoadd;
+    Vertex *parent;
+    Vertex *todelete;
+    
+    GraphAction( Node *a, Vertex *p ) : type( ADD ), newtoadd( a ), parent( p ) {}
+    GraphAction( Vertex *d ) : type( REMOVE ), todelete( d ) {}
+    
+    friend class SceneGraph;
 };
 
 class easyException : public std::exception

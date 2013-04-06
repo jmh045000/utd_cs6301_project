@@ -10,6 +10,7 @@
 
 namespace fs = boost::filesystem;
 
+
 void Tab::draw()
 {
     if( active )
@@ -176,7 +177,8 @@ void Item::doAction()
         {
             arTexture *t = new arTexture();
             t->readJPEG( filename, "", path );
-            obj->setTexture( 1, t );
+            for( int i = 0; i < obj->numTextures(); ++i )
+                obj->setTexture( i, t );
         }
     }
     else if( type == TOOL )
@@ -185,6 +187,12 @@ void Item::doAction()
         {
         case DELETE_TOOL:
             cout << "DELETING object" << endl;
+            if( Node *n = dynamic_cast<Node*>( interactableObjects.front() ) )
+            {
+                interactableObjects.pop_front();
+                sg->removeChild( n );
+            }
+            ar_usleep(3000000);
             break;
         case GROUP_TOOL:
         {
@@ -192,13 +200,11 @@ void Item::doAction()
             NothingNode *nothing = new NothingNode();
             
             for( list<arInteractable*>::iterator it = interactableObjects.begin(); it != interactableObjects.end(); ++it )
-            {
                 if( Node *n = dynamic_cast<Node*>( *it ) )
                 {
                     sg->removeChild( n );
                     n->setParent( nothing );
                 }
-            }
             
             sg->addChild( nothing );
             for( list<arInteractable*>::iterator it = interactableObjects.begin(); it != interactableObjects.end(); ++it )
@@ -212,6 +218,15 @@ void Item::doAction()
         break;
         case UNGROUP_TOOL:
             cout << "UNGROUP objects" << endl;
+            for( list<arInteractable*>::iterator it = interactableObjects.begin(); it != interactableObjects.end(); ++it )
+            {
+                if( Node *n = dynamic_cast<Node*>( *it ) )
+                {
+                    sg->removeChild( n );
+                    n->setParent( n );
+                    sg->addChild( n );
+                }
+            }
             break;
         case COPY_TOOL:
             cout << "COPYING object" << endl;
@@ -225,8 +240,8 @@ void Item::doAction()
 
 void MenuNode::draw()
 {
-    float hsize = 5;
-    float vsize = 3;
+    float hsize = 4;
+    float vsize = 2;
     GLfloat v[4][3] =
     {
         { -hsize / 2, -vsize / 2, 0 },
@@ -443,7 +458,7 @@ MenuNode* initMenu()
     
     {   // Initialize Tabs
         Tab *objectTab = new Tab( "Objects", true );
-        objectTab->setNodeTransform( ar_TM( -1.5, 1, 0 ) );
+        objectTab->setNodeTransform( ar_TM( -2.5, 1, 0 ) );
         menu->tabs.objectTab = objectTab;
         menu->currentSelected = objectTab;
         
@@ -452,7 +467,7 @@ MenuNode* initMenu()
         menu->tabs.materialTab = materialTab;
         
         Tab *toolsTab = new Tab( "Tools" );
-        toolsTab->setNodeTransform( ar_TM( 1.5, 1, 0 ) );
+        toolsTab->setNodeTransform( ar_TM( 2.5, 1, 0 ) );
         menu->tabs.toolsTab = toolsTab;
     }
     
@@ -480,10 +495,10 @@ void buildMenu( MenuNode *menu )
     sg->addChild( menu->tabs.materialTab, menu );
     sg->addChild( menu->tabs.toolsTab, menu );
     
-    float i = -1.5;
-    for( list<Item*>::iterator it = menu->items->itemlist.begin(); it != menu->items->itemlist.end() && i < 2; ++it, i += 1.5 )
+    float i = -2.5;
+    for( list<Item*>::iterator it = menu->items->itemlist.begin(); it != menu->items->itemlist.end() && i < 3; ++it, i += 2.5 )
     {
-        (*it)->setNodeTransform( ar_TM( i, 0, 0 ) );
+        (*it)->setNodeTransform( ar_TM( i, -0.5, 0 ) );
         sg->addChild( *it, menu );
     }
 }

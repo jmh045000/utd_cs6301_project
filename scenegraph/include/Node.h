@@ -34,7 +34,7 @@ typedef enum { SOUNDPLAYONCE = -1, SOUNDSTOP = 0, SOUNDPLAYCONTINOUS = 1 } Sound
 
 class Node : public arInteractable
 {
-    friend class dfs_visitor;
+    friend class SceneGraph;
     friend class RootNode;
 
     static NodeIdType numObjects_;
@@ -209,6 +209,7 @@ class wbOBJRenderer : public arOBJRenderer
 public:
 	wbOBJRenderer() : arOBJRenderer() {}
 	
+    arTexture* getTexture( unsigned i ) { return _textures[i]; }
 	void setTexture( unsigned i, arTexture *t );
 };
 
@@ -216,18 +217,21 @@ class ObjNode : public Node
 {
 private:
     std::string     filename_;
+    std::string     path_;
     
     void draw();
 public:
     wbOBJRenderer   obj_;
 	
 public:
-    ObjNode( std::string filename, std::string path = "" ) : Node(), filename_( filename )
+    ObjNode( std::string filename, std::string path = "" ) : Node(), filename_( filename ), path_( path )
     {
-        obj_.readOBJ( filename, path );
+        obj_.readOBJ( filename_, path_ );
     }
+    ObjNode( ObjNode &other_obj );
     
     void setTexture( int i, arTexture *t ) { obj_.setTexture( i, t ); }
+    int numTextures() { return obj_.getNumberTextures(); }
 };
 
 #endif
