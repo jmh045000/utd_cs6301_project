@@ -142,19 +142,26 @@ void onPreExchange( arMasterSlaveFramework &fw )
     primary.updateState( fw.getInputState() );
     secondary.updateState( fw.getInputState() );
     
-    std::map<WiiMote::button_t, WiiMote*> buttonMap;
+    std::map<WiiMote::button_t, std::list<WiiMote*> > buttonMap;
     WiiMote::ButtonList buttons = secondary.getDownButtons();
     for( WiiMote::ButtonList::iterator it = buttons.begin(); it != buttons.end(); ++it )
     {  // Process all butons just pressed on secondary
-        buttonMap.insert( std::make_pair( *it, &secondary ) );
+        if( buttonMap.find( *it ) == buttonMap.end() )
+            buttonMap.insert( std::make_pair( *it, std::list<WiiMote*>( 2, &secondary ) ) );
+        else
+            buttonMap[*it].push_back( &secondary );
     }
     
     buttons = primary.getDownButtons();
     for( WiiMote::ButtonList::iterator it = buttons.begin(); it != buttons.end(); ++it )
-    {  // Process all butons just pressed on secondary
-        buttonMap.insert( std::make_pair( *it, &primary ) );
+    {   // Process all butons just pressed on primary
+        if( buttonMap.find( *it ) == buttonMap.end() )
+            buttonMap.insert( std::make_pair( *it, std::list<WiiMote*>( 2, &secondary ) ) );
+        else
+            buttonMap[*it].push_back( &secondary );
     }
-    for( std::map<WiiMote::button_t, WiiMote*>::iterator it = buttonMap.begin(); it != buttonMap.end(); ++it )
+    
+    for( std::map<WiiMote::button_t, std::list<WiiMote*> >::iterator it = buttonMap.begin(); it != buttonMap.end(); ++it )
     {
         switch( it->first )
         {
