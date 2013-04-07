@@ -50,8 +50,8 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
         
     }
     glPushMatrix();
-        glMultMatrixf( ar_ETM( nodeTransform ).v );
-        currentView = currentView * ar_ETM( nodeTransform );
+        glMultMatrixf( nodeTransform.v );
+        currentView = currentView * nodeTransform;
         currentScale = currentScale * ar_ESM( nodeTransform );
         arInteractable::setMatrix( currentView );
 }
@@ -59,7 +59,7 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
 void Node::drawEnd( arMatrix4 &currentView, arMatrix4 &currentScale )
 {
     glPopMatrix();
-    currentView = currentView * ar_ETM( nodeTransform ).inverse();
+    currentView = currentView * nodeTransform.inverse();
     currentScale = currentScale * ar_ESM( nodeTransform ).inverse();
     //std::cout << "drawEnd, currentView=\n" << currentView << std::endl;
 }

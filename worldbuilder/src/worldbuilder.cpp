@@ -25,7 +25,6 @@ class Wall
 public:
     Wall() : yPosition( 0 ) {}
     
-    
     void init();
     void draw();
 };
@@ -89,12 +88,9 @@ void drawWiimote( WiiMote &wm )
 bool initSceneGraph( arMasterSlaveFramework &fw, arSZGClient &client )
 {
     sg = new SceneGraph( fw );
-    sg->getRoot()->setNodeTransform( ar_SM( 2, 2, 2 ) );
+    //sg->getRoot()->setNodeTransform( ar_SM( 2, 2, 2 ) );
     
-    menu = initMenu();
-    
-    primary.setDrag( primary.getGrabCondition( WiiMote::A ), arWandRelativeDrag() );
-    secondary.setDrag( secondary.getGrabCondition( WiiMote::A ), arWandRelativeDrag() );
+    menu = initMenu( fw );
     
     /**/
     
@@ -234,6 +230,7 @@ void doSceneGraph( arMasterSlaveFramework &fw )
     secondary.draw();
 	ground.draw();
     sg->drawSceneGraph();
+    drawMenu();
     ar_usleep( 100000 / 200 );
 }
 
@@ -267,6 +264,7 @@ int main(int argc, char *argv[])
 	primary.setDrag(UnionGrabCondition(c2), ScaleWithoutProportions(&primary, &secondary));
     
     primary.setDrag( primary.getGrabCondition( WiiMote::A ), arWandRelativeDrag() );
+    secondary.setDrag( secondary.getGrabCondition( WiiMote::A ), arWandRelativeDrag() );
 	ground.init();
     
     framework.setStartCallback( initSceneGraph );
