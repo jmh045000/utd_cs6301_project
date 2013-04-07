@@ -234,6 +234,7 @@ public:
     
     void setTexture( int i, arTexture *t ) { obj_.setTexture( i, t ); }
     int numTextures() { return obj_.getNumberTextures(); }
+    arAxisAlignedBoundingBox getAxisAlignedBoundingBox() { return obj_.getAxisAlignedBoundingBox(); }
 };
 
 #endif

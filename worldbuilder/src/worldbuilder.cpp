@@ -142,10 +142,21 @@ void onPreExchange( arMasterSlaveFramework &fw )
     primary.updateState( fw.getInputState() );
     secondary.updateState( fw.getInputState() );
     
+    std::map<WiiMote::button_t, WiiMote*> buttonMap;
     WiiMote::ButtonList buttons = secondary.getDownButtons();
     for( WiiMote::ButtonList::iterator it = buttons.begin(); it != buttons.end(); ++it )
     {  // Process all butons just pressed on secondary
-        switch( *it )
+        buttonMap.insert( std::make_pair( *it, &secondary ) );
+    }
+    
+    buttons = primary.getDownButtons();
+    for( WiiMote::ButtonList::iterator it = buttons.begin(); it != buttons.end(); ++it )
+    {  // Process all butons just pressed on secondary
+        buttonMap.insert( std::make_pair( *it, &primary ) );
+    }
+    for( std::map<WiiMote::button_t, WiiMote*>::iterator it = buttonMap.begin(); it != buttonMap.end(); ++it )
+    {
+        switch( it->first )
         {
         case WiiMote::HOME:
             toggleMenu( fw );
@@ -172,60 +183,18 @@ void onPreExchange( arMasterSlaveFramework &fw )
                 switch( menu->pressedA() )
                 {
                 case REDRAW:
-                    tearDownMenu( menu );
-                    buildMenu( menu );
+                    setMenuOff( fw );
+                    setMenuOn( fw );
                     break;
                 case CLOSE:
-                    tearDownMenu( menu );
-                    menuOn = false;
+                    setMenuOff( fw );
                     break;
                 }
             }
             break;
         }
     }
-    buttons = primary.getDownButtons();
-    for( WiiMote::ButtonList::iterator it = buttons.begin(); it != buttons.end(); ++it )
-    {  // Process all butons just pressed on primary
-        switch( *it )
-        {
-        case WiiMote::HOME:
-            toggleMenu( fw );
-            break;
-        case WiiMote::DOWN:
-            if( menuOn )
-                menu->pressedDown();
-            break;
-        case WiiMote::RIGHT:
-            if( menuOn )
-                menu->pressedRight();
-            break;
-        case WiiMote::LEFT:
-            if( menuOn )
-                menu->pressedLeft();
-            break;
-        case WiiMote::UP:
-            if( menuOn )
-                menu->pressedUp();
-            break;
-        case WiiMote::A:
-            if( menuOn )
-            {
-                switch( menu->pressedA() )
-                {
-                case REDRAW:
-                    tearDownMenu( menu );
-                    buildMenu( menu );
-                    break;
-                case CLOSE:
-                    tearDownMenu( menu );
-                    menuOn = false;
-                    break;
-                }
-            }
-            break;
-        }
-    }    
+    
 
     // Handle any interaction with the square (see interaction/arInteractionUtilities.h).
     // Any grabbing/dragging happens in here.

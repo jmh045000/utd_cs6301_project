@@ -189,7 +189,19 @@ void Item::doAction( arSZGAppFramework *fw )
     {
         ObjNode *obj = new ObjNode( filename, path );
         sg->addChild( obj );
-        obj->setNodeTransform( ar_getNavMatrix() * fw->getMidEyeMatrix() * ar_TM( 0, 0, -5 ) );
+        arAxisAlignedBoundingBox bbox = obj->getAxisAlignedBoundingBox();
+        arMatrix4 centerOnHead = ar_getNavMatrix() * fw->getMidEyeMatrix();
+        arMatrix4 arbitraryMove;
+        cout << "Center=" << ar_ET( centerOnHead ) << endl;
+        cout << "ysize=" << bbox.ySize << endl;
+        if( ( ar_ET( centerOnHead )[1] - ( bbox.ySize/2 ) ) < 0 )
+        {
+            cout << "Moving object up by: " << -( ar_ET( centerOnHead )[1] - ( bbox.ySize/2 ) ) << endl;
+            arbitraryMove = ar_TM( 0, -( ar_ET( centerOnHead )[1] - ( bbox.ySize/2 ) ), -5 );
+        }
+        else
+            arbitraryMove = ar_TM( 0, 0, -5 );
+        obj->setNodeTransform( centerOnHead * arbitraryMove );
         interactableObjects.push_back( obj );
     }
     else if( type == TEXTURE )
@@ -212,6 +224,7 @@ void Item::doAction( arSZGAppFramework *fw )
             {
                 interactableObjects.pop_front();
                 sg->removeChild( n );
+                delete n;
             }
             break;
         case GROUP_TOOL:
