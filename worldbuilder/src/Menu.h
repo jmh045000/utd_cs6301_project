@@ -238,12 +238,6 @@ public:
     friend void tearDownMenu( MenuNode* );
 };
 
-class TextureMenu : public Node
-{
-private:
-    void draw();
-};
-
 extern SceneGraph *sg;
 extern WiiMote primary;
 extern WiiMote secondary;
@@ -255,7 +249,7 @@ extern std::list<Item*> findTextures();
 extern MenuNode* initMenu( arSZGAppFramework &fw );
 extern void buildMenu( MenuNode *menu );
 extern void tearDownMenu( MenuNode *menu );
-extern void drawMenu();
+extern void drawMenu( MenuNode *menu, arSZGAppFramework &fw );
 
 
 #endif /*_MENU_H_*/

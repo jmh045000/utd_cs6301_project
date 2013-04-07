@@ -539,7 +539,10 @@ void tearDownMenu( MenuNode *menu )
     menuGraph->removeChild( menu );
 }
 
-void drawMenu( )
+void drawMenu( MenuNode *menu, arSZGAppFramework &fw )
 {
+    arMatrix4 menuPlacement = ar_getNavMatrix() * fw.getMidEyeMatrix() * ar_TM( 0, 0, -5 );
+    menu->setNodeTransform( menuPlacement );
+    
     menuGraph->drawSceneGraph();
 }

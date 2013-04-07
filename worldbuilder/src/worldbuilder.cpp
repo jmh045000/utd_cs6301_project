@@ -115,14 +115,7 @@ bool initSceneGraph( arMasterSlaveFramework &fw, arSZGClient &client )
 
 inline void setMenuOn( arMasterSlaveFramework &fw, WiiMote &eff )
 {
-    arMatrix4 me, nav;
-    nav = ar_getNavMatrix();
-    me  = fw.getMidEyeMatrix();
-
     menuOn = true;
-
-    menu->setNodeTransform( nav * me * ar_TM( 0, 0, -5 ) );
-
     buildMenu( menu );
 }
 
@@ -246,7 +239,8 @@ void doSceneGraph( arMasterSlaveFramework &fw )
     secondary.draw();
 	ground.draw();
     sg->drawSceneGraph();
-    drawMenu();
+    if( menuOn )
+        drawMenu( menu, fw );
     ar_usleep( 100000 / 200 );
 }
 
