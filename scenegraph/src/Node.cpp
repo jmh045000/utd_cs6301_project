@@ -136,8 +136,10 @@ RootNode::RootNode( arSZGAppFramework &fw ) : Node(), fw_( fw )
 void RootNode::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
 {
     glPushMatrix();
-        currentView = currentView * ar_ETM( nodeTransform );
+        glMultMatrixf( nodeTransform.v );
+        currentView = currentView * nodeTransform;
         currentScale = currentScale * ar_ESM( nodeTransform );
+        
     dsTransform( soundId_, ar_getNavMatrix() );
 }
 
