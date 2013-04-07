@@ -80,7 +80,7 @@ protected:
 
 public:
     // *structors
-    Node() : arInteractable(), nextMatrix_(), parentNode_( this ), color( 0, 0, 0 ), opengl_callback( NULL ), id( ++numObjects_ )
+    Node() : arInteractable(), nextMatrix_(), parentNode_( this ), opengl_callback( NULL ), color( 0, 0, 0 ), id( ++numObjects_ )
     {
     }
     

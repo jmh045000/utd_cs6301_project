@@ -134,6 +134,36 @@ inline void toggleMenu( arMasterSlaveFramework &fw )
         setMenuOn( fw );
 }
 
+void scaleWorld()
+{
+    int num_buttons = 0;
+    WiiMote::ButtonList buttons = primary.getOnButtons();
+    for( WiiMote::ButtonList::iterator it = buttons.begin(); it != buttons.end(); ++it )
+    {  // Process all butons just pressed on primary
+        switch( *it )
+        {
+        case WiiMote::A:
+        case WiiMote::B:
+            num_buttons++;
+        }
+    }
+
+    buttons = secondary.getOnButtons();
+    for( WiiMote::ButtonList::iterator it = buttons.begin(); it != buttons.end(); ++it )
+    {  // Process all butons just pressed on secondary
+        switch( *it )
+        {
+        case WiiMote::A:
+        case WiiMote::B:
+            num_buttons++;
+        }
+    }
+    if(num_buttons == 4)
+    {
+        cout << "ALL FOUR BUTTONS I NEED ARE PRESSED!" << endl;
+    }
+}
+
 void onPreExchange( arMasterSlaveFramework &fw )
 {
     fw.navUpdate();
@@ -141,6 +171,10 @@ void onPreExchange( arMasterSlaveFramework &fw )
     // update the input state (placement matrix & button states) of our effector.
     primary.updateState( fw.getInputState() );
     secondary.updateState( fw.getInputState() );
+
+    //used for scale the world (and possibly other scales later)
+    WiiMote::updateTipDistance(primary, secondary);
+    scaleWorld();
     
     std::map<WiiMote::button_t, std::list<WiiMote*> > buttonMap;
     WiiMote::ButtonList buttons = secondary.getDownButtons();

@@ -29,6 +29,8 @@ static wiimote_t **wiimotes_;
 static int wiimote_ids_[] = { 1, 2};
 static int connected_;
 
+
+
 void standardDraw(WiiMote& wm)
 {
 	glPushMatrix();
@@ -163,4 +165,28 @@ ostream &operator<< (ostream &out, WiiMote::button_t b)
 	case WiiMote::PLUS: out << "+"; break;
 	}
 	return out;
+}
+
+
+float WiiMote::tipDistance = 0.0;
+float WiiMote::lastTipDistance = 0.0;
+
+float scalar_distance(arMatrix4 m1, arMatrix4 m2)
+{
+    //we may not want the sqrt...
+    float distance = sqrt((m1[12] - m2[12])*(m1[12] - m2[12]) +
+                          (m1[13] - m2[13])*(m1[13] - m2[13]) +
+                          (m1[14] - m2[14])*(m1[14] - m2[14]));
+    return distance;
+}
+
+void WiiMote::updateTipDistance(WiiMote &primary, WiiMote &secondary)
+{
+    float lastTipDistance = tipDistance;
+    tipDistance = scalar_distance(primary.getMatrix(), secondary.getMatrix());
+
+/*
+    if (tipDistance != lastTipDistance)
+        cout <<  "New tip distance: " << tipDistance << endl;
+*/
 }
