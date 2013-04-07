@@ -68,7 +68,7 @@ void Tab::draw()
 }
 
 
-Item::Item( ItemType t, string f, string p, bool selected ) : MenuItem( selected ), type( t ), filename( f ), path( p )
+Item::Item( ItemType t, string f, string p, bool selected ) : MenuItem( selected ), filename( f ), path( p ), type( t )
 {
     if( type == OBJECT )
     {
@@ -100,6 +100,7 @@ Item::Item( ItemType t, ToolType t2, bool selected ) : MenuItem( selected ), typ
         case PASTE_TOOL:
             name = "PASTE";
             break;
+        default: break;
     }
 }
 
@@ -160,6 +161,7 @@ void Item::draw()
 		glPopMatrix();
 	}
 	break;
+    default: break;
 	}
     
     if( selected )
@@ -277,6 +279,7 @@ void Item::doAction( arSZGAppFramework *fw )
             }
             CopyBuffer.clear();
             break;
+        default: break;
         }
     }
 }
@@ -312,6 +315,7 @@ void MenuNode::pressedDown()
     case ITEM:
         currentSelected = items->first();
         break;
+    default: break;
     }
     currentSelected->select();
 }
@@ -329,6 +333,7 @@ void MenuNode::pressedLeft()
         currentSelected = (*items)--;
         buildMenu( this );
         break;
+    default: break;
     }
     currentSelected->select();
 }
@@ -346,6 +351,7 @@ void MenuNode::pressedRight()
         currentSelected = (*items)++;
         buildMenu( this );
         break;
+    default: break;
     }
     currentSelected->select();
 }
@@ -362,6 +368,7 @@ void MenuNode::pressedUp()
     case ITEM:
         currentSelected = items->first();
         break;
+    default: break;
     }
     currentSelected->select();
 }
@@ -405,6 +412,7 @@ MenuAction MenuNode::pressedA()
             return CLOSE;
         }
         break;
+    default: break;
     }
     
     return NONE;

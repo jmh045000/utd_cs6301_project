@@ -30,7 +30,7 @@ private:
     void draw();
     const char *name;
 public:
-    Tab( const char *name, bool selected = false ) : MenuItem( selected ), name( name ), active( selected ) {}
+    Tab( const char *name, bool selected = false ) : MenuItem( selected ), active( selected ), name( name ) {}
     
     void deactivate() { active = false; }
     void activate() { active = true; }
@@ -103,6 +103,7 @@ typedef struct _TabGroup_s : public MenuGroup_t
             cur = 0;
             return objectTab;
         }
+        return NULL;
     }
     
     MenuItem* operator--(int)
@@ -119,9 +120,11 @@ typedef struct _TabGroup_s : public MenuGroup_t
             cur = 1;
             return materialTab;
         }
+        return NULL;
     }
     
     _TabGroup_s() : MenuGroup_t(), cur( 0 ) {}
+    virtual ~_TabGroup_s() {}
 } TabGroup;
 
 typedef struct _ItemGroup_s : public MenuGroup_t
@@ -165,12 +168,13 @@ typedef struct _ItemGroup_s : public MenuGroup_t
             }
             return itemlist.front();
         }
+        return NULL;
     }
     
     MenuItem* operator-- (int)
     {
         int _ = 0;
-        Item *i;
+        Item *i = NULL;
         switch( cur )
         {
         case 0:
@@ -194,9 +198,11 @@ typedef struct _ItemGroup_s : public MenuGroup_t
                 i = *it;
             return i;
         }
+        return NULL;
     }
     
     _ItemGroup_s( list<Item*> i ) : MenuGroup_t(), cur( 0 ), itemlist( i ) {}
+    virtual ~_ItemGroup_s() {}
     
 } ItemGroup;
 

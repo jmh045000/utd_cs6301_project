@@ -101,7 +101,7 @@ void drawLefthand( WiiMote &wm )
 	glPopMatrix();
 }
 
-bool initSceneGraph( arMasterSlaveFramework &fw, arSZGClient &client )
+bool initSceneGraph( arMasterSlaveFramework &fw, arSZGClient& /*Unused*/)
 {
     sg = new SceneGraph( fw );
     menu = initMenu( fw );
@@ -145,6 +145,9 @@ void scaleWorld()
         case WiiMote::A:
         case WiiMote::B:
             num_buttons++;
+            break;
+        default:
+            break;
         }
     }
 
@@ -156,6 +159,9 @@ void scaleWorld()
         case WiiMote::A:
         case WiiMote::B:
             num_buttons++;
+            break;
+        default:
+            break;
         }
     }
     if(num_buttons == 4)
@@ -230,8 +236,12 @@ void onPreExchange( arMasterSlaveFramework &fw )
                 case CLOSE:
                     setMenuOff( fw );
                     break;
+                default:
+                    break;
                 }
             }
+            break;
+        default:
             break;
         }
     }

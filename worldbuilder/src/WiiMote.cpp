@@ -47,12 +47,12 @@ void standardDraw(WiiMote& wm)
 
 void init_driver()
 {
-	const char* vers = wiiuse_startup(WIIUSE_PATH);
+	wiiuse_startup(WIIUSE_PATH);
 	wiimotes_ = wiiuse_init(2, wiimote_ids_, NULL, NULL, NULL);
 	
 	const int found = wiiuse_find(wiimotes_, 2, 5);
 	
-	connected_ = wiiuse_connect( wiimotes_, 2 );
+	connected_ = wiiuse_connect( wiimotes_, found );
 }
 
 WiiMote::WiiMote(controller_t controller) : 
@@ -163,6 +163,7 @@ ostream &operator<< (ostream &out, WiiMote::button_t b)
 	case WiiMote::DOWN: out << "Down"; break;
 	case WiiMote::UP: out << "Up"; break;
 	case WiiMote::PLUS: out << "+"; break;
+    default: break;
 	}
 	return out;
 }

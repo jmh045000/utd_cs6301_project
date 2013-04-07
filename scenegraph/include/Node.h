@@ -84,7 +84,7 @@ public:
     {
     }
     
-    Node( arMatrix4 &tm ) : arInteractable(), nextMatrix_(), parentNode_( this ), color( 0, 0, 0 ), opengl_callback( NULL ), nodeTransform( tm ), id( ++numObjects_ ) {}
+    Node( arMatrix4 &tm ) : arInteractable(), nextMatrix_(), parentNode_( this ), nodeTransform( tm ), opengl_callback( NULL ), color( 0, 0, 0 ), id( ++numObjects_ ) {}
     virtual ~Node() {}
     
     // A globally unique id for this node.
