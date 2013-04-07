@@ -69,13 +69,29 @@ std::list<arInteractable*> interactableObjects;
 
 myDragManager myDm;
 
-void drawWiimote( WiiMote &wm )
+void drawRighthand( WiiMote &wm )
 {
 	static arOBJRenderer obj;
 	static bool init = false;
 	if( !init )
 	{
-		obj.readOBJ( "Hand1.obj" );
+		obj.readOBJ( "RightHand.obj" );
+		init = true;
+	}
+	
+	glPushMatrix();
+		glMultMatrixf( wm.getMatrix().v );
+		obj.draw();
+	glPopMatrix();
+}
+
+void drawLefthand( WiiMote &wm )
+{
+	static arOBJRenderer obj;
+	static bool init = false;
+	if( !init )
+	{
+		obj.readOBJ( "LeftHand.obj" );
 		init = true;
 	}
 	
@@ -247,8 +263,8 @@ int main(int argc, char *argv[])
         return -1;
     }
 	
-	primary.setDrawCallback( &drawWiimote );
-	secondary.setDrawCallback( &drawWiimote );
+	primary.setDrawCallback( &drawRighthand );
+	secondary.setDrawCallback( &drawLefthand );
 	
 	primary.setDragManager( &myDm );
 	secondary.setDragManager( &myDm );
