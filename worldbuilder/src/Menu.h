@@ -59,7 +59,7 @@ public:
     std::string getFilename() { return filename; }
     std::string getPath() { return path; }
     
-    void doAction();
+    void doAction( arSZGAppFramework *fw );
     
     friend struct _ItemGroup_s;
 };
@@ -217,9 +217,11 @@ private:
     ItemGroup *textures;
 	ItemGroup *tools;
     
+    arSZGAppFramework *framework;
+    
     void draw();
 public:
-    MenuNode( ) : Node(), selectedGroup( TAB ), currentSelected( NULL )  {}
+    MenuNode( arSZGAppFramework &fw ) : Node(), selectedGroup( TAB ), currentSelected( NULL ), framework( &fw )  {}
     
     void setObjects( list<Item*> l ) { objects = new ItemGroup( l ); }
     void setTextures( list<Item*> l ) { textures = new ItemGroup( l ); }
@@ -238,14 +240,13 @@ public:
     friend void tearDownMenu( MenuNode* );
 };
 
+// These are all defined in worldbuilder.cpp, but used in Menu.cpp
 extern SceneGraph *sg;
 extern WiiMote primary;
 extern WiiMote secondary;
 extern std::list<arInteractable*> interactableObjects;
 
-extern std::list<Item*> findObjects();
-extern std::list<Item*> findTextures();
-
+// These are all in Menu.cpp, but used in worldbuilder.cpp
 extern MenuNode* initMenu( arSZGAppFramework &fw );
 extern void buildMenu( MenuNode *menu );
 extern void tearDownMenu( MenuNode *menu );

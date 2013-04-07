@@ -11,6 +11,7 @@
 namespace fs = boost::filesystem;
 
 SceneGraph *menuGraph;
+std::list<Node*> CopyBuffer;
 
 void Tab::draw()
 {
@@ -181,14 +182,14 @@ void Item::draw()
     }
 }
 
-void Item::doAction()
+void Item::doAction( arSZGAppFramework *fw )
 {
 
     if( type == OBJECT )
     {
         ObjNode *obj = new ObjNode( filename, path );
         sg->addChild( obj );
-        obj->setNodeTransform( primary.getMatrix() );
+        obj->setNodeTransform( ar_getNavMatrix() * fw->getMidEyeMatrix() * ar_TM( 0, 0, -5 ) );
         interactableObjects.push_back( obj );
     }
     else if( type == TEXTURE )
@@ -249,9 +250,28 @@ void Item::doAction()
             break;
         case COPY_TOOL:
             cout << "COPYING object" << endl;
+            for( list<Node*>::iterator it = CopyBuffer.begin(); it != CopyBuffer.end(); ++it )
+            {
+                delete *it;
+            }
+            CopyBuffer.clear();
+            for( list<arInteractable*>::iterator it = interactableObjects.begin(); it != interactableObjects.end(); ++it )
+            {
+                if( ObjNode *n = dynamic_cast<ObjNode*>( *it ) )
+                {
+                    CopyBuffer.push_back( new ObjNode( *n ) );
+                }
+            }
             break;
         case PASTE_TOOL:
             cout << "PASTING object" << endl;
+            for( list<Node*>::iterator it = CopyBuffer.begin(); it != CopyBuffer.end(); ++it )
+            {
+                (*it)->setNodeTransform( (*it)->getNodeTransform() * ar_TM( -2, 2, 0 ) );
+                interactableObjects.push_back( *it );
+                sg->addChild( *it );
+            }
+            CopyBuffer.clear();
             break;
         }
     }
@@ -377,7 +397,7 @@ MenuAction MenuNode::pressedA()
     case ITEM:
         if( Item *i = dynamic_cast<Item*>( currentSelected ) )
         {
-            i->doAction();
+            i->doAction( framework );
             return CLOSE;
         }
         break;
@@ -474,7 +494,7 @@ list<Item*> findTextures()
 MenuNode* initMenu( arSZGAppFramework &fw )
 {
     menuGraph = new SceneGraph( fw );
-    MenuNode *menu = new MenuNode();
+    MenuNode *menu = new MenuNode( fw );
     menu->setColor( CYAN );
     
     {   // Initialize Tabs

@@ -247,9 +247,10 @@ void wbOBJRenderer::setTexture( unsigned i, arTexture *t )
 	}
 }
 
-ObjNode::ObjNode( ObjNode &otherObj ) : filename_ ( otherObj.filename_ ), path_( otherObj.path_ )
+ObjNode::ObjNode( ObjNode &otherObj ) : Node( otherObj.nodeTransform ), filename_ ( otherObj.filename_ ), path_( otherObj.path_ )
 {
     obj_.readOBJ( filename_, path_ );
+    
     for( int i = 0; i < numTextures(); ++i )
         setTexture( i, otherObj.obj_.getTexture( i ) );
 }

@@ -104,33 +104,34 @@ void drawLefthand( WiiMote &wm )
 bool initSceneGraph( arMasterSlaveFramework &fw, arSZGClient &client )
 {
     sg = new SceneGraph( fw );
-    //sg->getRoot()->setNodeTransform( ar_SM( 2, 2, 2 ) );
-    
     menu = initMenu( fw );
-    
-    /**/
-    
     return true;
 }
 
-inline void setMenuOn( arMasterSlaveFramework &fw, WiiMote &eff )
+inline void setMenuOn( arMasterSlaveFramework &fw )
 {
     menuOn = true;
     buildMenu( menu );
+    /* Cancel movement while in menu */
+    fw.setNavTransSpeed( 0.000001 );
+    fw.setNavRotSpeed( 0.000001 );
 }
 
 inline void setMenuOff( arMasterSlaveFramework &fw )
 {
     menuOn = false;
     tearDownMenu( menu );
+    /* Allow movement */
+    fw.setNavTransSpeed( 5 );
+    fw.setNavRotSpeed( 30 );
 }
 
-inline void toggleMenu( arMasterSlaveFramework &fw, WiiMote &eff )
+inline void toggleMenu( arMasterSlaveFramework &fw )
 {
     if( menuOn )
         setMenuOff( fw );
     else
-        setMenuOn( fw, eff );
+        setMenuOn( fw );
 }
 
 void onPreExchange( arMasterSlaveFramework &fw )
@@ -147,7 +148,7 @@ void onPreExchange( arMasterSlaveFramework &fw )
         switch( *it )
         {
         case WiiMote::HOME:
-            toggleMenu( fw, secondary );
+            toggleMenu( fw );
             break;
         case WiiMote::DOWN:
             if( menuOn )
@@ -189,7 +190,7 @@ void onPreExchange( arMasterSlaveFramework &fw )
         switch( *it )
         {
         case WiiMote::HOME:
-            toggleMenu( fw, primary );
+            toggleMenu( fw );
             break;
         case WiiMote::DOWN:
             if( menuOn )
