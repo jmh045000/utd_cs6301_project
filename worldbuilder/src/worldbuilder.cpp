@@ -166,29 +166,36 @@ void scaleWorld()
     }
 
     static bool scaling = false;
-    static float start_dist;
+    static float start_dist = 1.0;
     static float scale = 1.0;
     static float ratio = 1.0;
     if(num_buttons == 4)
     {
-        cout << "ALL FOUR BUTTONS I NEED ARE PRESSED!" << endl;
+        //cout << "STW: ";
         if(!scaling)
         {
             scaling = true;
             start_dist = WiiMote::tipDistance;
+            if(start_dist < 0.01)
+                start_dist = 0.01;
             ratio = 1.0;
         }
         else
         {
             ratio = WiiMote::tipDistance / start_dist;
+            //cout << WiiMote::tipDistance << " / " << start_dist << " = " << ratio;
             float sscale = ratio * scale;
             sg->getRoot()->setNodeTransform( ar_SM( sscale, sscale, sscale ) );
+            //cout << " " << sscale;
         }
+        //cout << endl;
     }
     else
     {
-        scaling = false;
-        scale = scale * ratio;
+        if(scaling) {
+            scaling = false;
+            scale = scale * ratio;
+        }
     }
 }
 
