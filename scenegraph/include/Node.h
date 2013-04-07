@@ -83,6 +83,8 @@ public:
     Node() : arInteractable(), nextMatrix_(), parentNode_( this ), opengl_callback( NULL ), color( 0, 0, 0 ), id( ++numObjects_ )
     {
     }
+    
+    Node( arMatrix4 &tm ) : arInteractable(), nextMatrix_(), parentNode_( this ), color( 0, 0, 0 ), opengl_callback( NULL ), nodeTransform( tm ), id( ++numObjects_ ) {}
     virtual ~Node() {}
     
     // A globally unique id for this node.
@@ -232,6 +234,7 @@ public:
     
     void setTexture( int i, arTexture *t ) { obj_.setTexture( i, t ); }
     int numTextures() { return obj_.getNumberTextures(); }
+    arAxisAlignedBoundingBox getAxisAlignedBoundingBox() { return obj_.getAxisAlignedBoundingBox(); }
 };
 
 #endif
