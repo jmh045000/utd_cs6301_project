@@ -191,16 +191,7 @@ void Item::doAction( arSZGAppFramework *fw )
         sg->addChild( obj );
         arAxisAlignedBoundingBox bbox = obj->getAxisAlignedBoundingBox();
         arMatrix4 centerOnHead = ar_getNavMatrix() * fw->getMidEyeMatrix();
-        arMatrix4 arbitraryMove;
-        cout << "Center=" << ar_ET( centerOnHead ) << endl;
-        cout << "ysize=" << bbox.ySize << endl;
-        if( ( ar_ET( centerOnHead )[1] - ( bbox.ySize/2 ) ) < 0 )
-        {
-            cout << "Moving object up by: " << -( ar_ET( centerOnHead )[1] - ( bbox.ySize/2 ) ) << endl;
-            arbitraryMove = ar_TM( 0, -( ar_ET( centerOnHead )[1] - ( bbox.ySize/2 ) ), -5 );
-        }
-        else
-            arbitraryMove = ar_TM( 0, 0, -5 );
+        arMatrix4 arbitraryMove = ar_TM( 0, 0, -5 );
         obj->setNodeTransform( centerOnHead * arbitraryMove );
         interactableObjects.push_back( obj );
     }
