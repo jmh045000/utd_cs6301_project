@@ -10,6 +10,8 @@
 
 namespace fs = boost::filesystem;
 
+SceneGraph *menuGraph;
+std::list<Node*> CopyBuffer;
 
 void Tab::draw()
 {
@@ -52,13 +54,13 @@ void Tab::draw()
             for( int i = 0; i < 4; i++ )
             {
                 if( v[i][0] > 0 )
-                    v[i][0] += 0.1;
+                    v[i][0] += 0.05;
                 else
-                    v[i][0] -= 0.1;
+                    v[i][0] -= 0.05;
                 if( v[i][1] > 0 )
-                    v[i][1] += 0.1;
+                    v[i][1] += 0.05;
                 else
-                    v[i][1] -= 0.1;
+                    v[i][1] -= 0.05;
                 glVertex3fv( v[i] );
             }
         glEnd();
@@ -66,7 +68,7 @@ void Tab::draw()
 }
 
 
-Item::Item( const char *name, ItemType t, string f, string p, bool selected ) : MenuItem( name, selected ), type( t ), filename( f ), path( p )
+Item::Item( ItemType t, string f, string p, bool selected ) : MenuItem( selected ), filename( f ), path( p ), type( t )
 {
     if( type == OBJECT )
     {
@@ -79,14 +81,33 @@ Item::Item( const char *name, ItemType t, string f, string p, bool selected ) : 
     }
 }
 
-Item::Item( const char *name, ItemType t, ToolType t2, bool selected ) : MenuItem( name, selected ), type( t ), tooltype( t2 )
+Item::Item( ItemType t, ToolType t2, bool selected ) : MenuItem( selected ), type( t ), tooltype( t2 )
 {
+    switch( tooltype )
+    {
+        case DELETE_TOOL:
+            name = "DELETE";
+            break;
+        case GROUP_TOOL:
+            name = "GROUP";
+            break;
+        case UNGROUP_TOOL:
+            name = "UNGROUP";
+            break;
+        case COPY_TOOL:
+            name = "COPY";
+            break;
+        case PASTE_TOOL:
+            name = "PASTE";
+            break;
+        default: break;
+    }
 }
 
 void Item::draw()
 {
     glColor3f( 1, 1, 1 );
-    float size = 1;
+    float size = 0.8;
     GLfloat v[4][3] =
     {
         { -size / 2, -size / 2, 0.0001 },
@@ -130,7 +151,8 @@ void Item::draw()
         glEnd();
 		glColor3f( 0, 0, 0 );
 		glPushMatrix();
-			glTranslatef( ( -size / 2 ) + 0.3 , 0, 0.001);
+            int len = strlen( name );
+			glTranslatef( -( (float)(size+1) / (float)len ), 0, 0.001);
 			glScalef(0.0009, 0.0009, 0.0009);
 			for (const char* c = name; *c; ++c)
 			{
@@ -139,6 +161,7 @@ void Item::draw()
 		glPopMatrix();
 	}
 	break;
+    default: break;
 	}
     
     if( selected )
@@ -148,27 +171,30 @@ void Item::draw()
             for( int i = 0; i < 4; i++ )
             {
                 if( v[i][0] > 0 )
-                    v[i][0] += 0.1;
+                    v[i][0] += 0.05;
                 else
-                    v[i][0] -= 0.1;
+                    v[i][0] -= 0.05;
                 if( v[i][1] > 0 )
-                    v[i][1] += 0.1;
+                    v[i][1] += 0.05;
                 else
-                    v[i][1] -= 0.1;
+                    v[i][1] -= 0.05;
                 glVertex3fv( v[i] );
             }
         glEnd();
     }
 }
 
-void Item::doAction()
+void Item::doAction( arSZGAppFramework *fw )
 {
 
     if( type == OBJECT )
     {
         ObjNode *obj = new ObjNode( filename, path );
         sg->addChild( obj );
-        obj->setNodeTransform( primary.getMatrix() );
+        arAxisAlignedBoundingBox bbox = obj->getAxisAlignedBoundingBox();
+        arMatrix4 centerOnHead = ar_getNavMatrix() * fw->getMidEyeMatrix();
+        arMatrix4 arbitraryMove = ar_TM( 0, 0, -5 );
+        obj->setNodeTransform( centerOnHead * arbitraryMove );
         interactableObjects.push_back( obj );
     }
     else if( type == TEXTURE )
@@ -191,8 +217,8 @@ void Item::doAction()
             {
                 interactableObjects.pop_front();
                 sg->removeChild( n );
+                delete n;
             }
-            ar_usleep(3000000);
             break;
         case GROUP_TOOL:
         {
@@ -230,10 +256,30 @@ void Item::doAction()
             break;
         case COPY_TOOL:
             cout << "COPYING object" << endl;
+            for( list<Node*>::iterator it = CopyBuffer.begin(); it != CopyBuffer.end(); ++it )
+            {
+                delete *it;
+            }
+            CopyBuffer.clear();
+            for( list<arInteractable*>::iterator it = interactableObjects.begin(); it != interactableObjects.end(); ++it )
+            {
+                if( ObjNode *n = dynamic_cast<ObjNode*>( *it ) )
+                {
+                    CopyBuffer.push_back( new ObjNode( *n ) );
+                }
+            }
             break;
         case PASTE_TOOL:
             cout << "PASTING object" << endl;
+            for( list<Node*>::iterator it = CopyBuffer.begin(); it != CopyBuffer.end(); ++it )
+            {
+                (*it)->setNodeTransform( (*it)->getNodeTransform() * ar_TM( -2, 2, 0 ) );
+                interactableObjects.push_back( *it );
+                sg->addChild( *it );
+            }
+            CopyBuffer.clear();
             break;
+        default: break;
         }
     }
 }
@@ -269,6 +315,7 @@ void MenuNode::pressedDown()
     case ITEM:
         currentSelected = items->first();
         break;
+    default: break;
     }
     currentSelected->select();
 }
@@ -286,6 +333,7 @@ void MenuNode::pressedLeft()
         currentSelected = (*items)--;
         buildMenu( this );
         break;
+    default: break;
     }
     currentSelected->select();
 }
@@ -303,6 +351,7 @@ void MenuNode::pressedRight()
         currentSelected = (*items)++;
         buildMenu( this );
         break;
+    default: break;
     }
     currentSelected->select();
 }
@@ -319,6 +368,7 @@ void MenuNode::pressedUp()
     case ITEM:
         currentSelected = items->first();
         break;
+    default: break;
     }
     currentSelected->select();
 }
@@ -358,10 +408,11 @@ MenuAction MenuNode::pressedA()
     case ITEM:
         if( Item *i = dynamic_cast<Item*>( currentSelected ) )
         {
-            i->doAction();
+            i->doAction( framework );
             return CLOSE;
         }
         break;
+    default: break;
     }
     
     return NONE;
@@ -412,14 +463,13 @@ list<Item*> findObjects()
     fs::directory_iterator end_itr;
     for( fs::directory_iterator it( p ); it != end_itr; ++it )
     {
-        char *n = new char[it->path().filename().length()];
-        strcpy( n, it->path().filename().c_str() );
+        
         if( it->path().extension() == ".obj" )
         {
             stringstream ss;
             ss << p;
             cout << "Loading object: " << it->path().filename() << endl;
-            l.push_back( new Item( n, Item::OBJECT, it->path().filename(), ss.str() ) );
+            l.push_back( new Item( Item::OBJECT, it->path().filename(), ss.str() ) );
         }
     }
     
@@ -446,30 +496,31 @@ list<Item*> findTextures()
             stringstream ss;
             ss << p;
             cout << "Loading Texture: " << it->path().filename() << endl;
-            l.push_back( new Item( it->path().filename().c_str(), Item::TEXTURE, it->path().filename(), ss.str() ) );
+            l.push_back( new Item( Item::TEXTURE, it->path().filename(), ss.str() ) );
         }
     }
     
     return l;
 }
 
-MenuNode* initMenu()
+MenuNode* initMenu( arSZGAppFramework &fw )
 {
-    MenuNode *menu = new MenuNode();
+    menuGraph = new SceneGraph( fw );
+    MenuNode *menu = new MenuNode( fw );
     menu->setColor( CYAN );
     
     {   // Initialize Tabs
         Tab *objectTab = new Tab( "Objects", true );
-        objectTab->setNodeTransform( ar_TM( -2.5, 1, 0 ) );
+        objectTab->setNodeTransform( ar_TM( -1.4, 0.5, 0 ) );
         menu->tabs.objectTab = objectTab;
         menu->currentSelected = objectTab;
         
         Tab *materialTab = new Tab( "Materials" );
-        materialTab->setNodeTransform( ar_TM( 0, 1, 0 ) );
+        materialTab->setNodeTransform( ar_TM( 0, 0.5, 0 ) );
         menu->tabs.materialTab = materialTab;
         
         Tab *toolsTab = new Tab( "Tools" );
-        toolsTab->setNodeTransform( ar_TM( 2.5, 1, 0 ) );
+        toolsTab->setNodeTransform( ar_TM( 1.4, 0.5, 0 ) );
         menu->tabs.toolsTab = toolsTab;
     }
     
@@ -478,11 +529,11 @@ MenuNode* initMenu()
         menu->setTextures( findTextures() );
 		
 		list<Item*> tools;
-		tools.push_back( new Item( "Delete", Item::TOOL, Item::DELETE_TOOL ) );
-		tools.push_back( new Item( "Group", Item::TOOL, Item::GROUP_TOOL ) );
-        tools.push_back( new Item( "Ungroup", Item::TOOL, Item::UNGROUP_TOOL ) );
-		tools.push_back( new Item( "Copy", Item::TOOL, Item::COPY_TOOL ) );
-		tools.push_back( new Item( "Paste", Item::TOOL, Item::PASTE_TOOL ) );
+		tools.push_back( new Item( Item::TOOL, Item::DELETE_TOOL ) );
+		tools.push_back( new Item( Item::TOOL, Item::GROUP_TOOL ) );
+        tools.push_back( new Item( Item::TOOL, Item::UNGROUP_TOOL ) );
+		tools.push_back( new Item( Item::TOOL, Item::COPY_TOOL ) );
+		tools.push_back( new Item( Item::TOOL, Item::PASTE_TOOL ) );
 		menu->setTools( tools );
 		
         menu->items = menu->objects;
@@ -492,16 +543,16 @@ MenuNode* initMenu()
 
 void buildMenu( MenuNode *menu )
 {
-    sg->addChild( menu );
-    sg->addChild( menu->tabs.objectTab, menu );
-    sg->addChild( menu->tabs.materialTab, menu );
-    sg->addChild( menu->tabs.toolsTab, menu );
+    menuGraph->addChild( menu );
+    menuGraph->addChild( menu->tabs.objectTab, menu );
+    menuGraph->addChild( menu->tabs.materialTab, menu );
+    menuGraph->addChild( menu->tabs.toolsTab, menu );
     
-    float i = -2.5;
-    for( list<Item*>::iterator it = menu->items->itemlist.begin(); it != menu->items->itemlist.end() && i < 3; ++it, i += 2.5 )
+    float i = -1.4;
+    for( list<Item*>::iterator it = menu->items->itemlist.begin(); it != menu->items->itemlist.end() && i < 2; ++it, i += 1.4 )
     {
-        (*it)->setNodeTransform( ar_TM( i, -0.5, 0 ) );
-        sg->addChild( *it, menu );
+        (*it)->setNodeTransform( ar_TM( i, -0.3, 0 ) );
+        menuGraph->addChild( *it, menu );
     }
 }
 
@@ -512,10 +563,18 @@ void tearDownMenu( MenuNode *menu )
     for( list<Item*>::iterator it = menu->items->itemlist.begin(); it != menu->items->itemlist.end() && i++ < 3; ++it )
         l.push_front( *it );
     for( list<Item*>::iterator it = l.begin(); it != l.end(); ++it )
-        sg->removeChild( *it );
+        menuGraph->removeChild( *it );
     
-    sg->removeChild( menu->tabs.toolsTab );
-    sg->removeChild( menu->tabs.materialTab );
-    sg->removeChild( menu->tabs.objectTab );
-    sg->removeChild( menu );
+    menuGraph->removeChild( menu->tabs.toolsTab );
+    menuGraph->removeChild( menu->tabs.materialTab );
+    menuGraph->removeChild( menu->tabs.objectTab );
+    menuGraph->removeChild( menu );
+}
+
+void drawMenu( MenuNode *menu, arSZGAppFramework &fw )
+{
+    arMatrix4 menuPlacement = ar_getNavMatrix() * fw.getMidEyeMatrix() * ar_TM( 0, 0, -5 );
+    menu->setNodeTransform( menuPlacement );
+    
+    menuGraph->drawSceneGraph();
 }

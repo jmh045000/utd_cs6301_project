@@ -85,6 +85,12 @@ public:
 	
 	friend std::ostream& operator<< (std::ostream &out, ButtonList l);
 	friend std::ostream& operator<< (std::ostream &out, button_t b);
+
+	//! \brief Used for custom scaling
+    static float tipDistance;
+    static float lastTipDistance;
+    static void updateTipDistance(WiiMote &primary, WiiMote &secondary);
+
 };
 
 #endif /* __WIIMOTE_H */

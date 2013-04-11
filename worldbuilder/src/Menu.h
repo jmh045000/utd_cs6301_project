@@ -2,6 +2,8 @@
 #ifndef _MENU_H_
 #define _MENU_H_
 
+#include "arSZGAppFramework.h"
+
 #include "WiiMote.h"
 #include "SceneGraph.h"
 #include "Node.h"
@@ -13,9 +15,7 @@ protected:
     
     MenuItem* operator++(int);
 public:
-    MenuItem( const char *n, bool s ) : Node(), name( n ), selected( s ) {}
-    
-    const char *name;
+    MenuItem( bool s ) : Node(),selected( s ) {}
     
     void deselect() { selected = false; }
     void select() { selected = true; }
@@ -28,8 +28,9 @@ class Tab : public MenuItem
 private:
     bool active;
     void draw();
+    const char *name;
 public:
-    Tab( const char *name, bool selected = false ) : MenuItem( name, selected ), active( selected ) {}
+    Tab( const char *name, bool selected = false ) : MenuItem( selected ), active( selected ), name( name ) {}
     
     void deactivate() { active = false; }
     void activate() { active = true; }
@@ -47,17 +48,18 @@ private:
     std::string path;
     arOBJRenderer obj;
     arTexture texture;
+    const char *name;
     void draw();
 public:
-    Item( const char *name, ItemType t, std::string f, std::string p, bool selected = false );
-	Item( const char *name, ItemType t, ToolType t2, bool selected = false );
+    Item( ItemType t, std::string f, std::string p, bool selected = false );
+	Item( ItemType t, ToolType t2, bool selected = false );
     
-    ItemType type;
+    const ItemType type;
 	ToolType tooltype;
     std::string getFilename() { return filename; }
     std::string getPath() { return path; }
     
-    void doAction();
+    void doAction( arSZGAppFramework *fw );
     
     friend struct _ItemGroup_s;
 };
@@ -101,6 +103,7 @@ typedef struct _TabGroup_s : public MenuGroup_t
             cur = 0;
             return objectTab;
         }
+        return NULL;
     }
     
     MenuItem* operator--(int)
@@ -117,9 +120,11 @@ typedef struct _TabGroup_s : public MenuGroup_t
             cur = 1;
             return materialTab;
         }
+        return NULL;
     }
     
     _TabGroup_s() : MenuGroup_t(), cur( 0 ) {}
+    virtual ~_TabGroup_s() {}
 } TabGroup;
 
 typedef struct _ItemGroup_s : public MenuGroup_t
@@ -163,12 +168,13 @@ typedef struct _ItemGroup_s : public MenuGroup_t
             }
             return itemlist.front();
         }
+        return NULL;
     }
     
     MenuItem* operator-- (int)
     {
         int _ = 0;
-        Item *i;
+        Item *i = NULL;
         switch( cur )
         {
         case 0:
@@ -192,9 +198,11 @@ typedef struct _ItemGroup_s : public MenuGroup_t
                 i = *it;
             return i;
         }
+        return NULL;
     }
     
     _ItemGroup_s( list<Item*> i ) : MenuGroup_t(), cur( 0 ), itemlist( i ) {}
+    virtual ~_ItemGroup_s() {}
     
 } ItemGroup;
 
@@ -215,9 +223,11 @@ private:
     ItemGroup *textures;
 	ItemGroup *tools;
     
+    arSZGAppFramework *framework;
+    
     void draw();
 public:
-    MenuNode( ) : Node(), selectedGroup( TAB ), currentSelected( NULL )  {}
+    MenuNode( arSZGAppFramework &fw ) : Node(), selectedGroup( TAB ), currentSelected( NULL ), framework( &fw )  {}
     
     void setObjects( list<Item*> l ) { objects = new ItemGroup( l ); }
     void setTextures( list<Item*> l ) { textures = new ItemGroup( l ); }
@@ -231,28 +241,22 @@ public:
     
     friend SelectedGroup operator++(SelectedGroup);
     friend SelectedGroup operator--(SelectedGroup);
-    friend MenuNode* initMenu();
+    friend MenuNode* initMenu( arSZGAppFramework& );
     friend void buildMenu( MenuNode* );
     friend void tearDownMenu( MenuNode* );
 };
 
-class TextureMenu : public Node
-{
-private:
-    void draw();
-};
-
+// These are all defined in worldbuilder.cpp, but used in Menu.cpp
 extern SceneGraph *sg;
 extern WiiMote primary;
 extern WiiMote secondary;
 extern std::list<arInteractable*> interactableObjects;
 
-extern std::list<Item*> findObjects();
-extern std::list<Item*> findTextures();
-
-extern MenuNode* initMenu();
+// These are all in Menu.cpp, but used in worldbuilder.cpp
+extern MenuNode* initMenu( arSZGAppFramework &fw );
 extern void buildMenu( MenuNode *menu );
 extern void tearDownMenu( MenuNode *menu );
+extern void drawMenu( MenuNode *menu, arSZGAppFramework &fw );
 
 
 #endif /*_MENU_H_*/
