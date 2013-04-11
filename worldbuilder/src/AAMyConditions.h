@@ -35,6 +35,6 @@ private:
 	bool _allowOffset;
 	arMatrix4 _scaleOffsetMatrix;
 
-	float oldDist;
-	float newDist;
+	float _oldDist;
+	float _newDist;
 };
