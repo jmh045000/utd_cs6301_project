@@ -327,7 +327,7 @@ int main(int argc, char *argv[])
     vector<ConditionEffectorPair> c3;
     c3.push_back(ConditionEffectorPair(primary.getGrabCondition(WiiMote::B), &primary));
     c3.push_back(ConditionEffectorPair(secondary.getGrabCondition(WiiMote::B), &secondary));
-    primary.setDrag(UnionGrabCondition(c3), WB_ScaleAlongXAxis(&primary, &secondary, 1.0 /* scaling factor */, true /* bool offset */));
+    primary.setDrag(UnionGrabCondition(c3), WB_ScaleObjectAlongXAxis(&primary, &secondary, 1.0 /* scaling factor */, true /* bool offset */));
     
     primary.setDrag( primary.getGrabCondition( WiiMote::A ), arWandRelativeDrag() );
     secondary.setDrag( secondary.getGrabCondition( WiiMote::A ), arWandRelativeDrag() );
