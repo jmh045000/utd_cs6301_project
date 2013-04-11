@@ -261,5 +261,41 @@ void ObjNode::draw()
 {
     if( !(!texture) ) std::cerr << "You shouldn't be setting a texture on an ObjNode, use the OBJ format" << std::endl;
     obj_.draw();
+	arAxisAlignedBoundingBox b = obj_.getAxisAlignedBoundingBox();
+	
+	float v[3][4][3] =
+    {
+		{
+			{ -b.xSize, 0, -b.zSize },
+			{ b.xSize, 0, -b.zSize },
+			{ b.xSize, 0, b.zSize },
+			{ -b.xSize, 0, b.zSize }
+		},
+		{
+			{ -b.xSize, -b.ySize, 0 },
+			{ b.xSize, -b.ySize, 0 },
+			{ b.xSize, b.ySize, 0 },
+			{ -b.xSize, b.ySize, 0 },
+		},
+		{
+			{ 0, -b.ySize, -b.zSize },
+			{ 0, b.ySize, -b.zSize },
+			{ 0, b.ySize, b.zSize },
+			{ 0, -b.ySize, b.zSize },
+		}
+    };
+	glColor3f( 1, 1, 1 );
+    glPushMatrix();
+        glMultMatrixf( ar_TM( b.center ).v );
+		for(int i = 0; i < 3; i++ )
+		{
+			glBegin(GL_LINE_LOOP);
+				glVertex3fv( v[i][0] );
+				glVertex3fv( v[i][1] );
+				glVertex3fv( v[i][2] );
+				glVertex3fv( v[i][3] );
+			glEnd();
+		}
+    glPopMatrix();
 }
 
