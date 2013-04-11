@@ -81,10 +81,10 @@ void WB_ScaleObjectAlongXAxis::update(const arEffector* const /*effector*/ , arI
 			arMatrix4 objectMatrix = object->getMatrix();
 			object->setMatrix(objectMatrix * ar_SM(diff, 1.0, 1.0));
 		}
-		_oldDist = _newDist;
+		//_oldDist = _newDist;
 	}
 
-void WB_ScaleObjectAlongXAxis::copy() const
+arDragBehavior* WB_ScaleObjectAlongXAxis::copy() const
 {
 	return (arDragBehavior*) new WB_ScaleObjectAlongXAxis(*this);
 }
