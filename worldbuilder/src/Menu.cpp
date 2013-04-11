@@ -215,9 +215,12 @@ void Item::doAction( arSZGAppFramework *fw )
             cout << "DELETING object" << endl;
             if( Node *n = dynamic_cast<Node*>( interactableObjects.front() ) )
             {
-                interactableObjects.pop_front();
-                sg->removeChild( n );
-                delete n;
+				if( n != NULL )
+				{
+					interactableObjects.pop_front();
+					sg->removeChild( n );
+					delete n;
+				}
             }
             break;
         case GROUP_TOOL:

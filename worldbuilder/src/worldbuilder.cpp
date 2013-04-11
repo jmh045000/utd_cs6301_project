@@ -18,7 +18,7 @@
 #include "WiiMote.h"
 #include "Menu.h"
 
-class Wall
+class Wall : public Node
 {
     float yPosition;
     arTexture tex;
@@ -44,7 +44,6 @@ void Wall::draw()
         { 500, 0, 500 },
         { -500, 0, 500 }
     };
-	glColor3f( 1, 1, 1 );
     tex.activate();
     glPushMatrix();
         glMultMatrixf( ar_TM( 0, yPosition, 0).v );
@@ -104,6 +103,11 @@ void drawLefthand( WiiMote &wm )
 bool initSceneGraph( arMasterSlaveFramework &fw, arSZGClient& /*Unused*/)
 {
     sg = new SceneGraph( fw );
+	SolidCylinderNode *cyl = new SolidCylinderNode( 1, 1, 20, 20, 20 );
+	cyl->setNodeTransform( ar_RM( 'x', -1.59 ) );
+	cyl->setColor( RED );
+	sg->addChild( cyl );
+	sg->addChild( &ground );
     menu = initMenu( fw );
     return true;
 }
@@ -142,7 +146,6 @@ void scaleWorld()
     {  // Process all butons just pressed on primary
         switch( *it )
         {
-        case WiiMote::A:
         case WiiMote::B:
             num_buttons++;
             break;
@@ -156,7 +159,6 @@ void scaleWorld()
     {  // Process all butons just pressed on secondary
         switch( *it )
         {
-        case WiiMote::A:
         case WiiMote::B:
             num_buttons++;
             break;
@@ -169,7 +171,7 @@ void scaleWorld()
     static float start_dist = 1.0;
     static float scale = 1.0;
     static float ratio = 1.0;
-    if(num_buttons == 4)
+    if(num_buttons == 2)
     {
         //cout << "STW: ";
         if(!scaling)
@@ -287,7 +289,7 @@ void doSceneGraph( arMasterSlaveFramework &fw )
     fw.loadNavMatrix();
     primary.draw();
     secondary.draw();
-	ground.draw();
+	//ground.draw();
     sg->drawSceneGraph();
     if( menuOn )
         drawMenu( menu, fw );

@@ -51,7 +51,7 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
     }
     glPushMatrix();
         glMultMatrixf( nodeTransform.v );
-        currentView = currentView * nodeTransform;
+        currentView = currentView * ar_ETM( nodeTransform );
         currentScale = currentScale * ar_ESM( nodeTransform );
         arInteractable::setMatrix( currentView );
 }
@@ -59,7 +59,7 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
 void Node::drawEnd( arMatrix4 &currentView, arMatrix4 &currentScale )
 {
     glPopMatrix();
-    currentView = currentView * nodeTransform.inverse();
+    currentView = currentView * ar_ETM( nodeTransform ).inverse();
     currentScale = currentScale * ar_ESM( nodeTransform ).inverse();
     //std::cout << "drawEnd, currentView=\n" << currentView << std::endl;
 }
@@ -71,7 +71,7 @@ void Node::drawLocalBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
         opengl_callback();
     }
     glPushMatrix();
-        glMultMatrixf( currentScale.v );
+        //glMultMatrixf( currentScale.v );
         glColor3f( color[0], color[1], color[2] );
         
         if( soundFile != "" )
@@ -137,7 +137,7 @@ void RootNode::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
 {
     glPushMatrix();
         glMultMatrixf( nodeTransform.v );
-        currentView = currentView * nodeTransform;
+        currentView = currentView * ar_ETM( nodeTransform );
         currentScale = currentScale * ar_ESM( nodeTransform );
         
     dsTransform( soundId_, ar_getNavMatrix() );
