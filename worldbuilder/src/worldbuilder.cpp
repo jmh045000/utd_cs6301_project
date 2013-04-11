@@ -15,6 +15,7 @@
 #include "SceneGraph.h"
 
 #include "MyConditions.h"
+#include "AAMyConditions.h"
 #include "WiiMote.h"
 #include "Menu.h"
 
