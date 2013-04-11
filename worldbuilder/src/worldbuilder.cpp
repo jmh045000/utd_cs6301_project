@@ -103,10 +103,8 @@ void drawLefthand( WiiMote &wm )
 bool initSceneGraph( arMasterSlaveFramework &fw, arSZGClient& /*Unused*/)
 {
     sg = new SceneGraph( fw );
-	SolidCylinderNode *cyl = new SolidCylinderNode( 1, 1, 20, 20, 20 );
-	cyl->setNodeTransform( ar_RM( 'x', -1.59 ) );
-	cyl->setColor( RED );
-	sg->addChild( cyl );
+	ObjNode *al = new ObjNode( "al.obj", "." );
+	sg->addChild( al );
 	sg->addChild( &ground );
     menu = initMenu( fw );
     return true;
@@ -211,7 +209,7 @@ void onPreExchange( arMasterSlaveFramework &fw )
 
     //used for scale the world (and possibly other scales later)
     WiiMote::updateTipDistance(primary, secondary);
-    scaleWorld();
+    //scaleWorld();
     
     std::map<WiiMote::button_t, std::list<WiiMote*> > buttonMap;
     WiiMote::ButtonList buttons = secondary.getDownButtons();
