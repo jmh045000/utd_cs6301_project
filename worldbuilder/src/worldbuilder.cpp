@@ -318,10 +318,15 @@ int main(int argc, char *argv[])
 	c1.push_back(ConditionEffectorPair(secondary.getGrabCondition(WiiMote::A), &secondary));
 	primary.setDrag(UnionGrabCondition(c1), ScaleWithProportions(&primary, &secondary));
 	
-	vector<ConditionEffectorPair> c2;
-	c2.push_back(ConditionEffectorPair(primary.getGrabCondition(WiiMote::B), &primary));
-	c2.push_back(ConditionEffectorPair(secondary.getGrabCondition(WiiMote::B), &secondary));
-	primary.setDrag(UnionGrabCondition(c2), ScaleWithoutProportions(&primary, &secondary));
+	//vector<ConditionEffectorPair> c2;
+	//c2.push_back(ConditionEffectorPair(primary.getGrabCondition(WiiMote::B), &primary));
+	//c2.push_back(ConditionEffectorPair(secondary.getGrabCondition(WiiMote::B), &secondary));
+	//primary.setDrag(UnionGrabCondition(c2), ScaleWithoutProportions(&primary, &secondary));
+
+    vector<ConditionEffectorPair> c3;
+    c3.push_back(ConditionEffectorPair(primary.getGrabCondition(WiiMote::B), &primary));
+    c3.push_back(ConditionEffectorPair(secondary.getGrabCondition(WiiMote::B), &secondary));
+    primary.setDrag(UnionGrabCondition(c3), WB_ScaleAlongXAxis(&primary, &secondary, 1.0 /* scaling factor */, true /* bool offset */));
     
     primary.setDrag( primary.getGrabCondition( WiiMote::A ), arWandRelativeDrag() );
     secondary.setDrag( secondary.getGrabCondition( WiiMote::A ), arWandRelativeDrag() );
