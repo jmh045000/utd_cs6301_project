@@ -9,6 +9,7 @@
 #define SZG_DO_NOT_EXPORT
 
 #include "WiiMote.h"
+#include "Node.h"
 #include "MyConditions.h"
 
 #include "arGlut.h"
@@ -183,11 +184,89 @@ float scalar_distance(arMatrix4 m1, arMatrix4 m2)
 
 void WiiMote::updateTipDistance(WiiMote &primary, WiiMote &secondary)
 {
-    float lastTipDistance = tipDistance;
+    lastTipDistance = tipDistance;
     tipDistance = scalar_distance(primary.getMatrix(), secondary.getMatrix());
 
 /*
     if (tipDistance != lastTipDistance)
         cout <<  "New tip distance: " << tipDistance << endl;
 */
+}
+
+arVector3 WiiMote::extractDirection()
+{
+    arMatrix4 m1 = _matrix * ar_translationMatrix( 0, 0, -1);
+    arVector3 retval = ar_ET(m1) - ar_ET(_matrix);
+    return retval;
+}
+arRay WiiMote::ray()
+{
+    arRay r;
+    r.origin = ar_ET(_matrix);
+    r.direction = extractDirection();
+    return r;
+}
+
+inline float vdistance2(arVector3 v1, arVector3 v2)
+{
+    float d[3];
+    d[0] = v1[0]-v2[0];
+    d[1] = v1[1]-v2[1];
+    d[2] = v1[2]-v2[2];
+    return d[0]*d[0] + d[1]*d[1] + d[2]*d[2];
+}
+
+inline bool behind(arVector3 v1, arVector3 v2, arVector3 dir)
+{
+    arVector3 dir2 = (v1 - v2).normalize();
+    arVector3 dir3 = dir + dir2;
+    if (dir3.magnitude() > 1)
+        return true;
+    return false;
+}
+
+ObjNode * WiiMote::closestObject(interlist &objects)
+{
+    float min = INFINITY;
+    ObjNode *retval = NULL;
+    arVector3 direction = extractDirection().normalize();
+    arVector3 origin = ar_ET(_matrix);
+    for(interlist::iterator it = objects.begin(); it != objects.end(); ++it)
+    {
+        ObjNode * ndptr = dynamic_cast<ObjNode *>(*it);
+        if(ndptr == NULL)
+            continue;
+        arBoundingSphere sphere = ndptr->getBoundingSphere();
+        arVector3 lp = ar_projectPointToLine(origin, direction, sphere.position);
+
+        // outside sphere...
+        if( vdistance2(lp, sphere.position) > sphere.radius*sphere.radius )
+            continue;
+        float distance = vdistance2(lp, origin);
+
+        if(behind(origin, lp, direction))
+            continue;
+
+        if(distance < min) {
+            min = distance;
+            retval = ndptr;
+        }
+    }
+
+    /*
+    arRay r = ray();
+    for(interlist::iterator it = objects.begin(); it != objects.end(); ++it)
+    {
+        ObjNode * ndptr = dynamic_cast<ObjNode *>(*it);
+        if(ndptr == NULL)
+            continue;
+        float distance = ndptr->getIntersection(r);
+        if(distance < min) {
+            cout << "distance: " << distance << endl;
+            min = distance;
+            retval = ndptr;
+        }
+    }
+    */
+    return retval;
 }

@@ -105,6 +105,7 @@ bool initSceneGraph( arMasterSlaveFramework &fw, arSZGClient& /*Unused*/)
     sg = new SceneGraph( fw );
 	ObjNode *al = new ObjNode( "al.obj", "." );
 	sg->addChild( al );
+    interactableObjects.push_back(al);
 	sg->addChild( &ground );
     menu = initMenu( fw );
     return true;
@@ -199,6 +200,9 @@ void scaleWorld()
     }
 }
 
+ObjNode *rightClosest = NULL;
+ObjNode *leftClosest = NULL;
+
 void onPreExchange( arMasterSlaveFramework &fw )
 {
     fw.navUpdate();
@@ -209,7 +213,7 @@ void onPreExchange( arMasterSlaveFramework &fw )
 
     //used for scale the world (and possibly other scales later)
     WiiMote::updateTipDistance(primary, secondary);
-    //scaleWorld();
+
     
     std::map<WiiMote::button_t, std::list<WiiMote*> > buttonMap;
     WiiMote::ButtonList buttons = secondary.getDownButtons();
@@ -274,12 +278,33 @@ void onPreExchange( arMasterSlaveFramework &fw )
             break;
         }
     }
+
+    // do ray-casting after menu actions
+    //float angle = ar_angleBetween( primary.extractDirection(), secondary.extractDirection());
+    //cout << angle * 180 / M_PI << endl;
+    if ( ! menuOn ) {
+        rightClosest = primary.closestObject(interactableObjects);
+        leftClosest = secondary.closestObject(interactableObjects);
+    }
     
 
     // Handle any interaction with the square (see interaction/arInteractionUtilities.h).
     // Any grabbing/dragging happens in here.
     ar_pollingInteraction( primary, interactableObjects );
     ar_pollingInteraction( secondary, interactableObjects );
+}
+
+void drawBoundSphere(ObjNode *o)
+{
+    if(o)
+    {   
+        arBoundingSphere sphere = o->getBoundingSphere();
+        glPushMatrix();
+            glMultMatrixf( ar_TM(sphere.position).v );
+            glColor3f(1.0, 1.0, 0.0);
+			glutWireSphere(sphere.radius, 16, 16);
+        glPopMatrix();
+    }
 }
 
 void doSceneGraph( arMasterSlaveFramework &fw )
@@ -291,7 +316,12 @@ void doSceneGraph( arMasterSlaveFramework &fw )
     sg->drawSceneGraph();
     if( menuOn )
         drawMenu( menu, fw );
+    else {
+        drawBoundSphere(rightClosest);
+        drawBoundSphere(leftClosest);
+    }
     ar_usleep( 100000 / 200 );
+
 }
 
 
