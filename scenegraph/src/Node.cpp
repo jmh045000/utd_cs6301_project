@@ -51,7 +51,7 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
     }
     glPushMatrix();
         glMultMatrixf( nodeTransform.v );
-        currentView = currentView * nodeTransform;
+        currentView = currentView * ar_ETM( nodeTransform );
         currentScale = currentScale * ar_ESM( nodeTransform );
         arInteractable::setMatrix( currentView );
 }
@@ -59,7 +59,7 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
 void Node::drawEnd( arMatrix4 &currentView, arMatrix4 &currentScale )
 {
     glPopMatrix();
-    currentView = currentView * nodeTransform.inverse();
+    currentView = currentView * ar_ETM( nodeTransform ).inverse();
     currentScale = currentScale * ar_ESM( nodeTransform ).inverse();
     //std::cout << "drawEnd, currentView=\n" << currentView << std::endl;
 }
@@ -71,7 +71,7 @@ void Node::drawLocalBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
         opengl_callback();
     }
     glPushMatrix();
-        glMultMatrixf( currentScale.v );
+        //glMultMatrixf( currentScale.v );
         glColor3f( color[0], color[1], color[2] );
         
         if( soundFile != "" )
@@ -137,7 +137,7 @@ void RootNode::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
 {
     glPushMatrix();
         glMultMatrixf( nodeTransform.v );
-        currentView = currentView * nodeTransform;
+        currentView = currentView * ar_ETM( nodeTransform );
         currentScale = currentScale * ar_ESM( nodeTransform );
         
     dsTransform( soundId_, ar_getNavMatrix() );
@@ -261,5 +261,41 @@ void ObjNode::draw()
 {
     if( !(!texture) ) std::cerr << "You shouldn't be setting a texture on an ObjNode, use the OBJ format" << std::endl;
     obj_.draw();
+	arAxisAlignedBoundingBox b = obj_.getAxisAlignedBoundingBox();
+	
+	float v[3][4][3] =
+    {
+		{
+			{ -b.xSize, 0, -b.zSize },
+			{ b.xSize, 0, -b.zSize },
+			{ b.xSize, 0, b.zSize },
+			{ -b.xSize, 0, b.zSize }
+		},
+		{
+			{ -b.xSize, -b.ySize, 0 },
+			{ b.xSize, -b.ySize, 0 },
+			{ b.xSize, b.ySize, 0 },
+			{ -b.xSize, b.ySize, 0 },
+		},
+		{
+			{ 0, -b.ySize, -b.zSize },
+			{ 0, b.ySize, -b.zSize },
+			{ 0, b.ySize, b.zSize },
+			{ 0, -b.ySize, b.zSize },
+		}
+    };
+	glColor3f( 1, 1, 1 );
+    glPushMatrix();
+        glMultMatrixf( ar_TM( b.center ).v );
+		for(int i = 0; i < 3; i++ )
+		{
+			glBegin(GL_LINE_LOOP);
+				glVertex3fv( v[i][0] );
+				glVertex3fv( v[i][1] );
+				glVertex3fv( v[i][2] );
+				glVertex3fv( v[i][3] );
+			glEnd();
+		}
+    glPopMatrix();
 }
 
