@@ -96,7 +96,7 @@ OBJS := Node$(OBJ_SUFFIX) SceneGraph$(OBJ_SUFFIX)
 # are stored.
 #
 
-COMPILE_FLAGS += -w -D_WIN32_WINNT=0x0501 -DWINVER=0x0501 
+COMPILE_FLAGS += -w -D_WIN32_WINNT=0x0501 -DWINVER=0x0501 -g
 SZG_INCLUDE += -I$(TOPDIR)/include
 # SZG_USR_FIRST += -L$(TOPDIR)/boost_1_53_0/stage/lib 
 # SZG_USR_SECOND += -lboost_serialization-mgw34-mt-1_53 -lboost_system-mgw34-mt-1_53 -lboost_thread-mgw34-mt-1_53 -lws2_32
