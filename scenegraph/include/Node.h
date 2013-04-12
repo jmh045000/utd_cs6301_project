@@ -220,6 +220,7 @@ class ObjNode : public Node
 private:
     std::string     filename_;
     std::string     path_;
+    bool            valid;
     
     void draw();
 public:
@@ -228,13 +229,30 @@ public:
 public:
     ObjNode( std::string filename, std::string path = "" ) : Node(), filename_( filename ), path_( path )
     {
-        obj_.readOBJ( filename_, path_ );
+        valid = obj_.readOBJ( filename_, path_ );
+        if(valid == false)
+            cout << "Failed to read: " << path << "/" << filename << endl;
     }
     ObjNode( ObjNode &other_obj );
     
-    void setTexture( int i, arTexture *t ) { obj_.setTexture( i, t ); }
-    int numTextures() { return obj_.getNumberTextures(); }
-    arAxisAlignedBoundingBox getAxisAlignedBoundingBox() { return obj_.getAxisAlignedBoundingBox(); }
+    void setTexture( int i, arTexture *t )
+    {
+        if(valid)
+            obj_.setTexture( i, t );
+    }
+    int numTextures() {
+        if(valid)
+            return obj_.getNumberTextures();
+        else
+            return 0;
+    }
+    arAxisAlignedBoundingBox getAxisAlignedBoundingBox()
+    {
+        if(valid)
+            return obj_.getAxisAlignedBoundingBox();
+        else
+            return arAxisAlignedBoundingBox
+    }
 };
 
 #endif

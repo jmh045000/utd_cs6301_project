@@ -259,8 +259,12 @@ ObjNode::ObjNode( ObjNode &otherObj ) : Node( otherObj.nodeTransform ), filename
 
 void ObjNode::draw()
 {
+    if(!valid)
+        return;
+
     if( !(!texture) ) std::cerr << "You shouldn't be setting a texture on an ObjNode, use the OBJ format" << std::endl;
     obj_.draw();
+
 	arAxisAlignedBoundingBox b = obj_.getAxisAlignedBoundingBox();
 	
 	float v[3][4][3] =
@@ -299,3 +303,10 @@ void ObjNode::draw()
     glPopMatrix();
 }
 
+arAxisAlignedBoundingBox ObjNode::getAxisAlignedBoundingBox()
+{
+    if(valid)
+        return obj_.getAxisAlignedBoundingBox();
+    else
+        return arAxisAlignedBoundingBox();
+}
