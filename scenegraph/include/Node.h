@@ -251,7 +251,7 @@ public:
         if(valid)
             return obj_.getAxisAlignedBoundingBox();
         else
-            return arAxisAlignedBoundingBox
+            return arAxisAlignedBoundingBox();
     }
 };
 
