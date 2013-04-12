@@ -303,10 +303,3 @@ void ObjNode::draw()
     glPopMatrix();
 }
 
-arAxisAlignedBoundingBox ObjNode::getAxisAlignedBoundingBox()
-{
-    if(valid)
-        return obj_.getAxisAlignedBoundingBox();
-    else
-        return arAxisAlignedBoundingBox();
-}
