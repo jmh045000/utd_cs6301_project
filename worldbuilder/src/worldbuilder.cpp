@@ -300,7 +300,7 @@ void drawBoundSphere(ObjNode *o)
     {   
         arBoundingSphere sphere = o->getBoundingSphere();
         glPushMatrix();
-            glMultMatrixf( ar_TM(sphere.position).v );
+            glMultMatrixf( (ar_ETM( o->getNodeTransform() ) * ar_TM(sphere.position)).v );
             glColor3f(1.0, 1.0, 0.0);
 			glutWireSphere(sphere.radius, 16, 16);
         glPopMatrix();

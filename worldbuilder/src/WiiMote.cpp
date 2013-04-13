@@ -241,6 +241,7 @@ ObjNode * WiiMote::closestObject(interlist &objects)
             continue;
         }
         arBoundingSphere sphere = ndptr->getBoundingSphere();
+        sphere.position = ar_ET( ar_ETM( ndptr->getNodeTransform() ) * ar_TM( sphere.position ) );
         cout << "center: " << sphere.position << " radius: " << sphere.radius << endl;
         arVector3 lp = ar_projectPointToLine(origin, direction, sphere.position);
         cout << "line point: " << lp << endl;
