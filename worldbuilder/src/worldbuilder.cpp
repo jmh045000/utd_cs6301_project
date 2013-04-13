@@ -284,7 +284,7 @@ void onPreExchange( arMasterSlaveFramework &fw )
     // do ray-casting after menu actions
 //    if ( ! menuOn ) {
         rightClosest = primary.closestObject(interactableObjects);
-//        leftClosest = secondary.closestObject(interactableObjects);
+        leftClosest = secondary.closestObject(interactableObjects);
 //    }
     
 

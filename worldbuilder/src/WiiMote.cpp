@@ -231,20 +231,20 @@ ObjNode * WiiMote::closestObject(interlist &objects)
     ObjNode *retval = NULL;
     arVector3 direction = extractDirection().normalize();
     arVector3 origin = ar_ET(_matrix);
-    cout << "direction: " << direction << endl;
-    cout << "origin: " << origin << endl;
+    //cout << "direction: " << direction << endl;
+    //cout << "origin: " << origin << endl;
     for(interlist::iterator it = objects.begin(); it != objects.end(); ++it)
     {
         ObjNode * ndptr = dynamic_cast<ObjNode *>(*it);
         if(ndptr == NULL) {
-            cout << "Not ObjNode" << endl;
+            //cout << "Not ObjNode" << endl;
             continue;
         }
         arBoundingSphere sphere = ndptr->getBoundingSphere();
         sphere.position = ar_ET( ar_ETM( ndptr->getNodeTransform() ) * ar_TM( sphere.position ) );
-        cout << "center: " << sphere.position << " radius: " << sphere.radius << endl;
+        //cout << "center: " << sphere.position << " radius: " << sphere.radius << endl;
         arVector3 lp = ar_projectPointToLine(origin, direction, sphere.position);
-        cout << "line point: " << lp << endl;
+        //cout << "line point: " << lp << endl;
 
         // outside sphere...
         if( vdistance2(lp, sphere.position) > sphere.radius*sphere.radius ) {
@@ -254,7 +254,7 @@ ObjNode * WiiMote::closestObject(interlist &objects)
         float distance = vdistance2(lp, origin);
 
         if(behind(origin, lp, direction)) {
-            cout << "behind wand" << endl;
+            //cout << "behind wand" << endl;
             continue;
         }
 
@@ -263,7 +263,7 @@ ObjNode * WiiMote::closestObject(interlist &objects)
             retval = ndptr;
         }
         else {
-            cout << "not closest object" << endl;
+            //cout << "not closest object" << endl;
         }
     }
 
