@@ -226,7 +226,7 @@ void Item::doAction( arSZGAppFramework *fw )
 					if( n != NULL )
 					{
 						interactableObjects.pop_front();
-						sg->removeChild( n );
+						sg->removeChild( n ); 
 					}
 				}
 			}
