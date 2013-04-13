@@ -231,25 +231,38 @@ ObjNode * WiiMote::closestObject(interlist &objects)
     ObjNode *retval = NULL;
     arVector3 direction = extractDirection().normalize();
     arVector3 origin = ar_ET(_matrix);
+    cout << "direction: " << direction << endl;
+    cout << "origin: " << origin << endl;
     for(interlist::iterator it = objects.begin(); it != objects.end(); ++it)
     {
         ObjNode * ndptr = dynamic_cast<ObjNode *>(*it);
-        if(ndptr == NULL)
+        if(ndptr == NULL) {
+            cout << "Not ObjNode" << endl;
             continue;
+        }
         arBoundingSphere sphere = ndptr->getBoundingSphere();
+        cout << "center: " << sphere.position << " radius: " << sphere.radius << endl;
         arVector3 lp = ar_projectPointToLine(origin, direction, sphere.position);
+        cout << "line point: " << lp << endl;
 
         // outside sphere...
-        if( vdistance2(lp, sphere.position) > sphere.radius*sphere.radius )
+        if( vdistance2(lp, sphere.position) > sphere.radius*sphere.radius ) {
+            cout << "outside sphere" << endl;
             continue;
+        }
         float distance = vdistance2(lp, origin);
 
-        if(behind(origin, lp, direction))
+        if(behind(origin, lp, direction)) {
+            cout << "behind wand" << endl;
             continue;
+        }
 
         if(distance < min) {
             min = distance;
             retval = ndptr;
+        }
+        else {
+            cout << "not closest object" << endl;
         }
     }
 

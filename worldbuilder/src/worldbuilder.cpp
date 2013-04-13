@@ -282,12 +282,10 @@ void onPreExchange( arMasterSlaveFramework &fw )
     }
 
     // do ray-casting after menu actions
-    //float angle = ar_angleBetween( primary.extractDirection(), secondary.extractDirection());
-    //cout << angle * 180 / M_PI << endl;
-    if ( ! menuOn ) {
+//    if ( ! menuOn ) {
         rightClosest = primary.closestObject(interactableObjects);
-        leftClosest = secondary.closestObject(interactableObjects);
-    }
+//        leftClosest = secondary.closestObject(interactableObjects);
+//    }
     
 
     // Handle any interaction with the square (see interaction/arInteractionUtilities.h).
