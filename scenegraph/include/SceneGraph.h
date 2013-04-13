@@ -27,11 +27,9 @@ class SceneGraph
 private:
     Vertex root_vertex_;
     IdToVertexMap idToVertex_;
-    bool drawing_;
     
     void addChild_( Node *newnode, Vertex *parent );
     Node* removeChild_( Vertex *v );
-    void processDeferred_();
     void dfs_( Vertex *r );
 
 public:
@@ -49,21 +47,6 @@ public:
     
     Node* getChild( NodeIdType id );
     Node* getRoot() { return root_vertex_.me; }
-};
-
-class GraphAction
-{
-    typedef enum { ADD, REMOVE, INVALID } GraphActionType;
-    
-    GraphActionType type;
-    Node *newtoadd;
-    Vertex *parent;
-    Vertex *todelete;
-    
-    GraphAction( Node *a, Vertex *p ) : type( ADD ), newtoadd( a ), parent( p ) {}
-    GraphAction( Vertex *d ) : type( REMOVE ), todelete( d ) {}
-    
-    friend class SceneGraph;
 };
 
 class easyException : public std::exception
