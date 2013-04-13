@@ -202,6 +202,9 @@ void scaleWorld()
     }
 }
 
+ObjNode *rightClosest = NULL;
+ObjNode *leftClosest = NULL;
+
 void moveWorld()
 {
 
@@ -282,12 +285,31 @@ void onPreExchange( arMasterSlaveFramework &fw )
             break;
         }
     }
+
+    // do ray-casting after menu actions
+//    if ( ! menuOn ) {
+        rightClosest = primary.closestObject(interactableObjects);
+        leftClosest = secondary.closestObject(interactableObjects);
+//    }
     
 
     // Handle any interaction with the square (see interaction/arInteractionUtilities.h).
     // Any grabbing/dragging happens in here.
     ar_pollingInteraction( primary, interactableObjects );
     ar_pollingInteraction( secondary, interactableObjects );
+}
+
+void drawBoundSphere(ObjNode *o)
+{
+    if(o)
+    {   
+        arBoundingSphere sphere = o->getBoundingSphere();
+        glPushMatrix();
+            glMultMatrixf( (ar_ETM( o->getNodeTransform() ) * ar_TM(sphere.position)).v );
+            glColor3f(1.0, 1.0, 0.0);
+			glutWireSphere(sphere.radius, 16, 16);
+        glPopMatrix();
+    }
 }
 
 void doSceneGraph( arMasterSlaveFramework &fw )
@@ -305,6 +327,10 @@ void doSceneGraph( arMasterSlaveFramework &fw )
     sg->drawSceneGraph();
     if( menuOn )
         drawMenu( menu, fw );
+    else {
+        drawBoundSphere(rightClosest);
+        drawBoundSphere(leftClosest);
+    }
     
     lastdrawtime = ar_time();
 }

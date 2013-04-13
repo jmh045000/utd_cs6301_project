@@ -14,6 +14,11 @@ static const int NUM_MATRICES = 2;
 
 #include "arEffector.h"
 #include "arGrabCondition.h"
+#include "arRay.h"
+
+typedef std::list<arInteractable*> interlist;
+
+class ObjNode;
 
 class WiiMote : public arEffector
 {
@@ -90,6 +95,13 @@ public:
     static float tipDistance;
     static float lastTipDistance;
     static void updateTipDistance(WiiMote &primary, WiiMote &secondary);
+
+	//! \brief Extracts direction vector based on _matrix
+    arVector3 extractDirection();
+    arRay ray();
+
+	//! \brief uses ray casting to find closes object
+    ObjNode *closestObject(interlist &objects);
 
 };
 

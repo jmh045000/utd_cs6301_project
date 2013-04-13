@@ -253,6 +253,20 @@ public:
         else
             return arAxisAlignedBoundingBox();
     }
+    arBoundingSphere getBoundingSphere()
+    {
+        if(valid)
+            return obj_.getBoundingSphere();
+        else
+            return getBoundingSphere();
+    }
+    float getIntersection(const arRay &theRay)
+    {
+        if(valid)
+            return obj_.getIntersection(theRay);
+        else
+            return -1;
+    }
 };
 
 #endif
