@@ -18,40 +18,41 @@
 #include "WiiMote.h"
 #include "Menu.h"
 
-class Wall : public Node
+class Ground : public Node
 {
     float yPosition;
     arTexture tex;
 public:
-    Wall() : yPosition( 0 ) {}
+    Ground() : yPosition( 0 ) {}
     
     void init();
     void draw();
 };
 
-void Wall::init()
+void Ground::init()
 {
     tex.repeating( true );
-    tex.readJPEG( "grass.jpg" );
+    tex.readJPEG( "grasswithborder.jpg" );
 }
 
-void Wall::draw()
+void Ground::draw()
 {
-    float v[4][3] =
+    static const float size = 500;
+    static const float v[4][3] =
     {
-        { -500, 0, -500 },
-        { 500, 0, -500 },
-        { 500, 0, 500 },
-        { -500, 0, 500 }
+        { -size, 0, -size },
+        { size, 0, -size },
+        { size, 0, size },
+        { -size, 0, size }
     };
     tex.activate();
     glPushMatrix();
         glMultMatrixf( ar_TM( 0, yPosition, 0).v );
         glBegin(GL_QUADS);
         glTexCoord2f(0.0f, 0.0f); glVertex3fv( v[0] );
-        glTexCoord2f(50.0f, 0.0f); glVertex3fv( v[1] );
-        glTexCoord2f(50.0f, 50.0f); glVertex3fv( v[2] );
-        glTexCoord2f(0.0f, 50.0f); glVertex3fv( v[3] );
+        glTexCoord2f(size, 0.0f); glVertex3fv( v[1] );
+        glTexCoord2f(size, size); glVertex3fv( v[2] );
+        glTexCoord2f(0.0f, size); glVertex3fv( v[3] );
         glEnd();
     glPopMatrix();
     tex.deactivate();
@@ -61,7 +62,7 @@ SceneGraph *sg;
 MenuNode *menu;
 WiiMote primary( WiiMote::CONTROLLER_1 );
 WiiMote secondary( WiiMote::CONTROLLER_2 );
-Wall ground;
+Ground ground;
 bool menuOn = false;
 
 std::list<arInteractable*> interactableObjects;
@@ -209,7 +210,7 @@ void onPreExchange( arMasterSlaveFramework &fw )
 
     //used for scale the world (and possibly other scales later)
     WiiMote::updateTipDistance(primary, secondary);
-    //scaleWorld();
+    scaleWorld();
     
     std::map<WiiMote::button_t, std::list<WiiMote*> > buttonMap;
     WiiMote::ButtonList buttons = secondary.getDownButtons();
@@ -285,9 +286,9 @@ void onPreExchange( arMasterSlaveFramework &fw )
 void doSceneGraph( arMasterSlaveFramework &fw )
 {
     fw.loadNavMatrix();
+    glClearColor( 0, 0.749, 1, 0 );
     primary.draw();
     secondary.draw();
-	//ground.draw();
     sg->drawSceneGraph();
     if( menuOn )
         drawMenu( menu, fw );
