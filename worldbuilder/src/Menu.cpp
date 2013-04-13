@@ -190,11 +190,17 @@ void Item::doAction( arSZGAppFramework *fw )
     if( type == OBJECT )
     {
         ObjNode *obj = new ObjNode( filename, path );
-        sg->addChild( obj );
+        
+        
         arAxisAlignedBoundingBox bbox = obj->getAxisAlignedBoundingBox();
         arMatrix4 centerOnHead = ar_getNavMatrix() * fw->getMidEyeMatrix();
         arMatrix4 arbitraryMove = ar_TM( 0, 0, -5 );
-        obj->setNodeTransform( centerOnHead * arbitraryMove );
+        
+        arMatrix4 rootscale = ar_ESM( sg->getRoot()->getNodeTransform() );
+        
+        obj->setNodeTransform( ar_SM( 1 / rootscale.v[0], 1 / rootscale.v[5], 1 / rootscale.v[10] ) * centerOnHead * arbitraryMove  );
+        
+        sg->addChild( obj );
         interactableObjects.push_back( obj );
     }
     else if( type == TEXTURE )
