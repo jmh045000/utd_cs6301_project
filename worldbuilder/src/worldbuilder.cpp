@@ -104,8 +104,10 @@ void drawLefthand( WiiMote &wm )
 bool initSceneGraph( arMasterSlaveFramework &fw, arSZGClient& /*Unused*/)
 {
     sg = new SceneGraph( fw );
-	ObjNode *al = new ObjNode( "al.obj", "." );
-	sg->addChild( al );
+	SolidCylinderNode *cyl = new SolidCylinderNode( 1, 1, 20, 20, 20 );
+    cyl->setColor( VIOLET );
+    cyl->setNodeTransform( ar_RM( 'x', -1.59 ) );
+	sg->addChild( cyl );
 	sg->addChild( &ground );
     menu = initMenu( fw );
     return true;
@@ -285,6 +287,12 @@ void onPreExchange( arMasterSlaveFramework &fw )
 
 void doSceneGraph( arMasterSlaveFramework &fw )
 {
+    static ar_timeval lastdrawtime = ar_time();
+    ar_timeval now = ar_time();
+    int curtime = ( now.sec * 1000000 ) + now.usec, lasttime = ( lastdrawtime.sec * 1000000 ) + lastdrawtime.usec;
+    int sleeptime = 5000 - ( curtime - lasttime );
+    ar_usleep( max( sleeptime, 1 ) );
+    
     fw.loadNavMatrix();
     glClearColor( 0, 0.749, 1, 0 );
     primary.draw();
@@ -292,7 +300,8 @@ void doSceneGraph( arMasterSlaveFramework &fw )
     sg->drawSceneGraph();
     if( menuOn )
         drawMenu( menu, fw );
-    ar_usleep( 100000 / 200 );
+    
+    lastdrawtime = ar_time();
 }
 
 
