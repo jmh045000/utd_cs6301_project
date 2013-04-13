@@ -172,7 +172,7 @@ void scaleWorld()
     static float start_dist = 1.0;
     static float scale = 1.0;
     static float ratio = 1.0;
-    if(num_buttons == 2)
+    if(num_buttons == 2 && ( primary.getTouchedObject() == NULL ) && ( secondary.getTouchedObject() == NULL ) )
     {
         //cout << "STW: ";
         if(!scaling)
@@ -205,6 +205,11 @@ void scaleWorld()
 ObjNode *rightClosest = NULL;
 ObjNode *leftClosest = NULL;
 
+void moveWorld()
+{
+
+}
+
 void onPreExchange( arMasterSlaveFramework &fw )
 {
     fw.navUpdate();
@@ -231,9 +236,9 @@ void onPreExchange( arMasterSlaveFramework &fw )
     for( WiiMote::ButtonList::iterator it = buttons.begin(); it != buttons.end(); ++it )
     {   // Process all butons just pressed on primary
         if( buttonMap.find( *it ) == buttonMap.end() )
-            buttonMap.insert( std::make_pair( *it, std::list<WiiMote*>( 2, &secondary ) ) );
+            buttonMap.insert( std::make_pair( *it, std::list<WiiMote*>( 2, &primary ) ) );
         else
-            buttonMap[*it].push_back( &secondary );
+            buttonMap[*it].push_back( &primary );
     }
     
     for( std::map<WiiMote::button_t, std::list<WiiMote*> >::iterator it = buttonMap.begin(); it != buttonMap.end(); ++it )
