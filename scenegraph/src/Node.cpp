@@ -49,11 +49,12 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
         nextMatrix_ = arMatrix4();
         
     }
+        
     glPushMatrix();
         glMultMatrixf( nodeTransform.v );
+        arInteractable::setMatrix( nodeTransform * currentScale );
         currentView = currentView * ar_ETM( nodeTransform );
         currentScale = currentScale * ar_ESM( nodeTransform );
-        arInteractable::setMatrix( currentView );
 }
 
 void Node::drawEnd( arMatrix4 &currentView, arMatrix4 &currentScale )
@@ -251,7 +252,7 @@ void wbOBJRenderer::setTexture( unsigned i, arTexture *t )
 
 ObjNode::ObjNode( ObjNode &otherObj ) : Node( otherObj.nodeTransform ), filename_ ( otherObj.filename_ ), path_( otherObj.path_ )
 {
-    obj_.readOBJ( filename_, path_ );
+    valid = obj_.readOBJ( filename_, path_ );
     
     for( int i = 0; i < numTextures(); ++i )
         setTexture( i, otherObj.obj_.getTexture( i ) );

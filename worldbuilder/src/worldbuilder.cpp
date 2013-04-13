@@ -18,40 +18,41 @@
 #include "WiiMote.h"
 #include "Menu.h"
 
-class Wall : public Node
+class Ground : public Node
 {
     float yPosition;
     arTexture tex;
 public:
-    Wall() : yPosition( 0 ) {}
+    Ground() : yPosition( 0 ) {}
     
     void init();
     void draw();
 };
 
-void Wall::init()
+void Ground::init()
 {
     tex.repeating( true );
-    tex.readJPEG( "grass.jpg" );
+    tex.readJPEG( "grasswithborder.jpg" );
 }
 
-void Wall::draw()
+void Ground::draw()
 {
-    float v[4][3] =
+    static const float size = 500;
+    static const float v[4][3] =
     {
-        { -500, 0, -500 },
-        { 500, 0, -500 },
-        { 500, 0, 500 },
-        { -500, 0, 500 }
+        { -size, 0, -size },
+        { size, 0, -size },
+        { size, 0, size },
+        { -size, 0, size }
     };
     tex.activate();
     glPushMatrix();
         glMultMatrixf( ar_TM( 0, yPosition, 0).v );
         glBegin(GL_QUADS);
         glTexCoord2f(0.0f, 0.0f); glVertex3fv( v[0] );
-        glTexCoord2f(50.0f, 0.0f); glVertex3fv( v[1] );
-        glTexCoord2f(50.0f, 50.0f); glVertex3fv( v[2] );
-        glTexCoord2f(0.0f, 50.0f); glVertex3fv( v[3] );
+        glTexCoord2f(size, 0.0f); glVertex3fv( v[1] );
+        glTexCoord2f(size, size); glVertex3fv( v[2] );
+        glTexCoord2f(0.0f, size); glVertex3fv( v[3] );
         glEnd();
     glPopMatrix();
     tex.deactivate();
@@ -61,7 +62,7 @@ SceneGraph *sg;
 MenuNode *menu;
 WiiMote primary( WiiMote::CONTROLLER_1 );
 WiiMote secondary( WiiMote::CONTROLLER_2 );
-Wall ground;
+Ground ground;
 bool menuOn = false;
 
 std::list<arInteractable*> interactableObjects;
@@ -103,9 +104,10 @@ void drawLefthand( WiiMote &wm )
 bool initSceneGraph( arMasterSlaveFramework &fw, arSZGClient& /*Unused*/)
 {
     sg = new SceneGraph( fw );
-	ObjNode *al = new ObjNode( "al.obj", "." );
-	sg->addChild( al );
-    interactableObjects.push_back(al);
+	SolidCylinderNode *cyl = new SolidCylinderNode( 1, 1, 20, 20, 20 );
+    cyl->setColor( VIOLET );
+    cyl->setNodeTransform( ar_RM( 'x', -1.59 ) );
+	sg->addChild( cyl );
 	sg->addChild( &ground );
     menu = initMenu( fw );
     return true;
@@ -213,7 +215,7 @@ void onPreExchange( arMasterSlaveFramework &fw )
 
     //used for scale the world (and possibly other scales later)
     WiiMote::updateTipDistance(primary, secondary);
-
+    scaleWorld();
     
     std::map<WiiMote::button_t, std::list<WiiMote*> > buttonMap;
     WiiMote::ButtonList buttons = secondary.getDownButtons();
@@ -309,10 +311,16 @@ void drawBoundSphere(ObjNode *o)
 
 void doSceneGraph( arMasterSlaveFramework &fw )
 {
+    static ar_timeval lastdrawtime = ar_time();
+    ar_timeval now = ar_time();
+    int curtime = ( now.sec * 1000000 ) + now.usec, lasttime = ( lastdrawtime.sec * 1000000 ) + lastdrawtime.usec;
+    int sleeptime = 5000 - ( curtime - lasttime );
+    ar_usleep( max( sleeptime, 1 ) );
+    
     fw.loadNavMatrix();
+    glClearColor( 0, 0.749, 1, 0 );
     primary.draw();
     secondary.draw();
-	//ground.draw();
     sg->drawSceneGraph();
     if( menuOn )
         drawMenu( menu, fw );
@@ -320,8 +328,8 @@ void doSceneGraph( arMasterSlaveFramework &fw )
         drawBoundSphere(rightClosest);
         drawBoundSphere(leftClosest);
     }
-    ar_usleep( 100000 / 200 );
-
+    
+    lastdrawtime = ar_time();
 }
 
 
