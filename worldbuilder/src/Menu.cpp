@@ -191,12 +191,11 @@ void Item::doAction( arSZGAppFramework *fw )
     {
         ObjNode *obj = new ObjNode( filename, path );
         
-        
         arAxisAlignedBoundingBox bbox = obj->getAxisAlignedBoundingBox();
-        arMatrix4 centerOnHead = ar_getNavMatrix() * fw->getMidEyeMatrix();
+        arMatrix4 centerOnHead = ar_TM( arVector3( 0, 0, 0 ) - ar_ET( sg->getRoot()->getNodeTransform() ) ) * fw->getMidEyeMatrix();
         arMatrix4 arbitraryMove = ar_TM( 0, 0, -5 );
         
-        arMatrix4 rootscale = ar_ESM( sg->getRoot()->getNodeTransform() );
+        arMatrix4 rootscale = sg->getRoot()->getNodeScale();
         
         obj->setNodeTransform( ar_SM( 1 / rootscale.v[0], 1 / rootscale.v[5], 1 / rootscale.v[10] ) * centerOnHead * arbitraryMove  );
         
@@ -234,21 +233,21 @@ void Item::doAction( arSZGAppFramework *fw )
         case GROUP_TOOL:
         {
             cout << "GROUPING" << endl;
-            NothingNode *nothing = new NothingNode();
             
             for( list<arInteractable*>::iterator it = interactableObjects.begin(); it != interactableObjects.end(); ++it )
                 if( Node *n = dynamic_cast<Node*>( *it ) )
                 {
                     sg->removeChild( n );
-                    n->setParent( nothing );
+                    n->setParent( (Node*)interactableObjects.front() );
                 }
             
-            sg->addChild( nothing );
+            sg->addChild( (Node*)interactableObjects.front() );
             for( list<arInteractable*>::iterator it = interactableObjects.begin(); it != interactableObjects.end(); ++it )
             {
+                if( *it == interactableObjects.front() ) continue;
                 if( Node *n = dynamic_cast<Node*>( *it ) )
                 {
-                    sg->addChild( n, nothing );
+                    sg->addChild( n, (Node*)interactableObjects.front() );
                 }
             }
         }

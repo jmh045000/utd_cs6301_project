@@ -48,7 +48,7 @@ public:
     void removeChild( NodeIdType id );
     
     Node* getChild( NodeIdType id );
-    Node* getRoot() { return root_vertex_.me; }
+    RootNode* getRoot() { return (RootNode*)root_vertex_.me; }
 };
 
 class easyException : public std::exception

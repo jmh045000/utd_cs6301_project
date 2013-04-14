@@ -65,6 +65,8 @@ SceneGraph::SceneGraph( arSZGAppFramework &fw, bool nolocal ) : root_vertex_ ( n
 
 void SceneGraph::drawSceneGraph()
 {
+    currentView = arMatrix4();
+    currentScale = arMatrix4();
     dfs_( &root_vertex_ );
 }
 

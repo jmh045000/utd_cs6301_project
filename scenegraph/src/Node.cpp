@@ -14,53 +14,64 @@
 
 uint64_t Node::numObjects_ = 0;
 
-void Node::setMatrix( const arMatrix4 &mat )
-{
-    // Change the nodeTransform matrix when drawing, so we know what has been pushed so far...
-    //cout << "setMatrix(\n" << mat << "\n)" << endl;
-    
-    nextMatrix_ = mat;
+void Node::grab( arEffector *g )
+{ 
+    if( parentNode_ == this )
+        grabbers_.insert( g );
+    else
+        parentNode_->grab( g );
 }
-
-void Node::move( const arVector3 &vec )
+void Node::ungrab( arEffector *g )
 {
-    for( int i = 12; i < 15; i++ )
-    nextMatrix_[i] = nodeTransform[i] + vec.v[i-12];
-    //cout << "move() called on id=" << id << " with " << vec << ", nextMatrix_=\n" << nextMatrix_ << endl;
+    if( parentNode_ == this )
+        grabbers_.erase( g );
+    else
+        parentNode_->ungrab( g );
 }
 
 void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
 {
-    if( nextMatrix_ != arMatrix4() )
-    {   // If we've changed transform from being interacted with, remove the current state of the world (all the pushes)
-        //std::cout << "Transforming.  nodeTransform=\n" << nodeTransform << "\ncurrentView=\n" << ar_ETM( currentView ) << "\nnextMatrix_\n" << nextMatrix_ << std::endl;
-        // Remove the current transform from the next manipulation.
-        
-        for(int i = 12; i < 15; i++)
-            nextMatrix_[i] -= currentView[i];
-        if( parentNode_ != this )
+    if( grabbers_.size() == 1 )
+    {
+        arVector3 curEffRotation, curEffPosition;
+        arEffector *eff = *(grabbers_.begin());
+        if( !grabbed )
         {
-            parentNode_->move( arVector3( nextMatrix_[12] - nodeTransform[12], nextMatrix_[13] - nodeTransform[13], nextMatrix_[14] - nodeTransform[14] ) );
+            origEffRotation = ar_ER( eff->getMatrix(), AR_XYZ );
+            origEffPosition = ar_ET( eff->getMatrix() );
+            grabbed = true;
         }
-        else
-        {
-            nodeTransform = nextMatrix_;
-        }
-        nextMatrix_ = arMatrix4();
         
+        curEffRotation = ar_ER( eff->getMatrix(), AR_XYZ );
+        curEffPosition = ar_ET( eff->getMatrix() );
+        
+        rotation = curEffRotation - origEffRotation;
+        translation = curEffPosition - origEffPosition;
+        
+    }
+    else
+    {
+        if( grabbed )
+        {
+            grabbed = false;
+            nodeTransform = ar_TM( translation ) * nodeTransform * arEulerAngles( AR_XYZ, rotation ).toMatrix();
+            rotation = translation = arVector3();
+            origEffPosition = arVector3();
+        }
     }
         
     glPushMatrix();
-        glMultMatrixf( nodeTransform.v );
-        arInteractable::setMatrix( nodeTransform * currentScale );
-        currentView = currentView * ar_ETM( nodeTransform );
+        glMultMatrixf( ( ar_TM( translation ) * nodeTransform * arEulerAngles( AR_XYZ, rotation ).toMatrix() ).v );
+        
+        currentView = currentView * ar_TM( translation ) * nodeTransform * arEulerAngles( AR_XYZ, rotation ).toMatrix();
         currentScale = currentScale * ar_ESM( nodeTransform );
+        actualPosition = currentView;
 }
 
 void Node::drawEnd( arMatrix4 &currentView, arMatrix4 &currentScale )
 {
     glPopMatrix();
-    currentView = currentView * ar_ETM( nodeTransform ).inverse();
+    currentView = currentView * arEulerAngles( AR_XYZ, rotation ).toMatrix().inverse() * nodeTransform.inverse() * ar_TM( translation ).inverse();
     currentScale = currentScale * ar_ESM( nodeTransform ).inverse();
     //std::cout << "drawEnd, currentView=\n" << currentView << std::endl;
 }
@@ -85,6 +96,20 @@ void Node::drawLocalBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
             
             dsLoop( soundId_, soundFile, soundState_, loudness, soundPosition );
         }
+        
+        if( touched() )
+        {
+            if( ObjNode *o = dynamic_cast<ObjNode*>( this ) )
+            {
+                arBoundingSphere sphere = o->getBoundingSphere();
+                glPushMatrix();
+                    glMultMatrixf( (ar_TM(sphere.position)).v );
+                    glColor3f(1.0, 1.0, 0.0);
+                    glutWireSphere(sphere.radius, 16, 16);
+                glPopMatrix();
+            }
+        }
+        
         
         if( !(!texture) ) texture.activate();
 }
@@ -137,11 +162,18 @@ RootNode::RootNode( arSZGAppFramework &fw ) : Node(), fw_( fw )
 void RootNode::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
 {
     glPushMatrix();
-        glMultMatrixf( nodeTransform.v );
-        currentView = currentView * ar_ETM( nodeTransform );
-        currentScale = currentScale * ar_ESM( nodeTransform );
+        glMultMatrixf( ( transform_ * scale_ ).v );
+        currentView = currentView * transform_ * scale_;
+        currentScale = currentScale * scale_;
         
-    dsTransform( soundId_, ar_getNavMatrix() );
+    dsTransform( soundId_, transform_ );
+}
+
+void RootNode::drawEnd( arMatrix4 &currentView, arMatrix4 &currentScale )
+{
+    glPopMatrix();
+        currentView = currentView * transform_.inverse() * scale_.inverse();
+        currentScale = currentScale * scale_.inverse();
 }
 
 SolidSphereNode::SolidSphereNode( double radius, int slices, int stacks, bool wireframe ) : SolidNode( SPHERE, wireframe ), radius_( radius ), slices_( slices ), stacks_( stacks )

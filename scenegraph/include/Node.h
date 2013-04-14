@@ -3,6 +3,8 @@
 #define _UTD_SCENEGRAPH_NODE_H_
 
 #include <string>
+#include <iostream>
+#include <set>
 
 #include <stdint.h>
 
@@ -39,16 +41,16 @@ class Node : public arInteractable
 
     static NodeIdType numObjects_;
 private:
-    
-    arMatrix4 nextMatrix_;
     int soundId_;
     SoundState soundState_; // What are we doing with current sound?
     
     Node *parentNode_; // This is used to group objects together
     
-    // This is the callback from arInteractable
-    void setMatrix( const arMatrix4 &mat );
-    void move( const arVector3 &vec );
+    std::set<arEffector*> grabbers_;
+    arVector3 origEffRotation, origEffPosition;
+    arVector3 rotation, translation;
+    bool grabbed;
+    
     // drawBegin_ is the function that will do the pushing, and multiply by our transform
     virtual void drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale ); // RootNode overrides this, no others should
     // drawEnd_ will pop the matrix
@@ -73,6 +75,9 @@ protected:
     // A texture that will be applied to this node
     arTexture               texture; // Filename to the texture (I have no idea how to do this...)
     
+    bool highlight;
+    arMatrix4 actualPosition;
+    
     // The generic draw functions
     // General flow: push_matrix, multi(node_transform), foreach c in child do c.draw(), opengl_callback(), color(), texture(), mydraw()
 
@@ -80,11 +85,11 @@ protected:
 
 public:
     // *structors
-    Node() : arInteractable(), nextMatrix_(), parentNode_( this ), opengl_callback( NULL ), color( 0, 0, 0 ), id( ++numObjects_ )
+    Node() : arInteractable(), parentNode_( this ), rotation(), translation(), grabbed( false ), opengl_callback( NULL ), color( 0, 0, 0 ), highlight( false ), id( ++numObjects_ )
     {
     }
     
-    Node( arMatrix4 &tm ) : arInteractable(), nextMatrix_(), parentNode_( this ), nodeTransform( tm ), opengl_callback( NULL ), color( 0, 0, 0 ), id( ++numObjects_ ) {}
+    Node( arMatrix4 &tm ) : arInteractable(), parentNode_( this ), rotation(), translation(), grabbed( false ), nodeTransform( tm ), opengl_callback( NULL ), color( 0, 0, 0 ), highlight( false ), id( ++numObjects_ ) {}
     virtual ~Node() {}
     
     // A globally unique id for this node.
@@ -105,16 +110,27 @@ public:
     void setTexture( std::string filename, std::string subdirectory = "", std::string path = "" );
     
     void setParent( Node *n ) 
-    { 
+    {
+        grabbers_.clear();
+        if( n != this )
+        {
+            nodeTransform = nodeTransform * n->nodeTransform.inverse();
+        }
         if( parentNode_ != this )
         {
-            for( int i = 12; i < 15; i++ )
-                nodeTransform[i] += parentNode_->nodeTransform[i];
+                nodeTransform = nodeTransform * parentNode_->nodeTransform;
         }
         parentNode_ = n;
     }
     
     Node *getParent() { return parentNode_; }
+    
+    void setHighlight( bool h ) { highlight = h; }
+    bool getHighlight() { return highlight; }
+    arMatrix4 getActualPosition() const { return actualPosition; }
+    
+    void grab( arEffector *g );
+    void ungrab( arEffector *g );
 };
 
 class RootNode : public Node
@@ -122,10 +138,20 @@ class RootNode : public Node
 private:
     arSZGAppFramework &fw_;
     
+    arMatrix4 scale_;
+    arMatrix4 transform_;
+    
     void drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale );
+    void drawEnd( arMatrix4 &currentView, arMatrix4 &currentScale );
     void draw() {}
 public:
     RootNode( arSZGAppFramework &fw );
+    
+    void setNodeScale( arMatrix4 scale ) { scale_ = scale; }
+    void setNodeTransform( arMatrix4 trans ) { transform_ = trans; }
+    
+    arMatrix4 getNodeScale() { return scale_; }
+    arMatrix4 getNodeTransform() { return transform_; }
 };
 
 class NothingNode : public Node
@@ -258,7 +284,7 @@ public:
         if(valid)
             return obj_.getBoundingSphere();
         else
-            return getBoundingSphere();
+            return arBoundingSphere();
     }
     float getIntersection(const arRay &theRay)
     {

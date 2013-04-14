@@ -48,6 +48,8 @@ private:
 	controller_t	controller_;
 	int				matrixOverride_;
 	draw_cb			draw_;
+    
+
 
 protected:
 	ButtonList		downButtons;
@@ -87,6 +89,9 @@ public:
 	const ButtonList& getUpButtons();
 	
 	arGrabCondition getGrabCondition(button_t b);
+    
+    bool requestGrab( arInteractable *grabee );
+    void requestUngrab( arInteractable *grabee );
 	
 	friend std::ostream& operator<< (std::ostream &out, ButtonList l);
 	friend std::ostream& operator<< (std::ostream &out, button_t b);

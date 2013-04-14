@@ -8,6 +8,8 @@
 // MUST come before other szg includes. See arCallingConventions.h for details.
 #define SZG_DO_NOT_EXPORT
 
+#include "arInteractable.h"
+
 #include "WiiMote.h"
 #include "Node.h"
 #include "MyConditions.h"
@@ -54,6 +56,22 @@ void init_driver()
 	const int found = wiiuse_find(wiimotes_, 2, 5);
 	
 	connected_ = wiiuse_connect( wiimotes_, found );
+}
+
+bool WiiMote::requestGrab( arInteractable *grabee )
+{
+    bool ret = arEffector::requestGrab( grabee );
+    if( ret )
+        if( Node *n = dynamic_cast<Node*>( grabee ) )
+            n->grab( this );
+    return ret;
+}
+
+void WiiMote::requestUngrab( arInteractable *grabee )
+{
+    arEffector::requestUngrab( grabee );
+    if( Node *n = dynamic_cast<Node*>( grabee ) )
+        n->ungrab( this );
 }
 
 WiiMote::WiiMote(controller_t controller) : 
@@ -229,10 +247,17 @@ ObjNode * WiiMote::closestObject(interlist &objects)
 {
     float min = INFINITY;
     ObjNode *retval = NULL;
+    
+    if( getButton( WiiMote::A ) )
+        if( arInteractable* inter = const_cast<arInteractable*>( getGrabbedObject() ) )
+            if( ObjNode *p = dynamic_cast<ObjNode*>( inter ) )
+                return p;
+            
     arVector3 direction = extractDirection().normalize();
     arVector3 origin = ar_ET(_matrix);
     //cout << "direction: " << direction << endl;
     //cout << "origin: " << origin << endl;
+    
     for(interlist::iterator it = objects.begin(); it != objects.end(); ++it)
     {
         ObjNode * ndptr = dynamic_cast<ObjNode *>(*it);
@@ -240,15 +265,17 @@ ObjNode * WiiMote::closestObject(interlist &objects)
             //cout << "Not ObjNode" << endl;
             continue;
         }
+        requestUngrab( ndptr );
+        ndptr->untouch( *this );
         arBoundingSphere sphere = ndptr->getBoundingSphere();
-        sphere.position = ar_ET( ar_ETM( ndptr->getNodeTransform() ) * ar_TM( sphere.position ) );
+        sphere.position = ar_ET( ndptr->getActualPosition() * ar_TM( sphere.position ) );
         //cout << "center: " << sphere.position << " radius: " << sphere.radius << endl;
         arVector3 lp = ar_projectPointToLine(origin, direction, sphere.position);
         //cout << "line point: " << lp << endl;
 
         // outside sphere...
         if( vdistance2(lp, sphere.position) > sphere.radius*sphere.radius ) {
-            cout << "outside sphere" << endl;
+            //cout << "outside sphere" << endl;
             continue;
         }
         float distance = vdistance2(lp, origin);
@@ -266,21 +293,7 @@ ObjNode * WiiMote::closestObject(interlist &objects)
             //cout << "not closest object" << endl;
         }
     }
-
-    /*
-    arRay r = ray();
-    for(interlist::iterator it = objects.begin(); it != objects.end(); ++it)
-    {
-        ObjNode * ndptr = dynamic_cast<ObjNode *>(*it);
-        if(ndptr == NULL)
-            continue;
-        float distance = ndptr->getIntersection(r);
-        if(distance < min) {
-            cout << "distance: " << distance << endl;
-            min = distance;
-            retval = ndptr;
-        }
-    }
-    */
+    
+    
     return retval;
 }

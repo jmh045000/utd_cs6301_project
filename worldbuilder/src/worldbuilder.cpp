@@ -135,38 +135,13 @@ inline void toggleMenu( )
 
 void scaleWorld()
 {
-    int num_buttons = 0;
-    WiiMote::ButtonList buttons = primary.getOnButtons();
-    for( WiiMote::ButtonList::iterator it = buttons.begin(); it != buttons.end(); ++it )
-    {  // Process all butons just pressed on primary
-        switch( *it )
-        {
-        case WiiMote::B:
-            num_buttons++;
-            break;
-        default:
-            break;
-        }
-    }
-
-    buttons = secondary.getOnButtons();
-    for( WiiMote::ButtonList::iterator it = buttons.begin(); it != buttons.end(); ++it )
-    {  // Process all butons just pressed on secondary
-        switch( *it )
-        {
-        case WiiMote::B:
-            num_buttons++;
-            break;
-        default:
-            break;
-        }
-    }
 
     static bool scaling = false;
     static float start_dist = 1.0;
     static float scale = 1.0;
     static float ratio = 1.0;
-    if(num_buttons == 2 && ( primary.getTouchedObject() == NULL ) && ( secondary.getTouchedObject() == NULL ) )
+    if( primary.getButton( WiiMote::B ) && secondary.getButton( WiiMote::B ) 
+        && ( primary.getGrabbedObject() == NULL ) && ( secondary.getGrabbedObject() == NULL ) )
     {
         //cout << "STW: ";
         if(!scaling)
@@ -182,7 +157,7 @@ void scaleWorld()
             ratio = WiiMote::tipDistance / start_dist;
             //cout << WiiMote::tipDistance << " / " << start_dist << " = " << ratio;
             float sscale = ratio * scale;
-            sg->getRoot()->setNodeTransform( ar_SM( sscale, sscale, sscale ) );
+            sg->getRoot()->setNodeScale( ar_SM( sscale, sscale, sscale ) );
             //cout << " " << sscale;
         }
         //cout << endl;
@@ -338,29 +313,39 @@ void onPreExchange( arMasterSlaveFramework &fw )
     }
 
     // do ray-casting after menu actions
-//    if ( ! menuOn ) {
+    if ( ! menuOn ) {
         rightClosest = primary.closestObject(interactableObjects);
         leftClosest = secondary.closestObject(interactableObjects);
-//    }
+    }
     
-
+    if( rightClosest )
+    {
+        rightClosest->touch( primary );
+        if( primary.getButton( WiiMote::A ) )
+        {
+            primary.requestGrab( rightClosest );
+        }
+    }
+    else
+        primary.forceUngrab();
+        
+    if( leftClosest )
+    {
+        leftClosest->touch( secondary );
+        if( secondary.getButton( WiiMote::A ) )
+        {
+            secondary.requestGrab( leftClosest );
+        }
+    }
+    else
+        secondary.forceUngrab();
+    
     // Handle any interaction with the square (see interaction/arInteractionUtilities.h).
     // Any grabbing/dragging happens in here.
+    /*
     ar_pollingInteraction( primary, interactableObjects );
     ar_pollingInteraction( secondary, interactableObjects );
-}
-
-void drawBoundSphere(ObjNode *o)
-{
-    if(o)
-    {   
-        arBoundingSphere sphere = o->getBoundingSphere();
-        glPushMatrix();
-            glMultMatrixf( (ar_ETM( o->getNodeTransform() ) * ar_TM(sphere.position)).v );
-            glColor3f(1.0, 1.0, 0.0);
-			glutWireSphere(sphere.radius, 16, 16);
-        glPopMatrix();
-    }
+    */
 }
 
 void doSceneGraph( arMasterSlaveFramework &fw )
@@ -378,10 +363,6 @@ void doSceneGraph( arMasterSlaveFramework &fw )
     sg->drawSceneGraph();
     if( menuOn )
         drawMenu( menu, fw );
-    else {
-        drawBoundSphere(rightClosest);
-        drawBoundSphere(leftClosest);
-    }
     
     lastdrawtime = ar_time();
 }
