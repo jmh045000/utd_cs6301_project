@@ -28,12 +28,14 @@ private:
     Vertex root_vertex_;
     IdToVertexMap idToVertex_;
     
+    bool nolocal_;
+    
     void addChild_( Node *newnode, Vertex *parent );
     Node* removeChild_( Vertex *v );
     void dfs_( Vertex *r );
 
 public:
-    SceneGraph( arSZGAppFramework &fw );
+    SceneGraph( arSZGAppFramework &fw, bool nolocal = false );
     ~SceneGraph();
 
     void drawSceneGraph();

@@ -38,16 +38,27 @@ void SceneGraph::dfs_( Vertex *r )
         return;
         
     Node *n = r->me;
-    n->drawBegin( currentView, currentScale );
-    for( std::set<Vertex*>::iterator it = r->children.begin(); it != r->children.end(); ++it )
-        dfs_( *it );
-    n->drawLocalBegin( currentView, currentScale );
-    n->draw();
-    n->drawLocalEnd( currentView, currentScale );
-    n->drawEnd( currentView, currentScale );
+    if( nolocal_ )
+    {
+        n->drawBegin( currentView, currentScale );
+        n->draw();
+        for( std::set<Vertex*>::iterator it = r->children.begin(); it != r->children.end(); ++it )
+            dfs_( *it );
+        n->drawEnd( currentView, currentScale );
+    }
+    else
+    {
+        n->drawBegin( currentView, currentScale );
+        for( std::set<Vertex*>::iterator it = r->children.begin(); it != r->children.end(); ++it )
+            dfs_( *it );
+        n->drawLocalBegin( currentView, currentScale );
+        n->draw();
+        n->drawLocalEnd( currentView, currentScale );
+        n->drawEnd( currentView, currentScale );
+    }
 }
 
-SceneGraph::SceneGraph( arSZGAppFramework &fw ) : root_vertex_ ( new RootNode( fw ) )
+SceneGraph::SceneGraph( arSZGAppFramework &fw, bool nolocal ) : root_vertex_ ( new RootNode( fw ) ), nolocal_( nolocal )
 {
     idToVertex_[root_vertex_.me->id] = &root_vertex_;
 }

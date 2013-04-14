@@ -145,7 +145,7 @@ typedef struct _ItemGroup_s : public MenuGroup_t
     MenuItem* operator++ (int)
     {
         int _ = 0;
-        Item *i;
+        Item *i = NULL;
         switch( cur )
         {
         case 0:

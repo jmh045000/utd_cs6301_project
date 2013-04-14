@@ -306,6 +306,8 @@ void MenuNode::draw()
         { hsize / 2, vsize / 2, 0 },
         { -hsize / 2, vsize / 2, 0 }
     };
+    
+    glColor3f( CYAN.v[0], CYAN.v[1], CYAN.v[2] );
     glBegin( GL_QUADS );
         glTexCoord2f( 0, 0 ); glVertex3fv( v[0] );
         glTexCoord2f( 1, 0 ); glVertex3fv( v[1] );
@@ -516,9 +518,9 @@ list<Item*> findTextures()
 
 MenuNode* initMenu( arSZGAppFramework &fw )
 {
-    menuGraph = new SceneGraph( fw );
+    menuGraph = new SceneGraph( fw, true );
     MenuNode *menu = new MenuNode( fw );
-    menu->setColor( CYAN );
+    
     
     {   // Initialize Tabs
         Tab *objectTab = new Tab( "Objects", true );
@@ -584,8 +586,11 @@ void tearDownMenu( MenuNode *menu )
 
 void drawMenu( MenuNode *menu, arSZGAppFramework &fw )
 {
+    glDisable( GL_DEPTH_TEST );
     arMatrix4 menuPlacement = ar_getNavMatrix() * fw.getMidEyeMatrix() * ar_TM( 0, 0, -5 );
     menu->setNodeTransform( menuPlacement );
     
     menuGraph->drawSceneGraph();
+    
+    glEnable( GL_DEPTH_TEST );
 }
