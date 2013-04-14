@@ -113,30 +113,24 @@ bool initSceneGraph( arMasterSlaveFramework &fw, arSZGClient& /*Unused*/)
     return true;
 }
 
-inline void setMenuOn( arMasterSlaveFramework &fw )
+inline void setMenuOn()
 {
     menuOn = true;
     buildMenu( menu );
-    /* Cancel movement while in menu */
-    fw.setNavTransSpeed( 0.000001 );
-    fw.setNavRotSpeed( 0.000001 );
 }
 
-inline void setMenuOff( arMasterSlaveFramework &fw )
+inline void setMenuOff()
 {
     menuOn = false;
     tearDownMenu( menu );
-    /* Allow movement */
-    fw.setNavTransSpeed( 5 );
-    fw.setNavRotSpeed( 30 );
 }
 
-inline void toggleMenu( arMasterSlaveFramework &fw )
+inline void toggleMenu( )
 {
     if( menuOn )
-        setMenuOff( fw );
+        setMenuOff();
     else
-        setMenuOn( fw );
+        setMenuOn();
 }
 
 void scaleWorld()
@@ -205,9 +199,66 @@ void scaleWorld()
 ObjNode *rightClosest = NULL;
 ObjNode *leftClosest = NULL;
 
-void moveWorld()
+void moveWorld( arSZGAppFramework &fw )
 {
+    static const float MOVE_SPEED = 0.25;
+    
+    if( !menuOn )
+    {
+        float z = 0, x = 0;
+        
+        WiiMote::ButtonList buttons;
+        buttons = primary.getOnButtons();
+        for( WiiMote::ButtonList::iterator it = buttons.begin(); it != buttons.end(); ++it )
+        {  // Process all butons just pressed on primary
+            switch( *it )
+            {
+            case WiiMote::UP:
+                z += 0.5;
+                break;
+            case WiiMote::DOWN:
+                z -= 0.5;
+                break;
+            case WiiMote::LEFT:
+                x += 0.5;
+                break;
+            case WiiMote::RIGHT:
+                x -= 0.5;
+                break;
+            default:
+                break;
+            }
+        }
 
+        buttons = secondary.getOnButtons();
+        for( WiiMote::ButtonList::iterator it = buttons.begin(); it != buttons.end(); ++it )
+        {  // Process all butons just pressed on secondary
+            switch( *it )
+            {
+            case WiiMote::UP:
+                z += 0.5;
+                break;
+            case WiiMote::DOWN:
+                z -= 0.5;
+                break;
+            case WiiMote::LEFT:
+                x += 0.5;
+                break;
+            case WiiMote::RIGHT:
+                x -= 0.5;
+                break;
+            default:
+                break;
+            }
+        }
+        
+        cout << "MOVE:" << endl << ar_TM( MOVE_SPEED * x, 0, MOVE_SPEED * z ) << "MIDEYE:" << endl << ar_ERM( fw.getMidEyeMatrix() ) << endl;
+        if( z != 0 || x != 0 )
+        {
+            
+            sg->getRoot()->setNodeTransform( sg->getRoot()->getNodeTransform() * ar_ETM( ar_ERM( fw.getMidEyeMatrix() ) * ar_TM( MOVE_SPEED * x, 0, MOVE_SPEED * z ) ) );
+        }
+    }
 }
 
 void onPreExchange( arMasterSlaveFramework &fw )
@@ -221,6 +272,7 @@ void onPreExchange( arMasterSlaveFramework &fw )
     //used for scale the world (and possibly other scales later)
     WiiMote::updateTipDistance(primary, secondary);
     scaleWorld();
+    moveWorld( fw );
     
     std::map<WiiMote::button_t, std::list<WiiMote*> > buttonMap;
     WiiMote::ButtonList buttons = secondary.getDownButtons();
@@ -246,7 +298,7 @@ void onPreExchange( arMasterSlaveFramework &fw )
         switch( it->first )
         {
         case WiiMote::HOME:
-            toggleMenu( fw );
+            toggleMenu();
             break;
         case WiiMote::DOWN:
             if( menuOn )
@@ -270,11 +322,11 @@ void onPreExchange( arMasterSlaveFramework &fw )
                 switch( menu->pressedA() )
                 {
                 case REDRAW:
-                    setMenuOff( fw );
-                    setMenuOn( fw );
+                    setMenuOff();
+                    setMenuOn();
                     break;
                 case CLOSE:
-                    setMenuOff( fw );
+                    setMenuOff();
                     break;
                 default:
                     break;
@@ -347,6 +399,9 @@ int main(int argc, char *argv[])
         std::cerr << "Failed to init framework!" << std::endl;
         return -1;
     }
+    
+    framework.setNavTransSpeed( 0 );
+    framework.setNavRotSpeed( 0 );
 	
 	primary.setDrawCallback( &drawRighthand );
 	secondary.setDrawCallback( &drawLefthand );
