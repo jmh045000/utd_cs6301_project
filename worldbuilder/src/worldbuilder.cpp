@@ -252,7 +252,6 @@ void moveWorld( arSZGAppFramework &fw )
             }
         }
         
-        cout << "MOVE:" << endl << ar_TM( MOVE_SPEED * x, 0, MOVE_SPEED * z ) << "MIDEYE:" << endl << ar_ERM( fw.getMidEyeMatrix() ) << endl;
         if( z != 0 || x != 0 )
         {
             
