@@ -295,12 +295,16 @@ void onPreExchange( arMasterSlaveFramework &fw )
             break;
 		case WiiMote::MINUS:
 			cout << "MINUS was pressed" << endl;
-			iSelectMenuObj = 1;
-			SelectedObjects.clear();
+            if( !menuOn )
+            {
+                iSelectMenuObj = 1;
+                SelectedObjects.clear();
+            }
             break;
 		case WiiMote::PLUS:
 			cout << "PLUS was pressed" << endl;
-			iSelectMenuObj = 2;
+            if( !menuOn )
+                iSelectMenuObj = 2;
             break;
         case WiiMote::A:
 			iSelectMenuObj = 0;
@@ -326,7 +330,7 @@ void onPreExchange( arMasterSlaveFramework &fw )
     }
 
     // do ray-casting after menu actions
-    if ( ! menuOn ) {
+    if ( !menuOn ) {
         rightClosest = primary.closestObject(interactableObjects);
         leftClosest = secondary.closestObject(interactableObjects);
     }
