@@ -251,6 +251,8 @@ extern SceneGraph *sg;
 extern WiiMote primary;
 extern WiiMote secondary;
 extern std::list<arInteractable*> interactableObjects;
+//Selected objects
+extern std::list<arInteractable*> SelectedObjects;
 
 // These are all in Menu.cpp, but used in worldbuilder.cpp
 extern MenuNode* initMenu( arSZGAppFramework &fw );

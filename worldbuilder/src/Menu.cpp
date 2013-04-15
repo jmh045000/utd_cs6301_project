@@ -218,15 +218,19 @@ void Item::doAction( arSZGAppFramework *fw )
         {
         case DELETE_TOOL:
             cout << "DELETING object" << endl;
-			if( interactableObjects.size() > 0 )
+			if( SelectedObjects.size() > 0 )
 			{
-				if( Node *n = dynamic_cast<Node*>( interactableObjects.front() ) )
+				while(!SelectedObjects.empty())
 				{
-					if( n != NULL )
+					if( Node *n = dynamic_cast<Node*>( SelectedObjects.front() ) )
 					{
-						interactableObjects.pop_front();
-						sg->removeChild( n ); 
+						if( n != NULL )
+						{
+							SelectedObjects.pop_front();
+							sg->removeChild( n ); 
+						}
 					}
+					SelectedObjects.pop_front();
 				}
 			}
             break;
@@ -234,27 +238,27 @@ void Item::doAction( arSZGAppFramework *fw )
         {
             cout << "GROUPING" << endl;
             
-            for( list<arInteractable*>::iterator it = interactableObjects.begin(); it != interactableObjects.end(); ++it )
+            for( list<arInteractable*>::iterator it = SelectedObjects.begin(); it != SelectedObjects.end(); ++it )
                 if( Node *n = dynamic_cast<Node*>( *it ) )
                 {
                     sg->removeChild( n );
-                    n->setParent( (Node*)interactableObjects.front() );
+                    n->setParent( (Node*)SelectedObjects.front() );
                 }
             
-            sg->addChild( (Node*)interactableObjects.front() );
-            for( list<arInteractable*>::iterator it = interactableObjects.begin(); it != interactableObjects.end(); ++it )
+            sg->addChild( (Node*)SelectedObjects.front() );
+            for( list<arInteractable*>::iterator it = SelectedObjects.begin(); it != SelectedObjects.end(); ++it )
             {
-                if( *it == interactableObjects.front() ) continue;
+                if( *it == SelectedObjects.front() ) continue;
                 if( Node *n = dynamic_cast<Node*>( *it ) )
                 {
-                    sg->addChild( n, (Node*)interactableObjects.front() );
+                    sg->addChild( n, (Node*)SelectedObjects.front() );
                 }
             }
         }
         break;
         case UNGROUP_TOOL:
             cout << "UNGROUP objects" << endl;
-            for( list<arInteractable*>::iterator it = interactableObjects.begin(); it != interactableObjects.end(); ++it )
+            for( list<arInteractable*>::iterator it = SelectedObjects.begin(); it != SelectedObjects.end(); ++it )
             {
                 if( Node *n = dynamic_cast<Node*>( *it ) )
                 {
@@ -271,7 +275,7 @@ void Item::doAction( arSZGAppFramework *fw )
                 delete *it;
             }
             CopyBuffer.clear();
-            for( list<arInteractable*>::iterator it = interactableObjects.begin(); it != interactableObjects.end(); ++it )
+            for( list<arInteractable*>::iterator it = SelectedObjects.begin(); it != SelectedObjects.end(); ++it )
             {
                 if( ObjNode *n = dynamic_cast<ObjNode*>( *it ) )
                 {

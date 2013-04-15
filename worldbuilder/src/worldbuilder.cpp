@@ -67,6 +67,10 @@ bool menuOn = false;
 
 std::list<arInteractable*> interactableObjects;
 
+//Selected objects
+int iSelectMenuObj = 0;
+std::list<arInteractable*> SelectedObjects;
+
 myDragManager myDm;
 
 void drawRighthand( WiiMote &wm )
@@ -238,7 +242,6 @@ void moveWorld( arSZGAppFramework &fw )
 void onPreExchange( arMasterSlaveFramework &fw )
 {
     fw.navUpdate();
-    
     // update the input state (placement matrix & button states) of our effector.
     primary.updateState( fw.getInputState() );
     secondary.updateState( fw.getInputState() );
@@ -290,7 +293,17 @@ void onPreExchange( arMasterSlaveFramework &fw )
             if( menuOn )
                 menu->pressedUp();
             break;
+		case WiiMote::MINUS:
+			cout << "MINUS was pressed" << endl;
+			iSelectMenuObj = 1;
+			SelectedObjects.clear();
+            break;
+		case WiiMote::PLUS:
+			cout << "PLUS was pressed" << endl;
+			iSelectMenuObj = 2;
+            break;
         case WiiMote::A:
+			iSelectMenuObj = 0;
             if( menuOn )
             {
                 switch( menu->pressedA() )
@@ -325,6 +338,40 @@ void onPreExchange( arMasterSlaveFramework &fw )
         {
             primary.requestGrab( rightClosest );
         }
+		else if(((primary.getButton( WiiMote::PLUS )) || (primary.getButton( WiiMote::MINUS ))) && ((iSelectMenuObj == 1) || (iSelectMenuObj == 2)))
+		{
+			bool found = false;
+			std::list<arInteractable*> tempSelectedObjects;
+			while (!SelectedObjects.empty())
+			{
+				if ( SelectedObjects.front() == rightClosest )
+				{
+					cout << "Removing right hand object to selected list" << endl;
+					SelectedObjects.pop_front();
+					found = true;
+					iSelectMenuObj = 0;
+					break;
+				}
+				else
+				{
+					tempSelectedObjects.push_back( SelectedObjects.front() );
+					SelectedObjects.pop_front();
+				}
+			}
+			
+			while (!tempSelectedObjects.empty())
+			{
+				SelectedObjects.push_back( tempSelectedObjects.front() );
+				tempSelectedObjects.pop_front();
+			}
+			
+			if (!found)
+			{
+				cout << "Adding right hand object to selected list" << endl;
+				SelectedObjects.push_back( rightClosest );
+				iSelectMenuObj = 0;
+			}
+		}
     }
     else
         primary.forceUngrab();
@@ -336,6 +383,40 @@ void onPreExchange( arMasterSlaveFramework &fw )
         {
             secondary.requestGrab( leftClosest );
         }
+		else if(((secondary.getButton( WiiMote::PLUS )) || (secondary.getButton( WiiMote::MINUS ))) && ((iSelectMenuObj == 1) || (iSelectMenuObj == 2)))
+		{
+			bool found = false;
+			std::list<arInteractable*> tempSelectedObjects;
+			while (!SelectedObjects.empty())
+			{
+				if ( SelectedObjects.front() == leftClosest )
+				{
+					cout << "Removing left hand object to selected list" << endl;
+					SelectedObjects.pop_front();
+					found = true;
+					iSelectMenuObj = 0;
+					break;
+				}
+				else
+				{
+					tempSelectedObjects.push_back( SelectedObjects.front() );
+					SelectedObjects.pop_front();
+				}
+			}
+			
+			while (!tempSelectedObjects.empty())
+			{
+				SelectedObjects.push_back( tempSelectedObjects.front() );
+				tempSelectedObjects.pop_front();
+			}
+			
+			if (!found)
+			{
+				cout << "Adding left hand object to selected list" << endl;
+				SelectedObjects.push_back( leftClosest );
+				iSelectMenuObj = 0;
+			}
+		}
     }
     else
         secondary.forceUngrab();
