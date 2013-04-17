@@ -69,13 +69,16 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
         arEffector *eff = *(posGrabbers_.begin());
         if( !posGrabbed )
         {
-            origEffPosition = ar_ET( eff->getMatrix() );
+            origEffPosition = ar_ET( eff->getMatrix() ) - ar_ET( currentView );
             posGrabbed = true;
+            rootPosWhenGrabbed = ar_ET( currentView );
         }
         
-        curEffPosition = ar_ET( eff->getMatrix() );
+        curEffPosition = ar_ET( eff->getMatrix() ) - ar_ET( currentView );
         
-        translation = curEffPosition - origEffPosition;
+        
+        translation = ( curEffPosition - origEffPosition );
+        cout << "rootPosWhenGrabbed=" << rootPosWhenGrabbed << endl << "currentView=" << ar_ET( currentView ) << endl << "translation=" << translation << endl;
     }
     else if( rotGrabbers_.size() == 1 )
 	{
@@ -178,20 +181,17 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
                 scaling.v[2] = deltaDistZ;
             }
         }
-        
-
-
 	}
 	else
     {
-        if(  posGrabbed )
+        if( posGrabbed )
         {
             posGrabbed = false;
             nodeTransform = ar_TM( translation ) * nodeTransform;
             translation = arVector3();
             origEffPosition = arVector3();
         }
-		if(  rotGrabbed )
+		if( rotGrabbed )
         {
             rotGrabbed = false;
             nodeTransform = nodeTransform * arEulerAngles( AR_XYZ, rotation ).toMatrix();
@@ -201,13 +201,14 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
         if (scaleGrabbed)
         {
             scaleGrabbed = false;
-            nodeTransform = nodeTransform * ar_SM(scaling); // correct?????
+            nodeTransform = nodeTransform * ar_SM(scaling);
             scaling = arVector3(1.0, 1.0, 1.0);
             originalDistX = 0.0;
             originalDistY = 0.0;
             originalDistZ = 0.0;
         }
     }
+    
     glPushMatrix();
         glMultMatrixf( ( ar_TM( translation ) * nodeTransform * ar_SM(scaling) * arEulerAngles( AR_XYZ, rotation ).toMatrix() ).v );
         

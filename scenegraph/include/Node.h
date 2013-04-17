@@ -50,6 +50,7 @@ private:
     
     std::set<arEffector*> rotGrabbers_, posGrabbers_, scaleGrabbers_;
     arVector3 origEffRotation, origEffPosition, origEffScale;
+    arVector3 rootPosWhenGrabbed;
     arVector3 rotation, translation, scaling;
     float originalDistX, originalDistY, originalDistZ;
     bool rotGrabbed, posGrabbed, scaleGrabbed;
