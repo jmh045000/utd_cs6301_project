@@ -147,7 +147,7 @@ void Node::drawLocalBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
                 arBoundingSphere sphere = o->getBoundingSphere();
                 glPushMatrix();
                     glMultMatrixf( (ar_TM(sphere.position)).v );
-                    glColor3f(1.0, 1.0, 0.0);
+                    selected_ ? glColor3f( 0, 0, 1 ) : glColor3f(1.0, 1.0, 0.0);
                     glutWireSphere(sphere.radius, 16, 16);
                 glPopMatrix();
             }

@@ -298,6 +298,9 @@ void onPreExchange( arMasterSlaveFramework &fw )
             if( !menuOn )
             {
                 iSelectMenuObj = 1;
+				for( std::list<arInteractable*>::iterator it = SelectedObjects.begin(); it != SelectedObjects.end(); ++it )
+					if( Node *n = dynamic_cast<Node*>( *it ) )
+						n->setSelected( false );
                 SelectedObjects.clear();
             }
             break;
@@ -366,6 +369,7 @@ void onPreExchange( arMasterSlaveFramework &fw )
 				if ( SelectedObjects.front() == rightClosest )
 				{
 					cout << "Removing right hand object to selected list" << endl;
+					rightClosest->setSelected( false );
 					SelectedObjects.pop_front();
 					found = true;
 					iSelectMenuObj = 0;
@@ -381,6 +385,8 @@ void onPreExchange( arMasterSlaveFramework &fw )
 			while (!tempSelectedObjects.empty())
 			{
 				SelectedObjects.push_back( tempSelectedObjects.front() );
+				if( Node *n = dynamic_cast<Node*>( tempSelectedObjects.front() ) )
+					n->setSelected( true );
 				tempSelectedObjects.pop_front();
 			}
 			
@@ -388,6 +394,7 @@ void onPreExchange( arMasterSlaveFramework &fw )
 			{
 				cout << "Adding right hand object to selected list" << endl;
 				SelectedObjects.push_back( rightClosest );
+				rightClosest->setSelected( true );
 				iSelectMenuObj = 0;
 			}
 		}
@@ -419,6 +426,7 @@ void onPreExchange( arMasterSlaveFramework &fw )
 				if ( SelectedObjects.front() == leftClosest )
 				{
 					cout << "Removing left hand object to selected list" << endl;
+					leftClosest->setSelected( false );
 					SelectedObjects.pop_front();
 					found = true;
 					iSelectMenuObj = 0;
@@ -434,6 +442,8 @@ void onPreExchange( arMasterSlaveFramework &fw )
 			while (!tempSelectedObjects.empty())
 			{
 				SelectedObjects.push_back( tempSelectedObjects.front() );
+				if( Node *n = dynamic_cast<Node*>( tempSelectedObjects.front() ) )
+					n->setSelected( true );
 				tempSelectedObjects.pop_front();
 			}
 			
@@ -441,6 +451,7 @@ void onPreExchange( arMasterSlaveFramework &fw )
 			{
 				cout << "Adding left hand object to selected list" << endl;
 				SelectedObjects.push_back( leftClosest );
+				leftClosest->setSelected( true );
 				iSelectMenuObj = 0;
 			}
 		}

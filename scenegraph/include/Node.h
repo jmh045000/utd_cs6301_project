@@ -45,6 +45,8 @@ private:
     SoundState soundState_; // What are we doing with current sound?
     
     Node *parentNode_; // This is used to group objects together
+	
+	bool selected_;
     
     std::set<arEffector*> rotGrabbers_, posGrabbers_, scaleGrabbers_;
     arVector3 origEffRotation, origEffPosition, origEffScale;
@@ -85,11 +87,11 @@ protected:
 
 public:
     // *structors
-    Node() : arInteractable(), parentNode_( this ), rotation(), translation(), rotGrabbed( false ), posGrabbed( false ), scaleGrabbed( false ), opengl_callback( NULL ), color( 0, 0, 0 ), highlight( false ), id( ++numObjects_ )
+    Node() : arInteractable(), parentNode_( this ), selected_( false ), rotation(), translation(), rotGrabbed( false ), posGrabbed( false ), scaleGrabbed( false ), opengl_callback( NULL ), color( 0, 0, 0 ), highlight( false ), id( ++numObjects_ )
     {
     }
     
-    Node( arMatrix4 &tm ) : arInteractable(), parentNode_( this ), rotation(), translation(), rotGrabbed( false ), posGrabbed( false ), scaleGrabbed( false ), nodeTransform( tm ), opengl_callback( NULL ), color( 0, 0, 0 ), highlight( false ), id( ++numObjects_ ) {}
+    Node( arMatrix4 &tm ) : arInteractable(), parentNode_( this ), selected_( false ), rotation(), translation(), rotGrabbed( false ), posGrabbed( false ), scaleGrabbed( false ), nodeTransform( tm ), opengl_callback( NULL ), color( 0, 0, 0 ), highlight( false ), id( ++numObjects_ ) {}
     virtual ~Node() {}
     
     // A globally unique id for this node.
@@ -135,6 +137,8 @@ public:
 	void rotGrab( arEffector *g );
 	void scaleGrab( arEffector *g );
     void ungrab( arEffector *g );
+	
+	void setSelected( bool s ) { selected_ = s; }
 };
 
 class RootNode : public Node
