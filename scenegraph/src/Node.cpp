@@ -140,7 +140,7 @@ void Node::drawLocalBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
             dsLoop( soundId_, soundFile, soundState_, loudness, soundPosition );
         }
         
-        if( touched() )
+        if( touched() || selected_ )
         {
             if( ObjNode *o = dynamic_cast<ObjNode*>( this ) )
             {
