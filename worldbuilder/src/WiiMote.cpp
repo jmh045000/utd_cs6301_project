@@ -257,6 +257,7 @@ ObjNode * WiiMote::closestObject(interlist &objects)
     arVector3 origin = ar_ET(_matrix);
     //cout << "direction: " << direction << endl;
     //cout << "origin: " << origin << endl;
+    linePoint = arVector3(0.0,0.0,0.0);
     
     for(interlist::iterator it = objects.begin(); it != objects.end(); ++it)
     {
@@ -288,6 +289,7 @@ ObjNode * WiiMote::closestObject(interlist &objects)
         if(distance < min) {
             min = distance;
             retval = ndptr;
+            linePoint = lp;
         }
         else {
             //cout << "not closest object" << endl;
@@ -296,4 +298,13 @@ ObjNode * WiiMote::closestObject(interlist &objects)
     
     
     return retval;
+}
+
+void WiiMote::drawdot()
+{
+    glPushMatrix();
+        glMultMatrixf( (ar_TM(linePoint)).v );
+        glColor3f(1.0, 0.0, 0.0);
+        glutWireSphere(0.1, 32, 32);
+    glPopMatrix();
 }
