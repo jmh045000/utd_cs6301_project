@@ -46,10 +46,10 @@ private:
     
     Node *parentNode_; // This is used to group objects together
     
-    std::set<arEffector*> grabbers_;
-    arVector3 origEffRotation, origEffPosition;
-    arVector3 rotation, translation;
-    bool grabbed;
+    std::set<arEffector*> rotGrabbers_, posGrabbers_, scaleGrabbers_;
+    arVector3 origEffRotation, origEffPosition, origEffScale;
+    arVector3 rotation, translation, scale;
+    bool rotGrabbed, posGrabbed, scaleGrabbed;
     
     // drawBegin_ is the function that will do the pushing, and multiply by our transform
     virtual void drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale ); // RootNode overrides this, no others should
@@ -85,11 +85,11 @@ protected:
 
 public:
     // *structors
-    Node() : arInteractable(), parentNode_( this ), rotation(), translation(), grabbed( false ), opengl_callback( NULL ), color( 0, 0, 0 ), highlight( false ), id( ++numObjects_ )
+    Node() : arInteractable(), parentNode_( this ), rotation(), translation(), rotGrabbed( false ), posGrabbed( false ), scaleGrabbed( false ), opengl_callback( NULL ), color( 0, 0, 0 ), highlight( false ), id( ++numObjects_ )
     {
     }
     
-    Node( arMatrix4 &tm ) : arInteractable(), parentNode_( this ), rotation(), translation(), grabbed( false ), nodeTransform( tm ), opengl_callback( NULL ), color( 0, 0, 0 ), highlight( false ), id( ++numObjects_ ) {}
+    Node( arMatrix4 &tm ) : arInteractable(), parentNode_( this ), rotation(), translation(), rotGrabbed( false ), posGrabbed( false ), scaleGrabbed( false ), nodeTransform( tm ), opengl_callback( NULL ), color( 0, 0, 0 ), highlight( false ), id( ++numObjects_ ) {}
     virtual ~Node() {}
     
     // A globally unique id for this node.
@@ -111,7 +111,9 @@ public:
     
     void setParent( Node *n ) 
     {
-        grabbers_.clear();
+        posGrabbers_.clear();
+		rotGrabbers_.clear();
+		scaleGrabbers_.clear();
         if( n != this )
         {
             nodeTransform = nodeTransform * n->nodeTransform.inverse();
@@ -129,7 +131,9 @@ public:
     bool getHighlight() { return highlight; }
     arMatrix4 getActualPosition() const { return actualPosition; }
     
-    void grab( arEffector *g );
+    void posGrab( arEffector *g );
+	void rotGrab( arEffector *g );
+	void scaleGrab( arEffector *g );
     void ungrab( arEffector *g );
 };
 

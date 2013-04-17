@@ -14,49 +14,92 @@
 
 uint64_t Node::numObjects_ = 0;
 
-void Node::grab( arEffector *g )
+void Node::posGrab( arEffector *g )
 { 
     if( parentNode_ == this )
-        grabbers_.insert( g );
+        posGrabbers_.insert( g );
     else
-        parentNode_->grab( g );
+        parentNode_->posGrab( g );
 }
+
+void Node::rotGrab( arEffector *g )
+{ 
+    if( parentNode_ == this )
+        rotGrabbers_.insert( g );
+    else
+        parentNode_->rotGrab( g );
+}
+
+void Node::scaleGrab( arEffector *g )
+{
+	if( parentNode_ == this )
+		scaleGrabbers_.insert( g );
+	else
+		parentNode_->scaleGrab( g );
+}
+
 void Node::ungrab( arEffector *g )
 {
     if( parentNode_ == this )
-        grabbers_.erase( g );
+	{
+        posGrabbers_.erase( g );
+		rotGrabbers_.erase( g );
+		scaleGrabbers_.erase( g );
+	}
     else
         parentNode_->ungrab( g );
 }
 
 void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
 {
-    if( grabbers_.size() == 1 )
+    if( posGrabbers_.size() == 1 )
     {
         arVector3 curEffRotation, curEffPosition;
-        arEffector *eff = *(grabbers_.begin());
-        if( !grabbed )
+        arEffector *eff = *(posGrabbers_.begin());
+        if( !posGrabbed )
+        {
+            origEffPosition = ar_ET( eff->getMatrix() );
+            posGrabbed = true;
+        }
+        
+        curEffPosition = ar_ET( eff->getMatrix() );
+        
+        translation = curEffPosition - origEffPosition;
+    }
+    else if( rotGrabbers_.size() == 1 )
+	{
+		arVector3 curEffRotation;
+		
+		arEffector *eff = *(rotGrabbers_.begin());
+        if( !rotGrabbed )
         {
             origEffRotation = ar_ER( eff->getMatrix(), AR_XYZ );
-            origEffPosition = ar_ET( eff->getMatrix() );
-            grabbed = true;
+            rotGrabbed = true;
         }
         
         curEffRotation = ar_ER( eff->getMatrix(), AR_XYZ );
-        curEffPosition = ar_ET( eff->getMatrix() );
         
         rotation = curEffRotation - origEffRotation;
-        translation = curEffPosition - origEffPosition;
-        
-    }
-    else
+	}
+	else if( scaleGrabbers_.size() == 2 )
+	{
+		
+	}
+	else
     {
-        if( grabbed )
+        if(  posGrabbed )
         {
-            grabbed = false;
-            nodeTransform = ar_TM( translation ) * nodeTransform * arEulerAngles( AR_XYZ, rotation ).toMatrix();
-            rotation = translation = arVector3();
+            posGrabbed = false;
+            nodeTransform = ar_TM( translation ) * nodeTransform;
+            translation = arVector3();
             origEffPosition = arVector3();
+        }
+		if(  rotGrabbed )
+        {
+            rotGrabbed = false;
+            nodeTransform = nodeTransform * arEulerAngles( AR_XYZ, rotation ).toMatrix();
+            rotation = arVector3();
+            origEffRotation = arVector3();
         }
     }
         
