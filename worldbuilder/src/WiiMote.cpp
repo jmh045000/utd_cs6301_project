@@ -296,7 +296,8 @@ ObjNode * WiiMote::closestObject(interlist &objects)
         //cout << "line point: " << lp << endl;
 
         // outside sphere...
-        if( vdistance2(lp, sphere.position) > sphere.radius*sphere.radius ) {
+        float radius = sphere.radius * ar_ESM( ndptr->getActualPosition() ).v[0]; // Since the root node is only scaled in all directions, just get one scale coord
+        if( vdistance2(lp, sphere.position) > radius*radius ) {
             //cout << "outside sphere" << endl;
             continue;
         }
