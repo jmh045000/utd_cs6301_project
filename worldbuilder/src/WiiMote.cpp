@@ -58,12 +58,30 @@ void init_driver()
 	connected_ = wiiuse_connect( wiimotes_, found );
 }
 
-bool WiiMote::requestGrab( arInteractable *grabee )
+bool WiiMote::requestPosGrab( arInteractable *grabee )
 {
     bool ret = arEffector::requestGrab( grabee );
     if( ret )
         if( Node *n = dynamic_cast<Node*>( grabee ) )
-            n->grab( this );
+            n->posGrab( this );
+    return ret;
+}
+
+bool WiiMote::requestRotGrab( arInteractable *grabee )
+{
+	bool ret = arEffector::requestGrab( grabee );
+    if( ret )
+        if( Node *n = dynamic_cast<Node*>( grabee ) )
+            n->rotGrab( this );
+    return ret;
+}
+
+bool WiiMote::requestScaleGrab( arInteractable *grabee )
+{
+	bool ret = arEffector::requestGrab( grabee );
+    if( ret )
+        if( Node *n = dynamic_cast<Node*>( grabee ) )
+            n->scaleGrab( this );
     return ret;
 }
 
@@ -248,7 +266,7 @@ ObjNode * WiiMote::closestObject(interlist &objects)
     float min = INFINITY;
     ObjNode *retval = NULL;
     
-    if( getButton( WiiMote::A ) )
+    if( getButton( WiiMote::A ) || getButton( WiiMote::B ) )
         if( arInteractable* inter = const_cast<arInteractable*>( getGrabbedObject() ) )
             if( ObjNode *p = dynamic_cast<ObjNode*>( inter ) )
                 return p;

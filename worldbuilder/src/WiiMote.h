@@ -91,7 +91,9 @@ public:
 	
 	arGrabCondition getGrabCondition(button_t b);
     
-    bool requestGrab( arInteractable *grabee );
+    bool requestPosGrab( arInteractable *grabee );
+	bool requestRotGrab( arInteractable *grabee );
+	bool requestScaleGrab( arInteractable *grabee );
     void requestUngrab( arInteractable *grabee );
 	
 	friend std::ostream& operator<< (std::ostream &out, ButtonList l);

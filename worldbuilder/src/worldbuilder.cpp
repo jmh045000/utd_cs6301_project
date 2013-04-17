@@ -338,10 +338,19 @@ void onPreExchange( arMasterSlaveFramework &fw )
     if( rightClosest )
     {
         rightClosest->touch( primary );
-        if( primary.getButton( WiiMote::A ) )
+		
+		if( primary.getButton( WiiMote::A ) && primary.getButton( WiiMote::B ) )
+		{
+			primary.requestScaleGrab( rightClosest );
+		}
+        else if( primary.getButton( WiiMote::A ) )
         {
-            primary.requestGrab( rightClosest );
+            primary.requestPosGrab( rightClosest );
         }
+		else if( primary.getButton( WiiMote::B ) )
+		{
+			primary.requestRotGrab( rightClosest );
+		}
 		else if(((primary.getButton( WiiMote::PLUS )) || (primary.getButton( WiiMote::MINUS ))) && ((iSelectMenuObj == 1) || (iSelectMenuObj == 2)))
 		{
 			bool found = false;
@@ -383,10 +392,18 @@ void onPreExchange( arMasterSlaveFramework &fw )
     if( leftClosest )
     {
         leftClosest->touch( secondary );
-        if( secondary.getButton( WiiMote::A ) )
+		if( secondary.getButton( WiiMote::A ) && secondary.getButton( WiiMote::B ) )
+		{
+			secondary.requestScaleGrab( leftClosest );
+		}
+        else if( secondary.getButton( WiiMote::A ) )
         {
-            secondary.requestGrab( leftClosest );
+            secondary.requestPosGrab( leftClosest );
         }
+		if( secondary.getButton( WiiMote::B ) )
+		{
+			secondary.requestRotGrab( leftClosest );
+		}
 		else if(((secondary.getButton( WiiMote::PLUS )) || (secondary.getButton( WiiMote::MINUS ))) && ((iSelectMenuObj == 1) || (iSelectMenuObj == 2)))
 		{
 			bool found = false;
