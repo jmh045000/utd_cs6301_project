@@ -337,13 +337,17 @@ void onPreExchange( arMasterSlaveFramework &fw )
             break;
         }
     }
+	
+	// JHJH: problem exists from here
 
     // do ray-casting after menu actions
     if ( !menuOn ) {
-        rightClosest = primary.closestObject(interactableObjects);
+        rightClosest = primary.closestObject(interactableObjects); // I think it's here...
         leftClosest = secondary.closestObject(interactableObjects);
     }
     
+	
+	
     if( rightClosest )
     {
         rightClosest->touch( primary );
@@ -465,6 +469,9 @@ void onPreExchange( arMasterSlaveFramework &fw )
     ar_pollingInteraction( primary, interactableObjects );
     ar_pollingInteraction( secondary, interactableObjects );
     */
+	
+	// JHJH: to here
+	
 }
 
 void doSceneGraph( arMasterSlaveFramework &fw )

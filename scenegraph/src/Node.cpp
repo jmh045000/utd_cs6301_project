@@ -50,11 +50,11 @@ void Node::ungrab( arEffector *g )
         parentNode_->ungrab( g );
 }
 
-inline void WB_abs(float a)
+inline float WB_abs(float a)
 {
     if (a >= 0)
     {
-        return a
+        return a;
     }
     else 
     {
@@ -63,6 +63,7 @@ inline void WB_abs(float a)
 }
 void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
 {
+	cout << id << ": " << "HERE0" << endl;
     if( posGrabbers_.size() == 1 )
     {
         arVector3 curEffRotation, curEffPosition;
@@ -84,7 +85,7 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
 		arEffector *eff = *(rotGrabbers_.begin());
         if( !rotGrabbed )
         {
-            origEffRotriginalion = ar_ER( eff->getMatrix(), AR_XYZ );
+            origEffRotation = ar_ER( eff->getMatrix(), AR_XYZ );
             rotGrabbed = true;
         }
         
@@ -152,8 +153,6 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
                 scaling.v[0] = deltaDistX;
                 scaling.v[1] = 1.0;
                 scaling.v[2] = 1.0;
-
-
             }
             else 
             {
@@ -204,17 +203,20 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
         {
             scaleGrabbed = false;
             nodeTransform = nodeTransform * ar_SM(scaling); // correct?????
-            scaling = arVector3();
+            scaling = arVector3(1.0, 1.0, 1.0);
             originalDistX = 0.0;
             originalDistY = 0.0;
             originalDistZ = 0.0;
         }
     }
-        
+        cout << id << ":" << "HERE1" << endl;
     glPushMatrix();
+		cout << id << ":" <<  "HERE2" << endl;
         glMultMatrixf( ( ar_TM( translation ) * nodeTransform * ar_SM(scaling) * arEulerAngles( AR_XYZ, rotation ).toMatrix() ).v );
         
+		cout << id << ":" <<  "HERE3" << endl;
         currentView = currentView * ar_TM( translation ) * nodeTransform * arEulerAngles( AR_XYZ, rotation ).toMatrix();
+		cout << id << ":" <<  "HERE4" << endl;
         currentScale = currentScale * ar_ESM( nodeTransform );
         actualPosition = currentView;
 }
