@@ -78,7 +78,11 @@ bool WiiMote::requestRotGrab( arInteractable *grabee )
 
 bool WiiMote::requestScaleGrab( arInteractable *grabee )
 {
-	return false;
+	bool ret = arEffector::requestGrab( grabee );
+    if( ret )
+        if( Node *n = dynamic_cast<Node*>( grabee ) )
+            n->scaleGrab( this );
+    return ret;
 }
 
 void WiiMote::requestUngrab( arInteractable *grabee )
