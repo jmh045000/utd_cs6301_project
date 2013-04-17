@@ -104,7 +104,7 @@ public:
     static float lastTipDistance;
     static void updateTipDistance(WiiMote &primary, WiiMote &secondary);
 
-	//! \brief Extracts direction vector based on _matrix
+    //! \brief Extracts direction vector based on _matrix
     arVector3 extractDirection();
     arRay ray();
 
