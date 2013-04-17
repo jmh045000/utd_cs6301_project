@@ -75,7 +75,8 @@ public:
 
 	//! \brief Draws the wiimote's effector object
 	//! \remark This function will only work once setDrawCallback is called with a draw_cb function pointer
-	void draw() { if(draw_) draw_(*this); }
+	void draw() { if(draw_) draw_(*this); drawdot(); }
+    void drawdot();
 	
 	void rumble(int on_off);
 
@@ -103,9 +104,15 @@ public:
     static float lastTipDistance;
     static void updateTipDistance(WiiMote &primary, WiiMote &secondary);
 
-	//! \brief Extracts direction vector based on _matrix
+    //! \brief Extracts direction vector based on _matrix
     arVector3 extractDirection();
     arRay ray();
+
+    //! \brief Point on ray closest to an object
+    bool selecting;
+    bool laserOn;
+    void toggleLightSaber() { if(laserOn) laserOn=false; else laserOn=true; }
+    arVector3 linePoint;
 
 	//! \brief uses ray casting to find closes object
     ObjNode *closestObject(interlist &objects);

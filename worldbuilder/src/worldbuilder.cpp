@@ -256,7 +256,7 @@ void onPreExchange( arMasterSlaveFramework &fw )
     for( WiiMote::ButtonList::iterator it = buttons.begin(); it != buttons.end(); ++it )
     {  // Process all butons just pressed on secondary
         if( buttonMap.find( *it ) == buttonMap.end() )
-            buttonMap.insert( std::make_pair( *it, std::list<WiiMote*>( 2, &secondary ) ) );
+            buttonMap.insert( std::make_pair( *it, std::list<WiiMote*>( 1, &secondary ) ) );
         else
             buttonMap[*it].push_back( &secondary );
     }
@@ -265,7 +265,7 @@ void onPreExchange( arMasterSlaveFramework &fw )
     for( WiiMote::ButtonList::iterator it = buttons.begin(); it != buttons.end(); ++it )
     {   // Process all butons just pressed on primary
         if( buttonMap.find( *it ) == buttonMap.end() )
-            buttonMap.insert( std::make_pair( *it, std::list<WiiMote*>( 2, &primary ) ) );
+            buttonMap.insert( std::make_pair( *it, std::list<WiiMote*>( 1, &primary ) ) );
         else
             buttonMap[*it].push_back( &primary );
     }
@@ -322,6 +322,12 @@ void onPreExchange( arMasterSlaveFramework &fw )
                 default:
                     break;
                 }
+            }
+            break;
+        case WiiMote::ONE:
+            for(std::list<WiiMote*>::iterator itt = it->second.begin(); itt != it->second.end(); ++itt)
+            {
+                (*itt)->toggleLightSaber();
             }
             break;
         default:
