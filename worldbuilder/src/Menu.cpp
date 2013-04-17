@@ -201,7 +201,6 @@ void Item::doAction( arSZGAppFramework *fw )
         
         sg->addChild( obj );
         interactableObjects.push_back( obj );
-		cout << obj->id << ":JH3" << endl;
     }
     else if( type == TEXTURE )
     {

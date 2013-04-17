@@ -71,14 +71,10 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
         {
             origEffPosition = ar_ET( eff->getMatrix() ) - ar_ET( currentView );
             posGrabbed = true;
-            rootPosWhenGrabbed = ar_ET( currentView );
         }
         
         curEffPosition = ar_ET( eff->getMatrix() ) - ar_ET( currentView );
-        
-        
         translation = ( curEffPosition - origEffPosition );
-        cout << "rootPosWhenGrabbed=" << rootPosWhenGrabbed << endl << "currentView=" << ar_ET( currentView ) << endl << "translation=" << translation << endl;
     }
     else if( rotGrabbers_.size() == 1 )
 	{
