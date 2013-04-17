@@ -107,6 +107,7 @@ public:
     arRay ray();
 
     //! \brief Point on ray closest to an object
+    bool selecting;
     arVector3 linePoint;
 
 	//! \brief uses ray casting to find closes object

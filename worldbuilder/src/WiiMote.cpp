@@ -257,7 +257,8 @@ ObjNode * WiiMote::closestObject(interlist &objects)
     arVector3 origin = ar_ET(_matrix);
     //cout << "direction: " << direction << endl;
     //cout << "origin: " << origin << endl;
-    linePoint = arVector3(0.0,0.0,0.0);
+
+    selecting = false;
     
     for(interlist::iterator it = objects.begin(); it != objects.end(); ++it)
     {
@@ -290,6 +291,7 @@ ObjNode * WiiMote::closestObject(interlist &objects)
             min = distance;
             retval = ndptr;
             linePoint = lp;
+            selecting = true;
         }
         else {
             //cout << "not closest object" << endl;
@@ -302,9 +304,36 @@ ObjNode * WiiMote::closestObject(interlist &objects)
 
 void WiiMote::drawdot()
 {
-    glPushMatrix();
-        glMultMatrixf( (ar_TM(linePoint)).v );
-        glColor3f(1.0, 0.0, 0.0);
-        glutWireSphere(0.1, 32, 32);
-    glPopMatrix();
+    if(selecting) 
+    {
+        glPushMatrix();
+            glMultMatrixf( (ar_TM(linePoint)).v );
+            glColor3f(1.0, 0.0, 0.0);
+            glutWireSphere(0.1, 32, 32);
+        glPopMatrix();
+        glPushMatrix();
+            glLineWidth(2.5); 
+            glColor3f(1.0, 0.0, 0.0);
+            glBegin(GL_LINES);
+            arVector3 o = ar_ET(_matrix);
+            glVertex3f( o[0], o[1], o[2] );
+            glVertex3f( linePoint[0], linePoint[1], linePoint[2] );
+            glEnd();
+        glPopMatrix();
+    }
+    else
+    {
+        arMatrix4 m1 = _matrix * ar_translationMatrix( 0, 0, -10000);
+        arVector3 o1 = ar_ET(m1);
+        arVector3 o2 = ar_ET(_matrix);
+        glPushMatrix();
+            glLineWidth(2.5); 
+            glColor3f(1.0, 0.0, 0.0);
+            glBegin(GL_LINES);
+            glVertex3f( o1[0], o1[1], o1[2] );
+            glVertex3f( o2[0], o2[1], o2[2] );
+            glEnd();
+        glPopMatrix();
+
+    }
 }
