@@ -90,12 +90,10 @@ public:
     // *structors
     Node() : arInteractable(), parentNode_( this ), selected_( false ), rotation(), translation(), scaling(1, 1, 1), rotGrabbed( false ), posGrabbed( false ), scaleGrabbed( false ), opengl_callback( NULL ), color( 0, 0, 0 ), highlight( false ), id( ++numObjects_ )
     {
-		cout << id << ":JH1" << endl;
     }
     
     Node( arMatrix4 &tm ) : arInteractable(), parentNode_( this ), selected_( false ), rotation(), translation(), scaling(1, 1, 1), rotGrabbed( false ), posGrabbed( false ), scaleGrabbed( false ), nodeTransform( tm ), opengl_callback( NULL ), color( 0, 0, 0 ), highlight( false ), id( ++numObjects_ ) 
 	{
-		cout << id << ":JH2" << endl;
 	}
     virtual ~Node() {}
     

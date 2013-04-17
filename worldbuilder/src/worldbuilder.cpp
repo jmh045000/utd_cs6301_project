@@ -345,8 +345,6 @@ void onPreExchange( arMasterSlaveFramework &fw )
         rightClosest = primary.closestObject(interactableObjects); // I think it's here...
         leftClosest = secondary.closestObject(interactableObjects);
     }
-    
-	
 	
     if( rightClosest )
     {
