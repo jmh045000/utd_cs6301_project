@@ -226,7 +226,6 @@ void Item::doAction( arSZGAppFramework *fw )
 					{
 						if( n != NULL )
 						{
-							SelectedObjects.pop_front();
 							sg->removeChild( n ); 
 						}
 					}
