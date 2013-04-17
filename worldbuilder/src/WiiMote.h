@@ -110,6 +110,8 @@ public:
 
     //! \brief Point on ray closest to an object
     bool selecting;
+    bool laserOn;
+    void toggleLightSaber() { if(laserOn) laserOn=false; else laserOn=true; }
     arVector3 linePoint;
 
 	//! \brief uses ray casting to find closes object
