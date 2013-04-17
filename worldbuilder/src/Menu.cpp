@@ -204,13 +204,16 @@ void Item::doAction( arSZGAppFramework *fw )
     }
     else if( type == TEXTURE )
     {
-        if( ObjNode *obj = dynamic_cast<ObjNode*>( interactableObjects.front() ) )
-        {
-            arTexture *t = new arTexture();
-            t->readJPEG( filename, "", path );
-            for( int i = 0; i < obj->numTextures(); ++i )
-                obj->setTexture( i, t );
-        }
+		for( std::list<arInteractable*>::iterator it = SelectedObjects.begin(); it != SelectedObjects.end(); ++it )
+		{
+			if( ObjNode *obj = dynamic_cast<ObjNode*>( *it ) )
+			{
+				arTexture *t = new arTexture();
+				t->readJPEG( filename, "", path );
+				for( int i = 0; i < obj->numTextures(); ++i )
+					obj->setTexture( i, t );
+			}
+		}
     }
     else if( type == TOOL )
     {
