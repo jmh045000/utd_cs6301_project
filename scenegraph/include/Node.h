@@ -50,7 +50,8 @@ private:
     
     std::set<arEffector*> rotGrabbers_, posGrabbers_, scaleGrabbers_;
     arVector3 origEffRotation, origEffPosition, origEffScale;
-    arVector3 rotation, translation, scale;
+    arVector3 rotation, translation, scaling;
+    float originalDistX, originalDistY, originalDistZ;
     bool rotGrabbed, posGrabbed, scaleGrabbed;
     
     // drawBegin_ is the function that will do the pushing, and multiply by our transform
@@ -87,11 +88,13 @@ protected:
 
 public:
     // *structors
-    Node() : arInteractable(), parentNode_( this ), selected_( false ), rotation(), translation(), rotGrabbed( false ), posGrabbed( false ), scaleGrabbed( false ), opengl_callback( NULL ), color( 0, 0, 0 ), highlight( false ), id( ++numObjects_ )
+    Node() : arInteractable(), parentNode_( this ), selected_( false ), rotation(), translation(), scaling(1, 1, 1), rotGrabbed( false ), posGrabbed( false ), scaleGrabbed( false ), opengl_callback( NULL ), color( 0, 0, 0 ), highlight( false ), id( ++numObjects_ )
     {
     }
     
-    Node( arMatrix4 &tm ) : arInteractable(), parentNode_( this ), selected_( false ), rotation(), translation(), rotGrabbed( false ), posGrabbed( false ), scaleGrabbed( false ), nodeTransform( tm ), opengl_callback( NULL ), color( 0, 0, 0 ), highlight( false ), id( ++numObjects_ ) {}
+    Node( arMatrix4 &tm ) : arInteractable(), parentNode_( this ), selected_( false ), rotation(), translation(), scaling(1, 1, 1), rotGrabbed( false ), posGrabbed( false ), scaleGrabbed( false ), nodeTransform( tm ), opengl_callback( NULL ), color( 0, 0, 0 ), highlight( false ), id( ++numObjects_ ) 
+	{
+	}
     virtual ~Node() {}
     
     // A globally unique id for this node.

@@ -240,20 +240,23 @@ void Item::doAction( arSZGAppFramework *fw )
         {
             cout << "GROUPING" << endl;
             
-            for( list<arInteractable*>::iterator it = SelectedObjects.begin(); it != SelectedObjects.end(); ++it )
-                if( Node *n = dynamic_cast<Node*>( *it ) )
-                {
-                    sg->removeChild( n );
-                    n->setParent( (Node*)SelectedObjects.front() );
-                }
-            
-            sg->addChild( (Node*)SelectedObjects.front() );
-            for( list<arInteractable*>::iterator it = SelectedObjects.begin(); it != SelectedObjects.end(); ++it )
+            if( !SelectedObjects.empty() )
             {
-                if( *it == SelectedObjects.front() ) continue;
-                if( Node *n = dynamic_cast<Node*>( *it ) )
+                for( list<arInteractable*>::iterator it = SelectedObjects.begin(); it != SelectedObjects.end(); ++it )
+                    if( Node *n = dynamic_cast<Node*>( *it ) )
+                    {
+                        sg->removeChild( n );
+                        n->setParent( (Node*)SelectedObjects.front() );
+                    }
+                
+                sg->addChild( (Node*)SelectedObjects.front() );
+                for( list<arInteractable*>::iterator it = SelectedObjects.begin(); it != SelectedObjects.end(); ++it )
                 {
-                    sg->addChild( n, (Node*)SelectedObjects.front() );
+                    if( *it == SelectedObjects.front() ) continue;
+                    if( Node *n = dynamic_cast<Node*>( *it ) )
+                    {
+                        sg->addChild( n, (Node*)SelectedObjects.front() );
+                    }
                 }
             }
         }

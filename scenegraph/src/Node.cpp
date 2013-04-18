@@ -50,6 +50,17 @@ void Node::ungrab( arEffector *g )
         parentNode_->ungrab( g );
 }
 
+inline float WB_abs(float a)
+{
+    if (a >= 0)
+    {
+        return a;
+    }
+    else 
+    {
+        return -a;
+    }
+}
 void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
 {
     if( posGrabbers_.size() == 1 )
@@ -58,13 +69,12 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
         arEffector *eff = *(posGrabbers_.begin());
         if( !posGrabbed )
         {
-            origEffPosition = ar_ET( eff->getMatrix() );
+            origEffPosition = ar_ET( eff->getMatrix() ) - ar_ET( currentView );
             posGrabbed = true;
         }
         
-        curEffPosition = ar_ET( eff->getMatrix() );
-        
-        translation = curEffPosition - origEffPosition;
+        curEffPosition = ar_ET( eff->getMatrix() ) - ar_ET( currentView );
+        translation = ( curEffPosition - origEffPosition );
     }
     else if( rotGrabbers_.size() == 1 )
 	{
@@ -83,28 +93,120 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
 	}
 	else if( scaleGrabbers_.size() == 2 )
 	{
-		
+		arEffector *eff1 = *(scaleGrabbers_.begin()); // get the first effector in the set
+        arEffector *eff2 = *(scaleGrabbers_.begin()++); // get the second effector in the set
+
+        arVector3 eff1Vect;
+        arVector3 eff2Vect;
+        float eff1x, eff1y, eff1z, eff2x, eff2y, eff2z;
+
+        float newDistX, newDistY, newDistZ;      
+        float deltaDistX, deltaDistY, deltaDistZ;
+
+        eff1Vect = ar_ET( eff1->getMatrix());
+
+        eff1x = eff1Vect.v[0];
+        eff1y = eff1Vect.v[1];
+        eff1z = eff1Vect.v[2];
+
+        eff2Vect = ar_ET(eff2->getMatrix());
+
+        eff2x = eff2Vect.v[0];
+        eff2y = eff2Vect.v[1];
+        eff2z = eff2Vect.v[2];
+
+        
+
+        if (!scaleGrabbed)
+        {
+
+            // Original distance along x is dot product of effector to effector vector with x axis vector
+            originalDistX = WB_abs(eff1x - eff2x); // absolute distance on x axis
+            originalDistY = WB_abs(eff1y - eff2y);
+            originalDistZ = WB_abs(eff1z - eff2z);
+
+            scaleGrabbed = true;
+
+        }
+        newDistX = WB_abs(eff1x - eff2x); // absolute distance on x axis
+        newDistY = WB_abs(eff1y - eff2y);
+        newDistZ = WB_abs(eff1z - eff2z);
+
+        /*
+        Find which axis has maximum change of distance between the effectors
+        and scale along that axis
+        */
+
+        deltaDistX = newDistX - originalDistX;
+        deltaDistY = newDistY - originalDistY;
+        deltaDistZ = newDistZ - originalDistZ;
+
+        //float bufferVal = 0.005; // buffer value above which the object is scaled
+
+        if (deltaDistX >= deltaDistY)
+        {
+            if (deltaDistX >= deltaDistZ)
+            {
+                // delta X is greatest
+                scaling.v[0] = deltaDistX;
+                scaling.v[1] = 1.0;
+                scaling.v[2] = 1.0;
+            }
+            else 
+            {
+                // delta Z is greatest
+                scaling.v[0] = 1.0;
+                scaling.v[1] = 1.0;
+                scaling.v[2] = deltaDistZ;
+            }
+        }
+        else 
+        {
+            if (deltaDistY >= deltaDistZ)
+            {
+                // delta Y is greatest
+                scaling.v[0] = 1.0;
+                scaling.v[1] = deltaDistY;
+                scaling.v[2] = 1.0;
+            }
+            else 
+            {
+                // delta Z is greatest
+                scaling.v[0] = 1.0;
+                scaling.v[1] = 1.0;
+                scaling.v[2] = deltaDistZ;
+            }
+        }
 	}
 	else
     {
-        if(  posGrabbed )
+        if( posGrabbed )
         {
             posGrabbed = false;
             nodeTransform = ar_TM( translation ) * nodeTransform;
             translation = arVector3();
             origEffPosition = arVector3();
         }
-		if(  rotGrabbed )
+		if( rotGrabbed )
         {
             rotGrabbed = false;
             nodeTransform = nodeTransform * arEulerAngles( AR_XYZ, rotation ).toMatrix();
             rotation = arVector3();
             origEffRotation = arVector3();
         }
+        if (scaleGrabbed)
+        {
+            scaleGrabbed = false;
+            nodeTransform = nodeTransform * ar_SM(scaling);
+            scaling = arVector3(1.0, 1.0, 1.0);
+            originalDistX = 0.0;
+            originalDistY = 0.0;
+            originalDistZ = 0.0;
+        }
     }
-        
+    
     glPushMatrix();
-        glMultMatrixf( ( ar_TM( translation ) * nodeTransform * arEulerAngles( AR_XYZ, rotation ).toMatrix() ).v );
+        glMultMatrixf( ( ar_TM( translation ) * nodeTransform * ar_SM(scaling) * arEulerAngles( AR_XYZ, rotation ).toMatrix() ).v );
         
         currentView = currentView * ar_TM( translation ) * nodeTransform * arEulerAngles( AR_XYZ, rotation ).toMatrix();
         currentScale = currentScale * ar_ESM( nodeTransform );

@@ -337,13 +337,13 @@ void onPreExchange( arMasterSlaveFramework &fw )
             break;
         }
     }
-
+	
     // do ray-casting after menu actions
     if ( !menuOn ) {
         rightClosest = primary.closestObject(interactableObjects);
         leftClosest = secondary.closestObject(interactableObjects);
     }
-    
+	
     if( rightClosest )
     {
         rightClosest->touch( primary );
@@ -458,22 +458,18 @@ void onPreExchange( arMasterSlaveFramework &fw )
     }
     else
         secondary.forceUngrab();
-    
-    // Handle any interaction with the square (see interaction/arInteractionUtilities.h).
-    // Any grabbing/dragging happens in here.
-    /*
-    ar_pollingInteraction( primary, interactableObjects );
-    ar_pollingInteraction( secondary, interactableObjects );
-    */
+	
 }
 
 void doSceneGraph( arMasterSlaveFramework &fw )
 {
+    static int loops = 0;
+    static ar_timeval starttime = ar_time();
     static ar_timeval lastdrawtime = ar_time();
     ar_timeval now = ar_time();
-    int curtime = ( now.sec * 1000000 ) + now.usec, lasttime = ( lastdrawtime.sec * 1000000 ) + lastdrawtime.usec;
-    int sleeptime = 5000 - ( curtime - lasttime );
-    ar_usleep( max( sleeptime, 1 ) );
+    long long curtime = ( now.sec * 1000000 ) + now.usec, lasttime = ( lastdrawtime.sec * 1000000 ) + lastdrawtime.usec;
+    long long sleeptime = 5000 - ( curtime - lasttime );
+    ar_usleep( max( (int)sleeptime, 1 ) );
     
     fw.loadNavMatrix();
     glClearColor( 0, 0.749, 1, 0 );
@@ -484,6 +480,13 @@ void doSceneGraph( arMasterSlaveFramework &fw )
         drawMenu( menu, fw );
     
     lastdrawtime = ar_time();
+    loops++;
+    if( lastdrawtime.sec > starttime.sec )
+    {
+        cout << "fps=" << loops << endl;
+        starttime = lastdrawtime;
+        loops = 0;
+    }
 }
 
 
