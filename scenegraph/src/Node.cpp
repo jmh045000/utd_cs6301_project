@@ -141,23 +141,36 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
         deltaDistY = newDistY - originalDistY;
         deltaDistZ = newDistZ - originalDistZ;
 
-        //float bufferVal = 0.005; // buffer value above which the object is scaled
+        float bufferVal = 0.005; // buffer value above which the object is scaled
+
+
 
         if (deltaDistX >= deltaDistY)
         {
             if (deltaDistX >= deltaDistZ)
             {
                 // delta X is greatest
-                scaling.v[0] = deltaDistX;
-                scaling.v[1] = 1.0;
-                scaling.v[2] = 1.0;
+
+                // Change scale only if deltaDistX > bufferVal
+
+                if (deltaDistX > bufferVal)
+                {
+                    scaling.v[0] = deltaDistX;
+                    scaling.v[1] = 1.0;
+                    scaling.v[2] = 1.0;
+                }
+                
             }
             else 
             {
                 // delta Z is greatest
-                scaling.v[0] = 1.0;
-                scaling.v[1] = 1.0;
-                scaling.v[2] = deltaDistZ;
+                if (deltaDistZ > bufferVal)
+                {
+                    scaling.v[0] = 1.0;
+                    scaling.v[1] = 1.0;
+                    scaling.v[2] = deltaDistZ; 
+                }
+                
             }
         }
         else 
@@ -165,16 +178,23 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
             if (deltaDistY >= deltaDistZ)
             {
                 // delta Y is greatest
-                scaling.v[0] = 1.0;
-                scaling.v[1] = deltaDistY;
-                scaling.v[2] = 1.0;
+                if (deltaDistY > bufferVal)
+                {
+                    scaling.v[0] = 1.0;
+                    scaling.v[1] = deltaDistY;
+                    scaling.v[2] = 1.0;
+                }
             }
             else 
             {
                 // delta Z is greatest
-                scaling.v[0] = 1.0;
-                scaling.v[1] = 1.0;
-                scaling.v[2] = deltaDistZ;
+                if (deltaDistZ > bufferVal)
+                {
+                    scaling.v[0] = 1.0;
+                    scaling.v[1] = 1.0;
+                    scaling.v[2] = deltaDistZ;
+                }
+                
             }
         }
 	}
