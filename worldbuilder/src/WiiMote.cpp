@@ -270,8 +270,11 @@ ObjNode * WiiMote::closestObject(interlist &objects)
     
     if( getButton( WiiMote::A ) || getButton( WiiMote::B ) )
         if( arInteractable* inter = const_cast<arInteractable*>( getGrabbedObject() ) )
-            if( ObjNode *p = dynamic_cast<ObjNode*>( inter ) )
+            if( ObjNode *p = dynamic_cast<ObjNode*>( inter ) ) {
+                linePoint = ar_ET( p->getActualPosition() );
+                selecting = true;
                 return p;
+            }
             
     arVector3 direction = extractDirection().normalize();
     arVector3 origin = ar_ET(_matrix);
