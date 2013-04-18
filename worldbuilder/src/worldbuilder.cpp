@@ -468,7 +468,7 @@ void doSceneGraph( arMasterSlaveFramework &fw )
     static ar_timeval lastdrawtime = ar_time();
     ar_timeval now = ar_time();
     long long curtime = ( now.sec * 1000000 ) + now.usec, lasttime = ( lastdrawtime.sec * 1000000 ) + lastdrawtime.usec;
-    long long sleeptime = 5000 - ( curtime - lasttime );
+    long long sleeptime = 2000 - ( curtime - lasttime );
     ar_usleep( max( (int)sleeptime, 1 ) );
     
     fw.loadNavMatrix();

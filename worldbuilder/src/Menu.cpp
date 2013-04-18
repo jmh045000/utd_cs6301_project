@@ -100,7 +100,10 @@ Item::Item( ItemType t, ToolType t2, bool selected ) : MenuItem( selected ), typ
         case PASTE_TOOL:
             name = "PASTE";
             break;
-        default: break;
+		case SCALE_ZERO_TOOL:
+			name = "RESET SCALE";
+			break;
+        default: name = "UNKNOWN"; break;
     }
 }
 
@@ -298,6 +301,10 @@ void Item::doAction( arSZGAppFramework *fw )
             }
             CopyBuffer.clear();
             break;
+		case SCALE_ZERO_TOOL:
+			cout << "SCALE_ZERO" << endl;
+			sg->getRoot()->setNodeScale( ar_SM( 1, 1, 1 ) );
+			break;
         default: break;
         }
     }
@@ -555,6 +562,7 @@ MenuNode* initMenu( arSZGAppFramework &fw )
         tools.push_back( new Item( Item::TOOL, Item::UNGROUP_TOOL ) );
 		tools.push_back( new Item( Item::TOOL, Item::COPY_TOOL ) );
 		tools.push_back( new Item( Item::TOOL, Item::PASTE_TOOL ) );
+		tools.push_back( new Item( Item::TOOL, Item::SCALE_ZERO_TOOL ) );
 		menu->setTools( tools );
 		
         menu->items = menu->objects;

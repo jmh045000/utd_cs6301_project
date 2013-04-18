@@ -338,7 +338,6 @@ void WiiMote::drawdot()
                 glutWireSphere(0.1, 32, 32);
             glPopMatrix();
             glPushMatrix();
-                glLineWidth(2.5); 
                 glColor3f(1.0, 0.0, 0.0);
                 glBegin(GL_LINES);
                 arVector3 o = ar_ET(_matrix);
@@ -353,7 +352,6 @@ void WiiMote::drawdot()
             arVector3 o1 = ar_ET(m1);
             arVector3 o2 = ar_ET(_matrix);
             glPushMatrix();
-                glLineWidth(2.5); 
                 glColor3f(1.0, 0.0, 0.0);
                 glBegin(GL_LINES);
                 glVertex3f( o1[0], o1[1], o1[2] );

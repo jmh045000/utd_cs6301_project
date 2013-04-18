@@ -42,7 +42,7 @@ class Item : public MenuItem
 {
 public:
     typedef enum { OBJECT, TEXTURE, TOOL, MAX_ITEM_TYPES } ItemType;
-	typedef enum { DELETE_TOOL, GROUP_TOOL, UNGROUP_TOOL, COPY_TOOL, PASTE_TOOL, MAX_TOOL_TYPES } ToolType;
+	typedef enum { DELETE_TOOL, GROUP_TOOL, UNGROUP_TOOL, COPY_TOOL, PASTE_TOOL, SCALE_ZERO_TOOL, MAX_TOOL_TYPES } ToolType;
 private:
     std::string filename;
     std::string path;
@@ -146,6 +146,7 @@ typedef struct _ItemGroup_s : public MenuGroup_t
     {
         int _ = 0;
         Item *i = NULL;
+		cout << "ItemGroup operator++" << endl;
         switch( cur )
         {
         case 0:
