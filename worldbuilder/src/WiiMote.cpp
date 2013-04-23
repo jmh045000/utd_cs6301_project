@@ -335,7 +335,7 @@ void WiiMote::drawdot()
             glPushMatrix();
                 glMultMatrixf( (ar_TM(linePoint)).v );
                 glColor3f(1.0, 0.0, 0.0);
-                glutWireSphere(0.1, 32, 32);
+                glutSolidSphere(0.1, 16, 16);
             glPopMatrix();
             glPushMatrix();
                 glColor3f(1.0, 0.0, 0.0);
