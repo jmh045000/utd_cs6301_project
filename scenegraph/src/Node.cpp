@@ -79,15 +79,18 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
     else if( rotGrabbers_.size() == 1 )
 	{
 		arVector3 curEffRotation;
+		arVector3 origObjRotation;
 		
 		arEffector *eff = *(rotGrabbers_.begin());
         if( !rotGrabbed )
         {
-            origEffRotation = ar_ER( eff->getMatrix(), AR_XYZ );
+			origObjRotation = ar_ER( nodeTransform, AR_XYZ );
+            origEffRotation = ar_ER( eff->getMatrix(), AR_XYZ ) - origObjRotation;
+			nodeTransform = nodeTransform * arEulerAngles( AR_XYZ, origObjRotation ).toMatrix().inverse();
             rotGrabbed = true;
         }
         
-        curEffRotation = ar_ER( eff->getMatrix(), AR_XYZ );
+        curEffRotation = ar_ER( eff->getMatrix(), AR_XYZ ) ;
         
         rotation = curEffRotation - origEffRotation;
 	}

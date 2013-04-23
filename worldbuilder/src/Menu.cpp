@@ -305,7 +305,7 @@ void Item::doAction( arSZGAppFramework *fw )
 			cout << "SCALE_ZERO" << endl;
 			sg->getRoot()->setNodeScale( ar_SM( 1, 1, 1 ) );
 			break;
-        default: break;
+        default: cout << "I don't even know..." << endl; break;
         }
     }
 }
