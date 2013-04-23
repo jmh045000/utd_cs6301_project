@@ -270,8 +270,11 @@ ObjNode * WiiMote::closestObject(interlist &objects)
     
     if( getButton( WiiMote::A ) || getButton( WiiMote::B ) )
         if( arInteractable* inter = const_cast<arInteractable*>( getGrabbedObject() ) )
-            if( ObjNode *p = dynamic_cast<ObjNode*>( inter ) )
+            if( ObjNode *p = dynamic_cast<ObjNode*>( inter ) ) {
+                linePoint = ar_ET( p->getActualPosition() );
+                selecting = true;
                 return p;
+            }
             
     arVector3 direction = extractDirection().normalize();
     arVector3 origin = ar_ET(_matrix);
@@ -332,10 +335,9 @@ void WiiMote::drawdot()
             glPushMatrix();
                 glMultMatrixf( (ar_TM(linePoint)).v );
                 glColor3f(1.0, 0.0, 0.0);
-                glutWireSphere(0.1, 32, 32);
+                glutSolidSphere(0.1, 16, 16);
             glPopMatrix();
             glPushMatrix();
-                glLineWidth(2.5); 
                 glColor3f(1.0, 0.0, 0.0);
                 glBegin(GL_LINES);
                 arVector3 o = ar_ET(_matrix);
@@ -350,7 +352,6 @@ void WiiMote::drawdot()
             arVector3 o1 = ar_ET(m1);
             arVector3 o2 = ar_ET(_matrix);
             glPushMatrix();
-                glLineWidth(2.5); 
                 glColor3f(1.0, 0.0, 0.0);
                 glBegin(GL_LINES);
                 glVertex3f( o1[0], o1[1], o1[2] );
