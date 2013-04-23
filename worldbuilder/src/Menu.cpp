@@ -232,6 +232,7 @@ void Item::doAction( arSZGAppFramework *fw )
 					{
 						if( n != NULL )
 						{
+							interactableObjects.remove( n );
 							sg->removeChild( n ); 
 						}
 					}
