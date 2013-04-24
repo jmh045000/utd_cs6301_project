@@ -94,7 +94,7 @@ public:
     bool requestPosGrab( arInteractable *grabee );
 	bool requestRotGrab( arInteractable *grabee );
 	bool requestScaleGrab( arInteractable *grabee );
-    void requestUngrab( arInteractable *grabee );
+    void requestUngrab( const arInteractable *grabee );
 	
 	friend std::ostream& operator<< (std::ostream &out, ButtonList l);
 	friend std::ostream& operator<< (std::ostream &out, button_t b);

@@ -269,6 +269,36 @@ void onPreExchange( arMasterSlaveFramework &fw )
         else
             buttonMap[*it].push_back( &primary );
     }
+	
+	buttons = primary.getUpButtons();
+	for( WiiMote::ButtonList::iterator it = buttons.begin(); it != buttons.end(); ++it )
+	{
+		switch( *it )
+		{
+		case WiiMote::A:
+		case WiiMote::B:
+			if( primary.getGrabbedObject() )
+				primary.requestUngrab( primary.getGrabbedObject() );
+			break;
+		default:
+			break;
+		}
+	}
+	
+	buttons = secondary.getUpButtons();
+	for( WiiMote::ButtonList::iterator it = buttons.begin(); it != buttons.end(); ++it )
+	{
+		switch( *it )
+		{
+		case WiiMote::A:
+		case WiiMote::B:
+			if( secondary.getGrabbedObject() )
+				secondary.requestUngrab( secondary.getGrabbedObject() );
+			break;
+		default:
+			break;
+		}
+	}
     
     for( std::map<WiiMote::button_t, std::list<WiiMote*> >::iterator it = buttonMap.begin(); it != buttonMap.end(); ++it )
     {
@@ -399,8 +429,6 @@ void onPreExchange( arMasterSlaveFramework &fw )
 			}
 		}
     }
-    else
-        primary.forceUngrab();
         
     if( leftClosest )
     {
@@ -456,8 +484,6 @@ void onPreExchange( arMasterSlaveFramework &fw )
 			}
 		}
     }
-    else
-        secondary.forceUngrab();
 	
 }
 

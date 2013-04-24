@@ -16,6 +16,7 @@ uint64_t Node::numObjects_ = 0;
 
 void Node::posGrab( arEffector *g )
 { 
+	ungrab( g );
     if( parentNode_ == this )
         posGrabbers_.insert( g );
     else
@@ -24,6 +25,7 @@ void Node::posGrab( arEffector *g )
 
 void Node::rotGrab( arEffector *g )
 { 
+	ungrab( g );
     if( parentNode_ == this )
         rotGrabbers_.insert( g );
     else
@@ -32,6 +34,7 @@ void Node::rotGrab( arEffector *g )
 
 void Node::scaleGrab( arEffector *g )
 {
+	ungrab( g );
 	if( parentNode_ == this )
 		scaleGrabbers_.insert( g );
 	else
@@ -94,10 +97,44 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
         
         rotation = curEffRotation - origEffRotation;
 	}
+	else if( scaleGrabbers_.size() == 1 )
+	{
+		arEffector *eff1 = *(scaleGrabbers_.begin()); // get the first effector in the set
+
+        arVector3 newEffPos;
+        float deltaDistX, deltaDistY, deltaDistZ;
+
+        if (!scaleGrabbed)
+        {
+            // Original distance along x is dot product of effector to effector vector with x axis vector
+            origEff1Pos = ar_ET( eff1->getMatrix() );
+
+            scaleGrabbed = true;
+        }
+        newEffPos = ar_ET( eff1->getMatrix() );
+
+        /*
+        Find which axis has maximum change of distance between the effectors
+        and scale along that axis
+        */
+		if( newEffPos.v[0] - origEff1Pos.v[0] < 0.005 && newEffPos.v[0] - origEff1Pos.v[0] > 0.005 ) deltaDistX = 1;
+		else deltaDistX = newEffPos.v[0] / origEff1Pos.v[0];
+		
+		if( newEffPos.v[1] - origEff1Pos.v[1] < 0.005 && newEffPos.v[1] - origEff1Pos.v[1] > 0.005 ) deltaDistY = 1;
+		else deltaDistY = newEffPos.v[1] / origEff1Pos.v[1];
+		
+		if( newEffPos.v[2] - origEff1Pos.v[2] < 0.005 && newEffPos.v[2] - origEff1Pos.v[2] > 0.005 ) deltaDistZ = 1;
+		else deltaDistZ = newEffPos.v[2] / origEff1Pos.v[2];
+
+		cout << "x=" << deltaDistX << ", y=" << deltaDistY << ", z=" << deltaDistZ << endl;
+		
+        scaling = arVector3( deltaDistX, deltaDistY, deltaDistZ );
+	}
+#if 0
 	else if( scaleGrabbers_.size() == 2 )
 	{
 		arEffector *eff1 = *(scaleGrabbers_.begin()); // get the first effector in the set
-        arEffector *eff2 = *(scaleGrabbers_.begin()++); // get the second effector in the set
+        arEffector *eff2 = *(++scaleGrabbers_.begin()); // get the second effector in the set
 
         arVector3 eff1Vect;
         arVector3 eff2Vect;
@@ -118,18 +155,23 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
         eff2y = eff2Vect.v[1];
         eff2z = eff2Vect.v[2];
 
-        
-
         if (!scaleGrabbed)
         {
-
             // Original distance along x is dot product of effector to effector vector with x axis vector
             originalDistX = WB_abs(eff1x - eff2x); // absolute distance on x axis
             originalDistY = WB_abs(eff1y - eff2y);
             originalDistZ = WB_abs(eff1z - eff2z);
+			
+			if( originalDistX < 0.005 && originalDistX >= 0 ) originalDistX = 0.005;
+			else if( originalDistX > -0.005 && originalDistX <= 0 ) originalDistX = -0.005;
+			
+			if( originalDistY < 0.005 && originalDistY >= 0 ) originalDistY = 0.005;
+			else if( originalDistY > -0.005 && originalDistY <= 0 ) originalDistY = -0.005;
+			
+			if( originalDistZ < 0.005 && originalDistZ >= 0 ) originalDistZ = 0.005;
+			else if( originalDistZ > -0.005 && originalDistZ <= 0 ) originalDistZ = -0.005;
 
             scaleGrabbed = true;
-
         }
         newDistX = WB_abs(eff1x - eff2x); // absolute distance on x axis
         newDistY = WB_abs(eff1y - eff2y);
@@ -139,15 +181,15 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
         Find which axis has maximum change of distance between the effectors
         and scale along that axis
         */
+		
+        deltaDistX = ( newDistX == originalDistX ) ? deltaDistX = 1 : newDistX / originalDistX;
+        deltaDistY = ( newDistY == originalDistY ) ? deltaDistY = 1 : newDistY / originalDistY;
+        deltaDistZ = ( newDistZ == originalDistZ ) ? deltaDistZ = 1 : newDistZ / originalDistZ;
 
-        deltaDistX = newDistX - originalDistX;
-        deltaDistY = newDistY - originalDistY;
-        deltaDistZ = newDistZ - originalDistZ;
-
-        float bufferVal = 0.005; // buffer value above which the object is scaled
-
-
-
+		cout << "x=" << deltaDistX << ", y=" << deltaDistY << ", z=" << deltaDistZ << endl;
+		
+		
+		
         if (deltaDistX >= deltaDistY)
         {
             if (deltaDistX >= deltaDistZ)
@@ -156,7 +198,7 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
 
                 // Change scale only if deltaDistX > bufferVal
 
-                if (deltaDistX > bufferVal)
+//                if (deltaDistX > bufferVal)
                 {
                     scaling.v[0] = deltaDistX;
                     scaling.v[1] = 1.0;
@@ -167,13 +209,12 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
             else 
             {
                 // delta Z is greatest
-                if (deltaDistZ > bufferVal)
+      //          if (deltaDistZ > bufferVal)
                 {
                     scaling.v[0] = 1.0;
                     scaling.v[1] = 1.0;
                     scaling.v[2] = deltaDistZ; 
                 }
-                
             }
         }
         else 
@@ -181,7 +222,7 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
             if (deltaDistY >= deltaDistZ)
             {
                 // delta Y is greatest
-                if (deltaDistY > bufferVal)
+  //              if (deltaDistY > bufferVal)
                 {
                     scaling.v[0] = 1.0;
                     scaling.v[1] = deltaDistY;
@@ -191,16 +232,17 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
             else 
             {
                 // delta Z is greatest
-                if (deltaDistZ > bufferVal)
+    //            if (deltaDistZ > bufferVal)
                 {
                     scaling.v[0] = 1.0;
                     scaling.v[1] = 1.0;
                     scaling.v[2] = deltaDistZ;
                 }
-                
             }
+			cout << "Scaling=" << scaling << endl;
         }
 	}
+#endif
 	else
     {
         if( posGrabbed )
@@ -222,9 +264,11 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
             scaleGrabbed = false;
             nodeTransform = nodeTransform * ar_SM(scaling);
             scaling = arVector3(1.0, 1.0, 1.0);
+			/*
             originalDistX = 0.0;
             originalDistY = 0.0;
             originalDistZ = 0.0;
+			*/
         }
     }
     

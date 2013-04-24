@@ -49,9 +49,8 @@ private:
 	bool selected_;
     
     std::set<arEffector*> rotGrabbers_, posGrabbers_, scaleGrabbers_;
-    arVector3 origEffRotation, origEffPosition, origEffScale;
+    arVector3 origEffRotation, origEffPosition, origEff1Pos, origEff2Pos;
     arVector3 rotation, translation, scaling;
-    float originalDistX, originalDistY, originalDistZ;
     bool rotGrabbed, posGrabbed, scaleGrabbed;
     
     // drawBegin_ is the function that will do the pushing, and multiply by our transform

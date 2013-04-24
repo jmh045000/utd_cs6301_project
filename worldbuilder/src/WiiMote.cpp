@@ -85,10 +85,11 @@ bool WiiMote::requestScaleGrab( arInteractable *grabee )
     return ret;
 }
 
-void WiiMote::requestUngrab( arInteractable *grabee )
+void WiiMote::requestUngrab( const arInteractable *grabee )
 {
-    arEffector::requestUngrab( grabee );
-    if( Node *n = dynamic_cast<Node*>( grabee ) )
+	arInteractable *i = const_cast<arInteractable*>( grabee );
+    arEffector::requestUngrab( i );
+    if( Node *n = dynamic_cast<Node*>( i ) )
         n->ungrab( this );
 }
 
@@ -290,7 +291,7 @@ ObjNode * WiiMote::closestObject(interlist &objects)
             //cout << "Not ObjNode" << endl;
             continue;
         }
-        requestUngrab( ndptr );
+        //requestUngrab( ndptr );
         ndptr->untouch( *this );
         arBoundingSphere sphere = ndptr->getBoundingSphere();
         sphere.position = ar_ET( ndptr->getActualPosition() * ar_TM( sphere.position ) );
