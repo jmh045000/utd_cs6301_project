@@ -534,21 +534,6 @@ int main(int argc, char *argv[])
 	primary.setDrawCallback( &drawRighthand );
 	secondary.setDrawCallback( &drawLefthand );
 	
-	primary.setDragManager( &myDm );
-	secondary.setDragManager( &myDm );
-	
-	vector<ConditionEffectorPair> c1;
-	c1.push_back(ConditionEffectorPair(primary.getGrabCondition(WiiMote::A), &primary));
-	c1.push_back(ConditionEffectorPair(secondary.getGrabCondition(WiiMote::A), &secondary));
-	primary.setDrag(UnionGrabCondition(c1), ScaleWithProportions(&primary, &secondary));
-	
-	vector<ConditionEffectorPair> c2;
-	c2.push_back(ConditionEffectorPair(primary.getGrabCondition(WiiMote::B), &primary));
-	c2.push_back(ConditionEffectorPair(secondary.getGrabCondition(WiiMote::B), &secondary));
-	primary.setDrag(UnionGrabCondition(c2), ScaleWithoutProportions(&primary, &secondary));
-    
-    primary.setDrag( primary.getGrabCondition( WiiMote::A ), arWandRelativeDrag() );
-    secondary.setDrag( secondary.getGrabCondition( WiiMote::A ), arWandRelativeDrag() );
 	ground.init();
     
     framework.setStartCallback( initSceneGraph );

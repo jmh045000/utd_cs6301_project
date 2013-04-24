@@ -71,7 +71,7 @@ void Node::ungrab( arEffector *g )
 {
     if( parentNode_ == this )
 	{
-		saveGrabState();
+		//saveGrabState();
         posGrabbers_.erase( g );
 		rotGrabbers_.erase( g );
 		scaleGrabbers_.erase( g );
