@@ -52,6 +52,8 @@ private:
     arVector3 origEffRotation, origEffPosition, origEff1Pos, origEff2Pos;
     arVector3 rotation, translation, scaling;
     bool rotGrabbed, posGrabbed, scaleGrabbed;
+	
+	void saveGrabState();
     
     // drawBegin_ is the function that will do the pushing, and multiply by our transform
     virtual void drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale ); // RootNode overrides this, no others should
