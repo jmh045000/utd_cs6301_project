@@ -528,7 +528,7 @@ void onPreExchange( arMasterSlaveFramework &fw )
 			{
 				secondary.requestPosGrab( leftClosest );
 			}
-			if( secondary.getButton( WiiMote::B ) )
+			else if( secondary.getButton( WiiMote::B ) )
 			{
 				secondary.requestRotGrab( leftClosest );
 			}
