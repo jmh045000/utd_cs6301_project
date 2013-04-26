@@ -42,27 +42,53 @@ void Node::saveGrabState()
 
 void Node::posGrab( arEffector *g )
 { 
-	ungrab( g );
+	
     if( parentNode_ == this )
-        posGrabbers_.insert( g );
+    {
+        if( posGrabbers_.find( g ) == posGrabbers_.end() )
+        {
+            ungrab( g );
+            posGrabbers_.insert( g );
+        }
+    }
     else
         parentNode_->posGrab( g );
 }
 
 void Node::rotGrab( arEffector *g )
 { 
-	ungrab( g );
     if( parentNode_ == this )
-        rotGrabbers_.insert( g );
+    {
+        if( rotGrabbers_.find( g ) == rotGrabbers_.end() )
+        {
+            ungrab( g );
+            rotGrabbers_.insert( g );
+        }
+    }
     else
         parentNode_->rotGrab( g );
 }
 
 void Node::scaleGrab( arEffector *g )
 {
-	ungrab( g );
+	
 	if( parentNode_ == this )
-		scaleGrabbers_.insert( g );
+    {
+        if( scaleGrabbers_.find( g ) == scaleGrabbers_.end() )
+        {
+            ungrab( g );
+            if( scaleGrabbers_.size() == 1 )
+            {
+                arEffector *e = *( scaleGrabbers_.begin() );
+                if( e != g )
+                {
+                    ungrab( e );
+                    scaleGrabbers_.insert( e );
+                }
+            }
+            scaleGrabbers_.insert( g );
+        }
+    }
 	else
 		parentNode_->scaleGrab( g );
 }
@@ -72,9 +98,9 @@ void Node::ungrab( arEffector *g )
     if( parentNode_ == this )
 	{
 		//saveGrabState();
-        posGrabbers_.erase( g );
-		rotGrabbers_.erase( g );
-		scaleGrabbers_.erase( g );
+        if( posGrabbers_.erase( g ) ) saveGrabState();
+		if( rotGrabbers_.erase( g ) ) saveGrabState();
+		if( scaleGrabbers_.erase( g ) ) saveGrabState();
 	}
     else
         parentNode_->ungrab( g );
@@ -153,8 +179,6 @@ void Node::drawBegin( arMatrix4 &currentView, arMatrix4 &currentScale )
 		
 		if( newEffPos.v[2] - origEff1Pos.v[2] < 0.005 && newEffPos.v[2] - origEff1Pos.v[2] > 0.005 ) deltaDistZ = 1;
 		else deltaDistZ = newEffPos.v[2] / origEff1Pos.v[2];
-
-		cout << "x=" << deltaDistX << ", y=" << deltaDistY << ", z=" << deltaDistZ << endl;
 		
         scaling = arVector3( deltaDistX, deltaDistY, deltaDistZ );
 	}
