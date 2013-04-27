@@ -255,6 +255,7 @@ void drawHelp( arMasterSlaveFramework &fw )
 	if( !init )
 	{
 		tex.readJPEG( "help.jpg" );
+		init = true;
 	}
 	
 	static float size = 4;
