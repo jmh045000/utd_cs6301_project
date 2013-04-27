@@ -191,8 +191,7 @@ void moveWorld( arSZGAppFramework &fw )
     
     if( !menuOn )
     {
-        float z = 0, x = 0;
-        
+		arVector3 primaryMove, secondaryMove;
         WiiMote::ButtonList buttons;
         buttons = primary.getOnButtons();
         for( WiiMote::ButtonList::iterator it = buttons.begin(); it != buttons.end(); ++it )
@@ -200,16 +199,16 @@ void moveWorld( arSZGAppFramework &fw )
             switch( *it )
             {
             case WiiMote::UP:
-                z += 0.5;
+                primaryMove.v[2] += 0.5;
                 break;
             case WiiMote::DOWN:
-                z -= 0.5;
+                primaryMove.v[2] -= 0.5;
                 break;
             case WiiMote::LEFT:
-                x += 0.5;
+                primaryMove.v[0] += 0.5;
                 break;
             case WiiMote::RIGHT:
-                x -= 0.5;
+                primaryMove.v[0] -= 0.5;
                 break;
             default:
                 break;
@@ -222,26 +221,29 @@ void moveWorld( arSZGAppFramework &fw )
             switch( *it )
             {
             case WiiMote::UP:
-                z += 0.5;
+                secondaryMove.v[2] += 0.5;
                 break;
             case WiiMote::DOWN:
-                z -= 0.5;
+                secondaryMove.v[2] -= 0.5;
                 break;
             case WiiMote::LEFT:
-                x += 0.5;
+                secondaryMove.v[0] += 0.5;
                 break;
             case WiiMote::RIGHT:
-                x -= 0.5;
+                secondaryMove.v[0] -= 0.5;
                 break;
             default:
                 break;
             }
         }
         
-        if( z != 0 || x != 0 )
+		arMatrix4 pMove, sMove;
+		pMove = ar_ERM( primary.getMatrix() ) * ar_TM( primaryMove * MOVE_SPEED );
+		sMove = ar_ERM( secondary.getMatrix() ) * ar_TM( secondaryMove * MOVE_SPEED );
+		cout << "primaryMove: " << primaryMove << ", secondaryMove: " << secondaryMove << "\npMove=\n" << pMove << "sMove\n:" << sMove << endl;
+        if( primaryMove.magnitude() != 0 || secondaryMove.magnitude() != 0 )
         {
-            
-            sg->getRoot()->setNodeTransform( sg->getRoot()->getNodeTransform() * ar_ETM( ar_ERM( fw.getMidEyeMatrix() ) * ar_TM( MOVE_SPEED * x, 0, MOVE_SPEED * z ) ) );
+            sg->getRoot()->setNodeTransform( sg->getRoot()->getNodeTransform() * ar_TM( ar_ET( pMove ) + ar_ET( sMove ) ) );
         }
     }
 }
