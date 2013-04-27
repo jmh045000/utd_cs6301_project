@@ -4,7 +4,7 @@ This prototype will stay true to the design, however, due to time constraints, n
 \subsection{Physical Environment}
 The physical environment remains the same between the end-goal and this prototype phase.
 We will still be using a Head Mounted Display, along with two Wiimotes.
-All will be independently tracked using a Vicon system in a 10'x30' space.
+All will be independently tracked using a Vicon system in a 12ft x 22ft space.
 Also, the Wiimotes provide 11 buttons each, that will be used for interaction and navigation (see Figure \ref{fig:wiimote}).
 
 \subsection{Virtual Environment}
@@ -18,10 +18,11 @@ Sound (as well as light) creation/manipulation are optional features that we hop
 During this prototype phase, the most important aspect is the interaction abilities the user has.
 
 \subsubsection{Selection}
-We will be implementing both the Simple Virtual Hand and the Simple Ray-Casting.
-Both will be drawn using a 2'x2' rectangular prism.
-When in virtual hand mode, the prism will be 5' long, with the tip where the user's hand is.
-In ray-casting mode, the prism will extend, up to 1000', until it reaches an object.
+We implemented our own hybrid technique which we call Virtual Hand Casting.
+The ray from each hand is drawn to infinity then for each object we calculate the closest point on the ray to the center of that object.
+We then determine if the point on the line is within the bounding sphere of the object.
+The object who's point on the ray is closest to the user's hand is determined to be the object being pointed at by the user.
+This selection technique works extremely well provided that an object isn't fully within the bounding sphere of another object.
 Since PORT is not being provided in the prototype, multi object selection will require the user to select objects in turn.
 
 \subsubsection{Manipulation}
