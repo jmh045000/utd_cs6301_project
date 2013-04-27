@@ -18,16 +18,19 @@ Sound (as well as light) creation/manipulation are optional features that we hop
 During this prototype phase, the most important aspect is the interaction abilities the user has.
 
 \subsubsection{Selection}
-We will be implementing both the Simple Virtual Hand and the Simple Ray-Casting.
-Both will be drawn using a 2'x2' rectangular prism.
-When in virtual hand mode, the prism will be 5' long, with the tip where the user's hand is.
-In ray-casting mode, the prism will extend, up to 1000', until it reaches an object.
-Since PORT is not being provided in the prototype, multi object selection will require the user to select objects in turn.
+We will be implementing the Simple Virtual Hand Casting technique.
+The Simple Virtual Hand Casting technique uses the Virtual Hand technique for movement but uses the Ray-Casting technique to select an object. 
+The users will use the Virtual Hand displayed to point to an object and to select it (if it is nearby and with reach of your hand). 
+To select distant objects, the user need not walk upto the object. 
+A laser pointer, diplayed by using button '1' on Wii remote, is used to point to the distant object and to select it. 
+To disable the pointer we need to use the same button again.
+Multi object selection is enabled by using the '+' button on the Wii remote and single object selection is enabled using the '-' button.
+Since PORT is not being provided in the prototype, multi object selection will require the user to select objects in turn. 
 
 \subsubsection{Manipulation}
 \paragraph{Single-Object Manipulation}
 All features discussed in the design section for single object manipulation will be included.
-The user will be able to create, delete, translate, rotate, scale, color, and texture all objects within the world.
+The user will be able to create, delete, translate, rotate, scale and texture all objects within the world.
 
 \paragraph{Multi-Object Manipulation}
 Boolean operations will not be provided in the prototype.
@@ -63,7 +66,7 @@ The Syzygy API contains two frameworks that are used for development, \verb|arMa
 We will be using the \verb|arMasterSlaveFramework|, but we are using a helper class created by the FIVE lab at UTD to include a Scene Graph in an \verb|arMasterSlaveFramework|.
 
 \subsection{Extra Features}
-This is a list of extra features we added to our prototype after testing that we determined would help usability or enable merriment amongst the team members.
+This is a list of extra features we added to our prototype after usability testing. We determined that these would help usability or enhance the merriment aspect amongst the users.
 
 \begin{itemize}
     \item laser pointer
