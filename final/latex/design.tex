@@ -1,7 +1,7 @@
 \label{Design}
 \subsection{Physical Environment}
 \label{Design:PhysicalEnvironment}
-The real-world environment that the user will be tracked in is 10'x30'.
+The real-world environment in which the user will be tracked is approximately 12ft x 22ft.
 The user is provided with a Head-Mounted Display and two 6 Degree of Freedom (6DOF) devices with 11 buttons each (Wiimotes) (see Figure \ref{fig:wiimote}).
 The tracking of the head and each Wiimote is done with a Vicon system placed around the tracking area.
 
@@ -31,21 +31,19 @@ We will be augmenting object selection with tactile feedback provided through th
 When a user selects a new object, the Wiimote will rumble for a predetermined amount of time.
 Several selection selection methods are provided, which can be selected based on the users preference.
 \begin{itemize}
-	\item Simple Virtual Hand
-	\item Simple Ray-Casting
+	\item Virtual Hand Casting
 	\item PORT
 \end{itemize}
 
-\paragraph{Simple Virtual Hand}
+\paragraph{Virtual Hand Casting}
+Virtual Hand Casting is a novel hybrid technique combining Virtual Hand and Ray Casting.
 A virtual hand will be co-located with the user's real hand.
-The user will not be able grasp any objects out of their reach, and must navigate to manipulate them.
-This method of selection is the easiest to understand and use but affords the least flexibility.
-
-\paragraph{Simple Ray-Casting}
-This is similar to Simple Virtual Hand, however the user is able to reach out to infinity or until an object is encountered.
-This affords the user to be able to manipulate objects that are very far out of reach but requires the user to learn to take advantage of this.
-We believe this will require little cognitive overhead and should not cause problems for most users.
-As such, this will be the default selection method.
+In additon, a ray is shot from the user's hand to enable object selection at a distance.
+Once an object is selected, manipulation of an object follows a 1:1 mapping of the movement of the user's hand similar to the Virtual Hand technique.
+This enable high fidelity manipulation of objects regardless of distance.
+In addition to the hand co-located with the user's hand, a ``laser pointer'' can be enabled which follows the ray.
+This enables higher fidelity of object selection.
+Lastly, we draw a bounding sphere around the object(s) which the user is pointing at as well as the currently selected object(s).
 
 \paragraph{PORT}
 The user can create a 3D selection box where all objects within the box become selected.
@@ -116,7 +114,7 @@ The user can create a sound, attach it to an object, and the sound is then creat
 Navigation is another crucial feature.
 Since the world is infinite, there must be a sensible way to navigate, otherwise the world will be limited to the size of the tracked area.
 
-The main method of navigation will be real walking, since we have a 10'x30' space, the user will be able to walk in any direction within the space, and that motion will be translated to the virtual environment.
+The main method of navigation will be real walking, since we have a 12ft x 22ft space, the user will be able to walk in any direction within the space, and that motion will be translated to the virtual environment.
 Another navigation mechanism provided will be virtual walking.
 We will be using the D-Pad on the Wiimote to simulate a joystick.
 i.e. If the user presses ``Up'' on the D-Pad, they will move forward in the virtual environment.

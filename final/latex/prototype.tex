@@ -4,7 +4,7 @@ This prototype will stay true to the design, however, due to time constraints, n
 \subsection{Physical Environment}
 The physical environment remains the same between the end-goal and this prototype phase.
 We will still be using a Head Mounted Display, along with two Wiimotes.
-All will be independently tracked using a Vicon system in a 10'x30' space.
+All will be independently tracked using a Vicon system in a 12ft x 22ft space.
 Also, the Wiimotes provide 11 buttons each, that will be used for interaction and navigation (see Figure \ref{fig:wiimote}).
 
 \subsection{Virtual Environment}
@@ -12,20 +12,18 @@ The virtual environment will still be an infinite world, with a goal of letting 
 However, simulation effects such as gravity and animation will not be included.
 The user can still create objects and place them together to make more complex and larger objects, but they will not be able to give them motion.
 
-Sound (as well as light) creation/manipulation are optional features that we hope to add in to the prototype.  See World Manipulation below.
+Sound and light creation/manipulation were not implemented in the prototype though a fully featured World Builder IVE would have these capabilities.
 
 \subsection{Interaction}
 During this prototype phase, the most important aspect is the interaction abilities the user has.
 
 \subsubsection{Selection}
-We will be implementing the Simple Virtual Hand Casting technique.
-The Simple Virtual Hand Casting technique uses the Virtual Hand technique for movement but uses the Ray-Casting technique to select an object. 
-The users will use the Virtual Hand displayed to point to an object and to select it (if it is nearby and with reach of your hand). 
-To select distant objects, the user need not walk upto the object. 
-A laser pointer, diplayed by using button '1' on Wii remote, is used to point to the distant object and to select it. 
-To disable the pointer we need to use the same button again.
-Multi object selection is enabled by using the '+' button on the Wii remote and single object selection is enabled using the '-' button.
-Since PORT is not being provided in the prototype, multi object selection will require the user to select objects in turn. 
+We implemented our own hybrid technique which we call Virtual Hand Casting.
+The ray from each hand is drawn to infinity then for each object we calculate the closest point on the ray to the center of that object.
+We then determine if the point on the line is within the bounding sphere of the object.
+The object who's point on the ray is closest to the user's hand is determined to be the object being pointed at by the user.
+This selection technique works extremely well provided that an object isn't fully within the bounding sphere of another object.
+Since PORT is not being provided in the prototype, multi object selection will require the user to select objects in turn.
 
 \subsubsection{Manipulation}
 \paragraph{Single-Object Manipulation}
@@ -39,9 +37,6 @@ However, the user will be able to group multiple objects to form a single object
 \paragraph{World Manipulation}
 Scale-the-World will be provided.
 This feature is essential given that the size of the world is so big, and the user will need to navigate large spaces.
-
-Sound and light creation will be focused on last.
-If there is time permitting after the essential manipulation features have been implemented, light and sound creation and manipulation will be included.
 
 \subsubsection{Navigation}
 Both real walking and virtual walking will be provided.
@@ -74,7 +69,13 @@ This is a list of extra features we added to our prototype after usability testi
     \item multiple object selection
     \item double speed
     \item bounding sphere object(s) being pointed at or selected
-    \item grid on "ground"
+    \item grid on ``ground''
     \item center pole to illustrate both the start point as well as help the user visualize the current scale
 \end{itemize}
 
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=3in]{figs/help.jpg}
+	\caption{Input}
+	\label{fig:help}
+\end{figure}
